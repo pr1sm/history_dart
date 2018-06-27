@@ -1,0 +1,15 @@
+name: history
+version: 0.1.0
+description: Support for HTML5 History Api calls in web and non-web contexts (based on npm history)
+author: Srinivas Dhanwada <dhanwada.dev@gmail.com>
+dependencies:
+dev_dependencies:
+  coverage: '>=0.9.3 <0.11.0'
+  dartdoc: '>=0.14.1 <0.19.0'
+  dart_dev: ^1.9.2
+  dart_style: ^1.0.7
+  dependency_validator: ^1.1.0
+  shelf: ^0.7.3
+  shelf_proxy: ^0.1.0
+  test: ^0.12.24
+  version: ^1.0.3
