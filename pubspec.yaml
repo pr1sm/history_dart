@@ -3,6 +3,7 @@ version: 0.1.0
 description: Support for HTML5 History Api calls in web and non-web contexts (based on npm history)
 author: Srinivas Dhanwada <dhanwada.dev@gmail.com>
 dependencies:
+  quiver: ^0.29.0
 dev_dependencies:
   coverage: '>=0.9.3 <0.11.0'
   dartdoc: '>=0.14.1 <0.19.0'
