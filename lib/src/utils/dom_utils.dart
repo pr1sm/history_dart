@@ -4,8 +4,6 @@ bool get canUseDom => (window != null &&
     window.document != null &&
     window.document.createElement != null);
 
-typedef void ConfirmationCallback(bool confirmed);
-
 void getConfirmation({String message, ConfirmationCallback callback}) {
   final confirmed = window.confirm(message);
   if (callback != null) {

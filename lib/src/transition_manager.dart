@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'location.dart';
-import 'utils/dom_utils.dart' show ConfirmationCallback;
+import 'utils/utils.dart' show Confirmation, ConfirmationCallback;
 
 typedef void ReliqueshPrompt();
 
@@ -20,17 +20,18 @@ class TransitionManager<T> extends Stream<T> {
     _prompt = nextPrompt;
 
     return () {
-      if(_prompt == nextPrompt) {
+      if (_prompt == nextPrompt) {
         _prompt = null;
       }
     };
   }
 
-  confirmTransitionTo(Location location, dynamic action, void getConfirmation(result, ConfirmationCallback callback), ConfirmationCallback callback) {
+  confirmTransitionTo(Location location, dynamic action,
+      Confirmation getConfirmation, ConfirmationCallback callback) {
     if (_prompt != null) {
       final result = (_prompt is Function) ? prompt(location, action) : prompt;
 
-      if(result is String) {
+      if (result is String) {
         getConfirmation(result, callback);
       } else {
         callback(result != false);
@@ -42,9 +43,10 @@ class TransitionManager<T> extends Stream<T> {
 
   @override
   StreamSubscription<T> listen(void onData(T transition),
-    {Function onError, void onDone(), bool cancelOnError}) =>
-      _controller.stream.listen(onData, onError: onError, onDone: onDone, cancelOnError: cancelOnError);
-  
+          {Function onError, void onDone(), bool cancelOnError}) =>
+      _controller.stream.listen(onData,
+          onError: onError, onDone: onDone, cancelOnError: cancelOnError);
+
   void notify(T transition) {
     _controller.add(transition);
   }
