@@ -1,5 +1,7 @@
 import 'dart:html';
 
+import 'utils.dart';
+
 bool get canUseDom => (window != null &&
     window.document != null &&
     window.document.createElement != null);
