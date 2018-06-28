@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'location.dart';
-import 'utils/utils.dart' show Confirmation, ConfirmationCallback;
+import 'utils/utils.dart' show Confirmation, getPrompt;
 
 typedef void ReliqueshPrompt();
 
@@ -26,18 +26,13 @@ class TransitionManager<T> extends Stream<T> {
     };
   }
 
-  confirmTransitionTo(Location location, dynamic action,
-      Confirmation getConfirmation, ConfirmationCallback callback) {
+  Future<bool> confirmTransitionTo(
+      Location location, dynamic action, Confirmation getConfirmation) async {
     if (_prompt != null) {
-      final result = (_prompt is Function) ? prompt(location, action) : prompt;
-
-      if (result is String) {
-        getConfirmation(result, callback);
-      } else {
-        callback(result != false);
-      }
+      final result = await getPrompt(_prompt, location, action);
+      return getConfirmation(result);
     } else {
-      callback(true);
+      return true;
     }
   }
 
