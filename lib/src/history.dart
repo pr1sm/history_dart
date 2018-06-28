@@ -1,15 +1,23 @@
+import 'dart:async';
+
 import 'location.dart';
 import 'utils/utils.dart';
 
 abstract class History {
   /// The number of entries in the History list
-  int length;
+  int get length;
 
   /// The current location
-  Location location;
+  Location get location;
 
   /// The current action
-  Action action;
+  Action get action;
+
+  /// Whether or not this [History] is in blocking mode
+  bool get isBlocking;
+
+  /// Stream of changes to this [History] list
+  Stream<History> get onChange;
 
   /// Push an entry ([String] or [Location]) on to the History list
   ///
