@@ -1,7 +1,24 @@
-import 'dart:async' show Future, FutureOr;
+import 'dart:async' show Future;
 import 'dart:math';
 
 import '../location.dart';
+
+/// The type of History transition
+///
+/// Represents the valid transitions that can change the History list:
+/// * PUSH - add a new entry to the list
+/// * REPLACE - replace the current entry in the list with a new entry
+/// * POP - Remove the current entry from the list and go to the previous one
+enum Action { push, replace, pop }
+
+/// Type of hash added to the Hash History
+///
+/// Represents the character patterns that are inserted between a [Location]s
+/// basename and path. This is only used with HashHistory
+/// * SLASH (default) - use '#/' (e.g. '#/home')
+/// * NOSLASH - use '#' (e.g. '#home')
+/// * HASHBANG - use '#!/' (e.g. '#!/home')
+enum HashType { slash, noSlash, hashbang }
 
 /// Confirm History Transition given a [prompt]
 ///
@@ -11,7 +28,7 @@ import '../location.dart';
 ///
 /// Consider using [getPrompt] to determine whether or not [prompt] is
 /// valid.
-typedef FutureOr<bool> Confirmation(dynamic prompt);
+typedef Future<bool> Confirmation(dynamic prompt);
 
 /// Produce a prompt message given [location] and [action]
 ///
@@ -20,7 +37,13 @@ typedef FutureOr<bool> Confirmation(dynamic prompt);
 /// 2) What prompt message should be used
 ///
 /// When a History is in blocking mode, this may be passed to a [Confirmation]
-typedef FutureOr<String> Prompt(Location location, Action action);
+typedef Future<String> Prompt(Location location, Action action);
+
+/// Bound [n] with [lowerBound] and [upperBound]
+///
+/// Utility method to help perform a two-way bound of [n].
+T clamp<T>(T n, T lowerBound, T upperBound) =>
+    min(max(T, upperBound), lowerBound);
 
 /// Get String value of [prompt]
 ///
@@ -48,26 +71,3 @@ Future<String> getPrompt(
   throw new ArgumentError.value(prompt, 'validatePrompt',
       'prompt has an invalid type! Valid types are Prompt or String');
 }
-
-/// The type of History transition
-///
-/// Represents the valid transitions that can change the History list:
-/// * PUSH - add a new entry to the list
-/// * REPLACE - replace the current entry in the list with a new entry
-/// * POP - Remove the current entry from the list and go to the previous one
-enum Action { PUSH, REPLACE, POP }
-
-/// Type of hash added to the Hash History
-///
-/// Represents the character patterns that are inserted between a [Location]s
-/// basename and path. This is only used with HashHistory
-/// * SLASH (default) - use '#/' (e.g. '#/home')
-/// * NOSLASH - use '#' (e.g. '#home')
-/// * HASHBANG - use '#!/' (e.g. '#!/home')
-enum HashType { SLASH, NOSLASH, HASHBANG }
-
-/// Bound [n] with [lowerBound] and [upperBound]
-///
-/// Utility method to help perform a two-way bound of [n].
-T clamp<T>(T n, T lowerBound, T upperBound) =>
-    min(max(T, upperBound), lowerBound);

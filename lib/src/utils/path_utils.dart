@@ -1,5 +1,3 @@
-import '../location.dart';
-
 /// Add a leading [prefix] to [path] if it isn't already there
 addLeading(String path, String prefix) =>
     path.startsWith(prefix) ? path : '${prefix}${path}';
@@ -29,40 +27,3 @@ stripBasename(String path, String prefix) =>
 /// Remove trailing slash from [path] if it exists
 stripTrailingSlash(String path) =>
     path.endsWith('/') ? path.substring(0, path.length - 1) : path;
-
-/// Convert [path] from a [String] to a valid [Location]
-// TOOD: Integrate with location.dart
-Location parsePath(String path) {
-  String pathname = path ?? '/';
-  String search = '';
-  String hash = '';
-
-  final hashIndex = pathname.indexOf('#');
-  if (hashIndex != -1) {
-    hash = pathname.substring(hashIndex);
-    pathname = pathname.substring(0, hashIndex);
-  }
-
-  final searchIndex = pathname.indexOf('?');
-  if (searchIndex != -1) {
-    search = pathname.substring(searchIndex);
-    pathname = pathname.substring(0, searchIndex);
-  }
-
-  return new Location(pathname: pathname, search: search, hash: hash);
-}
-
-/// Convert [location] to a string representation
-// TODO: Integrate with location.dart
-createPath(Location location) {
-  String path = location.pathname;
-  if (location.search != '?') {
-    path += addLeading(location.search, '?');
-  }
-
-  if (location.hash != '#') {
-    path += addLeading(location.hash, '#');
-  }
-
-  return path;
-}
