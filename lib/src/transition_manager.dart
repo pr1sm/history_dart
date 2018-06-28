@@ -1,9 +1,7 @@
 import 'dart:async';
 
 import 'location.dart';
-import 'utils/utils.dart' show Confirmation, getPrompt;
-
-typedef void ReliqueshPrompt();
+import 'utils/utils.dart' show Action, Confirmation, getPrompt;
 
 class TransitionManager<T> extends Stream<T> {
   dynamic _prompt = null;
@@ -12,24 +10,23 @@ class TransitionManager<T> extends Stream<T> {
 
   dynamic get prompt => _prompt;
 
-  ReliqueshPrompt setPrompt(nextPrompt) {
+  void set prompt(nextPrompt) {
     if (_prompt != null) {
       print('WARNING: A history supports only one prompt at a time');
     }
 
     _prompt = nextPrompt;
-
-    return () {
-      if (_prompt == nextPrompt) {
-        _prompt = null;
-      }
-    };
   }
 
   Future<bool> confirmTransitionTo(
-      Location location, dynamic action, Confirmation getConfirmation) async {
+      Location location, Action action, Confirmation getConfirmation) async {
     if (_prompt != null) {
       final result = await getPrompt(_prompt, location, action);
+      if (getConfirmation == null) {
+        print(
+            'WARNING: In order to use a prompt message, a non-null Confirmation method is needed!');
+        return true;
+      }
       return getConfirmation(result);
     } else {
       return true;

@@ -10,7 +10,8 @@ bool get canUseDom => (window != null &&
 /// Confirmation using [Window.confirm]
 ///
 /// This is a utility method to represent a [Confirmation] when using the DOM.
-Confirmation get getConfirmation => (String message) => window.confirm(message);
+Confirmation get getConfirmation =>
+    (String message) async => window.confirm(message);
 
 /// Check if browser supports history
 ///
