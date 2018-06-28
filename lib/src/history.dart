@@ -95,3 +95,9 @@ abstract class History {
   /// method will have no effect.
   void unblock();
 }
+
+/// Mixin for [History] to support adding a prefix to paths
+abstract class BasenameMixin {
+  /// Prefix added to paths if it isn't already included
+  String get basename;
+}

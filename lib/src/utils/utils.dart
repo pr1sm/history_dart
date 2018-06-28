@@ -57,6 +57,15 @@ Future<String> getPrompt(
 /// * POP - Remove the current entry from the list and go to the previous one
 enum Action { PUSH, REPLACE, POP }
 
+/// Type of hash added to the Hash History
+///
+/// Represents the character patterns that are inserted between a [Location]s
+/// basename and path. This is only used with HashHistory
+/// * SLASH (default) - use '#/' (e.g. '#/home')
+/// * NOSLASH - use '#' (e.g. '#home')
+/// * HASHBANG - use '#!/' (e.g. '#!/home')
+enum HashType { SLASH, NOSLASH, HASHBANG }
+
 /// Bound [n] with [lowerBound] and [upperBound]
 ///
 /// Utility method to help perform a two-way bound of [n].
