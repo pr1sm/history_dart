@@ -1,6 +1,14 @@
 import '../location.dart';
 import 'path_utils.dart';
 
+/// Helper Method to create a [Location]
+///
+/// This method creates a valid [Location] given the following:
+/// * [path] - a path [String] or [Map] of [Location] information
+/// * [state] - any extra state info associated with the [Location]
+/// * [key] - the key name for the created [Location]
+/// * [currentLocation] - an optional existing [Location]
+// TODO: Integrate this with location.dart
 Location createLocation(dynamic path, dynamic state, String key,
     [Location currentLocation = null]) {
   Location location;
