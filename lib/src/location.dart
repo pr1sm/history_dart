@@ -59,14 +59,9 @@ class Location {
   /// Construct a [Location] relative to [base]
   ///
   /// This should be used as a convenience to easily resolve pathnames that are
-  /// relative.
+  /// relative when creating a location.
   ///
-  /// Example:
-  /// ```
-  /// Location base = new Location(pathname: '/home/first');
-  /// Location relative = new Location.relativeTo(base, pathname: 'second');
-  /// print(relative.pathname) // Output: /home/second
-  /// ```
+  /// See [relateTo] for more information on how this is done.
   Location.relativeTo(
     Location base, {
     String pathname,
@@ -79,23 +74,7 @@ class Location {
     _initialize(pathname, hash, key, search, state);
 
     // Resolve pathname if needed...
-    String resolvedPathname = null;
-    if (base != null) {
-      // Current pathname is empty, use base pathname
-      if (_pathname.isEmpty) {
-        resolvedPathname = base.pathname;
-      } else if (!_pathname.startsWith('/')) {
-        // Current pathname is relative, resolve relative to base pathname
-        Uri baseUri = Uri.parse(base.pathname);
-        resolvedPathname = baseUri.resolve(_pathname).path;
-      }
-    } else if (_pathname.isEmpty) {
-      // Base is null and current pathname is empty, set a default
-      resolvedPathname = '/';
-    }
-
-    // Use resolved pathname it if isn't null
-    _pathname ??= resolvedPathname;
+    relateTo(base);
   }
 
   /// Custom hashCode implementation
@@ -122,6 +101,38 @@ class Location {
   @override
   String toString() =>
       'Pathname: "${pathname}", Hash: "${hash}", Search: "${search}", Key: "${key}", State: "${state.toString()}"';
+
+  /// Resolve this [Location] relative to [base]
+  ///
+  /// Attempt to resolve the [pathname] of this [Location] to [base] using uri
+  /// resolution. This should be done if [pathname] is a relative path
+  ///
+  /// Example:
+  /// ```
+  /// Location base = new Location(pathname: '/home/first');
+  /// Location relative = new Location(pathname: 'second'); // relative path
+  /// relative.relateTo(base);
+  /// print(relative.pathname) // Output: /home/second
+  /// ```
+  void relateTo(Location base) {
+    String resolvedPathname = null;
+    if (base != null) {
+      // Current pathname is empty, use base pathname
+      if (_pathname.isEmpty) {
+        resolvedPathname = base.pathname;
+      } else if (!_pathname.startsWith('/')) {
+        // Current pathname is relative, resolve relative to base pathname
+        Uri baseUri = Uri.parse(base.pathname);
+        resolvedPathname = baseUri.resolve(_pathname).path;
+      }
+    } else if (_pathname.isEmpty) {
+      // Base is null and current pathname is empty, set a default
+      resolvedPathname = '/';
+    }
+
+    // Use resolved pathname it if isn't null
+    _pathname ??= resolvedPathname;
+  }
 
   /// The hash fragment of this [Location]
   ///
