@@ -25,7 +25,7 @@ abstract class HashHistory extends History with BasenameMixin {
   /// * [hashType] - The type of charater pattern to insert as the hash for paths
   /// * [getConfirmation] - A [Confirmation] to use during blocking mode.
   factory(
-      {String basename,
+      {String basename = '',
       HashType hashType = HashType.slash,
       Confirmation getConfirmation}) {
     return new _HashHistoryImpl._(basename, hashType, getConfirmation);
@@ -274,7 +274,7 @@ class _HashHistoryImpl extends HashHistory {
   }
 
   void _revertPop(Location fromLocation) {
-    var toLocation = convert(html.window.location);
+    var toLocation = _location; // convert(html.window.location);
 
     var toIndex = max(_allPaths.lastIndexOf(toLocation.path), 0);
     var fromIndex = max(_allPaths.lastIndexOf(fromLocation.path), 0);

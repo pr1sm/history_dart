@@ -36,7 +36,7 @@ abstract class MemoryHistory extends History {
   ///
   /// [n] functions similarly to [History.go()] -- a change relative to the
   /// current page, where the direction is determined by the sign of [n].
-  bool canGo(n);
+  bool canGo(int n);
 }
 
 class _MemoryHistoryImpl extends MemoryHistory {
