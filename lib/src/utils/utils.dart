@@ -1,5 +1,4 @@
 import 'dart:async' show Future;
-import 'dart:math';
 
 import '../location.dart';
 
