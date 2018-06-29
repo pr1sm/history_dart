@@ -61,6 +61,8 @@ class _MemoryHistoryImpl extends MemoryHistory {
         .toList();
     _index = initialIndex.clamp(0, _entries.length - 1);
     _transitionManager = new TransitionManager<MemoryHistory>();
+    _location = _entries[index];
+    _action = Action.pop;
   }
 
   @override
@@ -98,12 +100,12 @@ class _MemoryHistoryImpl extends MemoryHistory {
         ? new Location(pathname: path, state: state, key: _createKey())
         : new Location.copy(path,
             key: _createKey(), state: path.state ?? state);
-    var action = Action.push;
+    var nextAction = Action.push;
     nextLocation.relateTo(_location);
 
     // Await Confirmation
     var ok = await _transitionManager.confirmTransitionTo(
-        nextLocation, action, _getConfirmation);
+        nextLocation, nextAction, _getConfirmation);
     if (!ok) {
       return;
     }
@@ -117,7 +119,7 @@ class _MemoryHistoryImpl extends MemoryHistory {
     }
     _index = nextIndex;
     _location = nextLocation;
-    _action = action;
+    _action = nextAction;
     _transitionManager.notify(this);
   }
 
@@ -179,12 +181,6 @@ class _MemoryHistoryImpl extends MemoryHistory {
       _transitionManager.notify(this);
     }
   }
-
-  @override
-  void goBack() => go(-1);
-
-  @override
-  void goForward() => go(1);
 
   @override
   void block(dynamic prompt) => _transitionManager.prompt(prompt);

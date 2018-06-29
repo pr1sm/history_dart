@@ -148,11 +148,11 @@ class Location {
   /// Combines the [pathname], [hash] and [search] portions of this [Location]
   String get path {
     String path = pathname;
-    if (hash != '#') {
-      path += addLeading(hash, '#');
-    }
     if (search != '?') {
       path += addLeading(search, '?');
+    }
+    if (hash != '#') {
+      path += addLeading(hash, '#');
     }
     return path;
   }

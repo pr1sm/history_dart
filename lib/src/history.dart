@@ -70,7 +70,7 @@ abstract class History {
   /// h.go(-1);
   /// ```
   ///
-  void goBack();
+  void goBack() => go(-1);
 
   /// Travel to the next entry on the History list (if it exists)
   ///
@@ -80,7 +80,7 @@ abstract class History {
   /// h.goForward();
   /// h.go(1);
   /// ```
-  void goForward();
+  void goForward() => go(1);
 
   /// Enable blocking mode with the given [prompt]
   ///
