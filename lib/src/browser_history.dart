@@ -5,11 +5,7 @@ import 'dart:math';
 import 'history.dart';
 import 'location.dart';
 import 'browser_transition_manager.dart';
-import 'utils/dom_utils.dart'
-    show
-        supportsHistory,
-        supportsPopStateOnHashChange,
-        isExtraneousPopStateEvent;
+import 'utils/dom_utils.dart' show DomUtils;
 import 'utils/path_utils.dart'
     show stripTrailingSlash, addLeadingSlash, hasBasename, stripBasename;
 import 'utils/utils.dart' show Action, Confirmation, validatePath;
@@ -45,8 +41,7 @@ class _BrowserHistoryImpl extends BrowserHistory {
   final Random _r = new Random();
   final int _keyLength;
   final html.History _globalHistory = html.window.history;
-  final bool _canUseHistory = supportsHistory;
-  final bool _needsHashChangeListener = !supportsPopStateOnHashChange;
+  final DomUtils _domUtils = new DomUtils();
 
   _BrowserHistoryImpl._(String basename, this._forceRefresh, this._keyLength,
       this._getConfirmation) {
@@ -60,7 +55,7 @@ class _BrowserHistoryImpl extends BrowserHistory {
     _transitionManager = new BrowserTransitionManager(
         popStateChangeHandler: _handlePopState,
         hashChangeHandler: _handleHashChange,
-        needsHashChangeHandler: _needsHashChangeListener);
+        needsHashChangeHandler: !_domUtils.supportsPopStateOnHashChange);
   }
 
   @override
@@ -110,7 +105,7 @@ class _BrowserHistoryImpl extends BrowserHistory {
 
     var href = _href(nextLocation);
 
-    if (_canUseHistory) {
+    if (_domUtils.supportsHistory) {
       _globalHistory.pushState(
           {'key': nextLocation.key, 'state': nextLocation.state}, null, href);
 
@@ -159,7 +154,7 @@ class _BrowserHistoryImpl extends BrowserHistory {
 
     var href = _href(nextLocation);
 
-    if (_canUseHistory) {
+    if (_domUtils.supportsHistory) {
       _globalHistory.replaceState(
           {'key': nextLocation.key, 'state': nextLocation.state}, null, href);
 
@@ -225,7 +220,7 @@ class _BrowserHistoryImpl extends BrowserHistory {
   }
 
   Future<Null> _handlePopState(event) async {
-    if (isExtraneousPopStateEvent(event)) return;
+    if (_domUtils.isExtraneousPopStateEvent(event)) return;
 
     await _handlePop(_domLocation(event.state));
   }

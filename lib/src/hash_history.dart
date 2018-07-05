@@ -6,8 +6,7 @@ import 'history.dart';
 import 'location.dart';
 import 'transition_manager.dart';
 import 'hash_transition_manager.dart';
-import 'utils/dom_utils.dart' as dom_utils
-    show canUseDom, getConfirmation, supportsGoWithoutReloadUsingHash;
+import 'utils/dom_utils.dart' show DomUtils;
 import 'utils/hash_utils.dart' show EncoderDecoder, HashPathCoders, convert;
 import 'utils/path_utils.dart'
     show addLeadingSlash, stripTrailingSlash, hasBasename, stripBasename;
@@ -51,19 +50,19 @@ class _HashHistoryImpl extends HashHistory {
   List<String> _allPaths;
 
   html.History _globalHistory = html.window.history;
-  bool _canGoWithoutReload = dom_utils.supportsGoWithoutReloadUsingHash;
   TransitionManager<HashHistory> _transitionManager;
+  final DomUtils _domUtils = new DomUtils();
 
   _HashHistoryImpl._(
       String basename, HashType hashType, Confirmation getConfirmation) {
-    if (!dom_utils.canUseDom) {
+    if (!_domUtils.canUseDom) {
       throw new StateError('Hash History needs a DOM');
     }
 
     _basename =
         (basename != null) ? stripTrailingSlash(addLeadingSlash(basename)) : '';
     _hashType = hashType ?? HashType.slash;
-    _getConfirmation = getConfirmation ?? dom_utils.getConfirmation;
+    _getConfirmation = getConfirmation ?? _domUtils.getConfirmation;
     _ed = HashPathCoders[_hashType];
 
     final path = _hashPath;
@@ -186,7 +185,7 @@ class _HashHistoryImpl extends HashHistory {
 
   @override
   Future<Null> go(int n) async {
-    if (!_canGoWithoutReload) {
+    if (!_domUtils.supportsGoWithoutReloadUsingHash) {
       print(
           'WARNING: Hash History go(n) causes a full page reload in the browser');
     }
