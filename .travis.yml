@@ -2,5 +2,5 @@ language: dart
 dart:
   - stable
 script:
-  - bash tool/ci_task.bash
+  - bash tool/travis.bash
   - bash <(curl -s https://codecov.io/bash) -f coverage/coverage.lcov

@@ -5,9 +5,7 @@ main(args) async {
     ..entryPoints = ['lib/', 'tool/', 'test/']
     ..strong = true;
 
-  config.coverage
-    ..html = false
-    ..pubServe = true;
+  config.coverage..html = false;
 
   config.format
     ..paths = ['lib/', 'tool/', 'test/']
@@ -18,7 +16,9 @@ main(args) async {
     ..commandFilePattern = '([a-zA-Z0-9]+)_task.([a-zA-Z0-9]+)'
     ..executables['go'] = ['go', 'run'];
 
-  config.test..unitTests = ['test/unit'];
+  config.test
+    ..pubServe = true
+    ..unitTests = ['test/unit'];
 
   config.genTestRunner
     ..configs = [
