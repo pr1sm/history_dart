@@ -1,6 +1,12 @@
+sudo: required
 language: dart
 dart:
   - stable
+addons:
+  chrome: stable
+env:
+  - DARTIUM_EXPIRATION_TIME="1577836800"
+with_content_shell: true
 script:
   - bash tool/travis.bash
   - bash <(curl -s https://codecov.io/bash) -f coverage/coverage.lcov
