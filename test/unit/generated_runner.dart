@@ -5,9 +5,11 @@ library test.unit.generated_runner;
 
 import './utils/dom_utils_test.dart' as utils_dom_utils_test;
 import './utils/path_utils_test.dart' as utils_path_utils_test;
+import './utils/utils_test.dart' as utils_utils_test;
 import 'package:test/test.dart';
 
 void main() {
   utils_dom_utils_test.main();
   utils_path_utils_test.main();
+  utils_utils_test.main();
 }
