@@ -11,9 +11,10 @@ dev_dependencies:
   dart_dev: ^1.9.2
   dart_style: ^1.0.7
   dependency_validator: ^1.1.0
+  mockito: ^2.2.2
   shelf: ^0.7.3
   shelf_proxy: ^0.1.0
-  test: ^0.12.24
+  test: ^0.12.32+1
   version: ^1.0.3
 transformers:
   - test/pub_serve:
