@@ -48,7 +48,7 @@ typedef Future<String> Prompt(Location location, Action action);
 Future<String> getPrompt(
     dynamic prompt, Location location, Action action) async {
   if (prompt is String) {
-    return prompt;
+    return new Future.value(prompt);
   }
 
   if (prompt is Prompt) {

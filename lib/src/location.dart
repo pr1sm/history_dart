@@ -23,7 +23,7 @@ class Location {
       String search = '',
       String state = null}) {
     // Call initialization with given inputs
-    _initialize(pathname, hash, key, search, state);
+    _initialize(pathname ?? '/', hash ?? '', key, search ?? '', state);
   }
 
   /// Construct a copy of an existing [Location].
@@ -48,13 +48,7 @@ class Location {
   ///
   /// This is convenience constructor that allows [Location] information stored in a map to
   /// be converted to typed information.
-  Location.fromMap(Map<String, dynamic> map)
-      : this(
-            pathname: map['pathname'],
-            hash: map['hash'],
-            key: map['key'],
-            search: map['search'],
-            state: map['state']);
+  Location.fromMap(Map<String, dynamic> map) : this._fromMap(map ?? const {});
 
   /// Construct a [Location] relative to [base]
   ///
@@ -71,7 +65,7 @@ class Location {
     dynamic state,
   }) {
     // Call initialization with given inputs
-    _initialize(pathname, hash, key, search, state);
+    _initialize(pathname ?? '/', hash ?? '', key, search ?? '', state);
 
     // Resolve pathname if needed...
     relateTo(base);
@@ -131,7 +125,7 @@ class Location {
     }
 
     // Use resolved pathname it if isn't null
-    _pathname ??= resolvedPathname;
+    _pathname = resolvedPathname ?? _pathname;
   }
 
   /// The hash fragment of this [Location]
@@ -148,10 +142,10 @@ class Location {
   /// Combines the [pathname], [hash] and [search] portions of this [Location]
   String get path {
     String path = pathname;
-    if (search != '?') {
+    if (search != '?' && search.isNotEmpty) {
       path += addLeading(search, '?');
     }
-    if (hash != '#') {
+    if (hash != '#' && hash.isNotEmpty) {
       path += addLeading(hash, '#');
     }
     return path;
@@ -175,6 +169,14 @@ class Location {
   /// be used to pass data along with the [Location] that may be too complex to represent as a string.
   dynamic get state => _state;
 
+  Location._fromMap(Map<String, dynamic> map)
+      : this(
+            pathname: map['pathname'],
+            hash: map['hash'],
+            key: map['key'],
+            search: map['search'],
+            state: map['state']);
+
   void _initialize(
       String pathname, String hash, String key, String search, dynamic state) {
     // Check if given pathname contains a hash portion and strip it
@@ -188,8 +190,8 @@ class Location {
     // Deal with implicit vs explicit hash
     if (hash.isNotEmpty && pathHash.isNotEmpty) {
       print(
-          'WARNING: pathname contains a hash portion and explicit hash was also provided. Defaulting to use explicit hash');
-      _hash = hash;
+          'WARNING: pathname contains an explicit hash portion and hash parameter was also provided. Defaulting to use hash portion');
+      _hash = pathHash;
     } else {
       _hash = hash.isNotEmpty ? hash : pathHash;
     }
@@ -199,15 +201,15 @@ class Location {
     int searchIndex = pathname.indexOf('?');
     String pathSearch = '';
     if (searchIndex != -1) {
-      search = pathname.substring(searchIndex);
+      pathSearch = pathname.substring(searchIndex);
       pathname = pathname.substring(0, searchIndex);
     }
 
     // Deal with implicit vs explicit search
     if (search.isNotEmpty && pathSearch.isNotEmpty) {
       print(
-          'WARNING: pathname contains a search portion and explicit search was also provided. Defaulting to use explicit search');
-      _search = search;
+          'WARNING: pathname contains an explicit search portion and search parameter was also provided. Defaulting to use search portion');
+      _search = pathSearch;
     } else {
       _search = search.isNotEmpty ? search : pathSearch;
     }
@@ -219,14 +221,10 @@ class Location {
     _state = state;
 
     try {
-      Uri.parse(_pathname);
-    } catch (e) {
-      if (e is FormatException) {
-        throw new FormatException(
-            'Pathname "${_pathname}" could not be decoded. This is likely caused by an invalid percent-encoding/');
-      } else {
-        throw e;
-      }
+      Uri uri = Uri.parse(path);
+    } on FormatException catch (e) {
+      throw new FormatException(
+          'Pathname "${_pathname}" could not be decoded. This is likely caused by an invalid percent-encoding.');
     }
   }
 }
