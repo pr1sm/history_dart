@@ -5,7 +5,7 @@ dart:
 addons:
   chrome: stable
 env:
-  - DARTIUM_EXPIRATION_TIME="1577836800"
+  - TEST_ENV="travis"
 with_content_shell: true
 script:
   - bash tool/travis.bash
