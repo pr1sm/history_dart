@@ -4,9 +4,7 @@ dart:
   - stable
 addons:
   chrome: stable
-env:
-  - TEST_ENV="travis"
 with_content_shell: true
 script:
-  - bash tool/travis.bash
+  - TEST_ENV="travis" bash ./tool/travis.bash
   - bash <(curl -s https://codecov.io/bash) -f coverage/coverage.lcov
