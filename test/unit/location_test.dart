@@ -76,6 +76,15 @@ void main() {
             pathname: null, hash: null, key: null, search: null, state: null);
         compareToExpected(loc);
       });
+
+      test('throws FormatException on invalid path', () {
+        try {
+          new Location(pathname: '%_:?invalid#path');
+        } on FormatException catch (_) {
+          return;
+        }
+        fail('FormatException should be thrown for invalid path');
+      });
     });
 
     group('copy constructor', () {
