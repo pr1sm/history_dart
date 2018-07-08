@@ -9,7 +9,7 @@ import 'package:history/src/browser/hash_transition_manager.dart';
 import 'package:history/src/utils/utils.dart' show Prompt, Action;
 
 import 'html_mocks.dart' show MocKHashHistory;
-import 'mocks.dart' show MockLocation;
+import '../core/mocks.dart' show MockLocation;
 
 void main() {
   group('HashTransitionManager', () {

@@ -8,7 +8,7 @@ import 'package:history/src/core/location.dart';
 import 'package:history/src/utils/hash_utils.dart';
 import 'package:history/src/utils/utils.dart';
 
-import '../html_mocks.dart' show MockHtmlLocation;
+import '../browser/html_mocks.dart' show MockHtmlLocation;
 
 void main() {
   group('HashUtils', () {

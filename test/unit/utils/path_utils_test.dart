@@ -1,4 +1,4 @@
-@TestOn('vm || browser')
+@TestOn('browser || vm')
 
 import 'package:test/test.dart';
 
