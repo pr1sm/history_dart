@@ -4,7 +4,12 @@ import 'package:test/test.dart';
 
 import 'package:history/src/utils/dom_utils.dart';
 
-import '../html_mocks.dart';
+import '../html_mocks.dart'
+    show
+        MockHtmlHistory,
+        MockHtmlNavigator,
+        MockHtmlPopStateEvent,
+        MockHtmlWindow;
 
 void main() {
   group('DomUtils', () {
