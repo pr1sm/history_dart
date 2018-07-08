@@ -15,7 +15,7 @@ class HashTransitionManager<T extends HashHistory>
 
   HashTransitionManager({HashChangeHandler hashChangeHandler}) : super() {
     _domCheck = 0;
-    _hashChangeHandler = hashChangeHandler;
+    _hashChangeHandler = hashChangeHandler ?? (_) {};
     _controller = new StreamController<T>.broadcast(
         onCancel: _onControllerCancel, onListen: _onControllerListen);
   }
@@ -35,7 +35,9 @@ class HashTransitionManager<T extends HashHistory>
 
   @override
   void notify(T transition) {
-    _controller.add(transition);
+    if (transition != null) {
+      _controller.add(transition);
+    }
   }
 
   void _handleDomListener(int delta) {

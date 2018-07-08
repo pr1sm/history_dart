@@ -21,8 +21,8 @@ class BrowserTransitionManager<T extends BrowserHistory>
       bool needsHashChangeHandler = false})
       : super() {
     _domCheck = 0;
-    _hashChangeHandler = hashChangeHandler;
-    _popStateChangeHandler = popStateChangeHandler;
+    _hashChangeHandler = hashChangeHandler ?? (_) {};
+    _popStateChangeHandler = popStateChangeHandler ?? (_) {};
     _needsHashChangeHandler = needsHashChangeHandler;
     _controller = new StreamController<T>.broadcast(
         onCancel: _onControllerCancel, onListen: _onControllerListen);
@@ -43,7 +43,9 @@ class BrowserTransitionManager<T extends BrowserHistory>
 
   @override
   void notify(T transition) {
-    _controller.add(transition);
+    if (transition != null) {
+      _controller.add(transition);
+    }
   }
 
   void _handleDomListener(int delta) {

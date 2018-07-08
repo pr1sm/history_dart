@@ -13,7 +13,7 @@ class TransitionManager<T> {
   Prompt get prompt => _prompt;
 
   void set prompt(Prompt nextPrompt) {
-    if (_prompt != null) {
+    if (_prompt != null && nextPrompt != null) {
       print(
           'WARNING: A history supports only one prompt at a time! Current Prompt will be overridden');
     }
