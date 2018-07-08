@@ -1,6 +1,5 @@
 @TestOn('browser')
 import 'dart:async';
-import 'dart:html' as html;
 
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
@@ -9,7 +8,7 @@ import 'package:history/src/location.dart';
 import 'package:history/src/utils/hash_utils.dart';
 import 'package:history/src/utils/utils.dart';
 
-import '../mocks.dart';
+import '../html_mocks.dart';
 
 void main() {
   group('HashUtils', () {
@@ -131,10 +130,10 @@ void main() {
     });
 
     group('convert', () {
-      MockLocation mockLocation;
+      MockHtmlLocation mockLocation;
 
       setUp(() {
-        mockLocation = new MockLocation();
+        mockLocation = new MockHtmlLocation();
       });
 
       tearDown(() {
