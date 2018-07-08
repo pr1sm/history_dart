@@ -2,7 +2,7 @@ import 'package:dart_dev/dart_dev.dart';
 
 main(args) async {
   config.analyze
-    ..entryPoints = ['lib/', 'tool/', 'test/']
+    ..entryPoints = ['lib/', 'tool/', 'test/unit/']
     ..strong = true;
 
   config.coverage..html = false;
