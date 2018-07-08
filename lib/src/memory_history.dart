@@ -6,26 +6,8 @@ import 'location.dart';
 import 'transition_manager.dart';
 import 'utils/utils.dart' show Action, Confirmation, validatePath;
 
-/// Extension of [History] that stores all data in-memory
-///
-/// This class extends all functionality of the base [History] class and adds
-/// extra functionality only supported in this variant.
-abstract class MemoryHistory extends History {
-  /// Construct a new [MemoryHistory]
-  ///
-  /// Factory constructor takes the following parameters:
-  /// * [initialEntries] - List of [String]s or [Location]s that this [History] will start with
-  /// * [initialIndex] - The starting index of this [History]
-  /// * [keyLength] - The length of keys generated for [Locations] when changes occur
-  /// * [getConfirmation] - A [Confirmation] to use during blocking mode.
-  factory(
-          {Iterable<dynamic> initialEntries,
-          int initialIndex = 0,
-          int keyLength = 6,
-          Confirmation getConfirmation}) =>
-      new _MemoryHistoryImpl._(
-          getConfirmation, initialEntries, initialIndex, keyLength);
-
+/// Mixin contains [MemoryHistory] specific definitions
+abstract class MemoryMixin {
   /// Get the index of the current [Location]
   int get index;
 
@@ -39,7 +21,11 @@ abstract class MemoryHistory extends History {
   bool canGo(int n);
 }
 
-class _MemoryHistoryImpl extends MemoryHistory {
+/// Extension of [History] that stores all data in-memory
+///
+/// This class extends all functionality of the base [History] class and adds
+/// extra functionality only supported in this variant.
+class MemoryHistory extends History with MemoryMixin {
   Action _action;
   int _index;
   final Confirmation _getConfirmation;
@@ -49,9 +35,21 @@ class _MemoryHistoryImpl extends MemoryHistory {
   Location _location;
   TransitionManager<MemoryHistory> _transitionManager;
 
-  _MemoryHistoryImpl._(this._getConfirmation, Iterable<dynamic> initialEntries,
-      int initialIndex, this._keyLength)
-      : _r = new Random() {
+  /// Construct a new [MemoryHistory]
+  ///
+  /// Factory constructor takes the following parameters:
+  /// * [initialEntries] - List of [String]s or [Location]s that this [History] will start with
+  /// * [initialIndex] - The starting index of this [History]
+  /// * [keyLength] - The length of keys generated for [Locations] when changes occur
+  /// * [getConfirmation] - A [Confirmation] to use during blocking mode.
+  MemoryHistory(
+      {Iterable<dynamic> initialEntries,
+      int initialIndex = 0,
+      int keyLength = 6,
+      Confirmation getConfirmation})
+      : _keyLength = keyLength,
+        _getConfirmation = getConfirmation,
+        _r = new Random() {
     initialEntries ??= [new Location(pathname: '/')];
     _entries = initialEntries
         .where((i) => i is String || i is Location)

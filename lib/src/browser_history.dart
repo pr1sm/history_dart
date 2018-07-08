@@ -10,25 +10,17 @@ import 'utils/path_utils.dart'
     show stripTrailingSlash, addLeadingSlash, hasBasename, stripBasename;
 import 'utils/utils.dart' show Action, Confirmation, validatePath;
 
-/// Extension of [History] that proxies calls to the Browser
-///
-/// This class extends all functionality of the base [History] class and adds
-/// extra functionality only supported in this variant.
-abstract class BrowserHistory extends History with BasenameMixin {
-  factory(
-      {String basename = '',
-      bool forcedRefresh = false,
-      int keyLength = 6,
-      Confirmation getConfirmation}) {
-    return new _BrowserHistoryImpl._(
-        basename, forcedRefresh, keyLength, getConfirmation);
-  }
-
+/// Mixin contains [BrowserHistory] specific definitions
+abstract class BrowserMixin {
   /// If changes to this will force a Browser page refresh
   bool get willForceRefresh;
 }
 
-class _BrowserHistoryImpl extends BrowserHistory {
+/// Extension of [History] that proxies calls to the Browser
+///
+/// This class includes extends all functionality of the base [History] class and adds
+/// extra functionality only supported in this variant.
+class BrowserHistory extends History with BrowserMixin, BasenameMixin {
   String _basename;
   BrowserTransitionManager<BrowserHistory> _transitionManager;
   Action _action;
@@ -43,8 +35,14 @@ class _BrowserHistoryImpl extends BrowserHistory {
   final html.History _globalHistory = html.window.history;
   final DomUtils _domUtils = new DomUtils();
 
-  _BrowserHistoryImpl._(String basename, this._forceRefresh, this._keyLength,
-      this._getConfirmation) {
+  BrowserHistory(
+      {String basename = '',
+      bool forcedRefresh = false,
+      int keyLength = 6,
+      Confirmation getConfirmation})
+      : _forceRefresh = forcedRefresh,
+        _getConfirmation = getConfirmation,
+        _keyLength = keyLength {
     _basename =
         basename != null ? stripTrailingSlash(addLeadingSlash(basename)) : '';
     _forceNextPop = false;

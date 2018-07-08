@@ -12,31 +12,19 @@ import 'utils/path_utils.dart'
     show addLeadingSlash, stripTrailingSlash, hasBasename, stripBasename;
 import 'utils/utils.dart' show Action, Confirmation, HashType, validatePath;
 
-/// Extension of [History] that supports Legacy Browsers
-///
-/// This class extends all functionality of the base [History] class and adds
-/// extra functionality only supported in this variant.
-abstract class HashHistory extends History with BasenameMixin {
-  /// Construct a new [HashHistory]
-  ///
-  /// Factory constructor takes the following parameters:
-  /// * [basename] - The base of all paths for this [HashHistory]
-  /// * [hashType] - The type of charater pattern to insert as the hash for paths
-  /// * [getConfirmation] - A [Confirmation] to use during blocking mode.
-  factory(
-      {String basename = '',
-      HashType hashType = HashType.slash,
-      Confirmation getConfirmation}) {
-    return new _HashHistoryImpl._(basename, hashType, getConfirmation);
-  }
-
+/// Mixin contains [HashHistory] specific definitions
+abstract class HashMixin {
   /// Character pattern that will be used for the hash
   ///
   /// (See [HashType] for more info)
   HashType get hashType;
 }
 
-class _HashHistoryImpl extends HashHistory {
+/// Extension of [History] that supports Legacy Browsers
+///
+/// This class extends all functionality of the base [History] class and adds
+/// extra functionality only supported in this variant.
+class HashHistory extends History with BasenameMixin, HashMixin {
   HashType _hashType;
   String _basename;
   Location _location;
@@ -53,8 +41,16 @@ class _HashHistoryImpl extends HashHistory {
   TransitionManager<HashHistory> _transitionManager;
   final DomUtils _domUtils = new DomUtils();
 
-  _HashHistoryImpl._(
-      String basename, HashType hashType, Confirmation getConfirmation) {
+  /// Construct a new [HashHistory]
+  ///
+  /// Factory constructor takes the following parameters:
+  /// * [basename] - The base of all paths for this [HashHistory]
+  /// * [hashType] - The type of charater pattern to insert as the hash for paths
+  /// * [getConfirmation] - A [Confirmation] to use during blocking mode.
+  HashHistory(
+      {String basename = '',
+      HashType hashType = HashType.slash,
+      Confirmation getConfirmation}) {
     if (!_domUtils.canUseDom) {
       throw new StateError('Hash History needs a DOM');
     }
