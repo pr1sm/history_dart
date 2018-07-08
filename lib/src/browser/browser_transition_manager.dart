@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:html';
 
 import 'browser_history.dart';
-import 'transition_manager.dart';
+import '../core/transition_manager.dart';
 
 typedef HashChangeHandler = Function(Event e);
 typedef PopStateChangeHandler = Function(Event e);

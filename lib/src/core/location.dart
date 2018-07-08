@@ -1,6 +1,6 @@
 import 'package:quiver/core.dart' show hashObjects;
 
-import 'utils/path_utils.dart';
+import '../utils/path_utils.dart';
 
 /// Abstraction of Location class
 ///

@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'location.dart';
-import 'utils/utils.dart';
+import '../utils/utils.dart';
 
 abstract class History {
   /// The number of entries in the History list

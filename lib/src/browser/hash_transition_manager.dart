@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:html';
 
 import 'hash_history.dart';
-import 'transition_manager.dart';
+import '../core/transition_manager.dart';
 
 typedef HashChangeHandler = Function(Event e);
 

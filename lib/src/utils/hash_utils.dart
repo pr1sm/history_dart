@@ -3,7 +3,7 @@ import 'dart:html' as html;
 import 'path_utils.dart' show addLeadingSlash, stripLeading, stripLeadingSlash;
 import 'utils.dart' show HashType;
 
-import '../location.dart';
+import '../core/location.dart';
 
 /// Container for Encode/Decode methods
 ///

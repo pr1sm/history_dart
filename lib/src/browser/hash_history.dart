@@ -2,15 +2,15 @@ import 'dart:async';
 import 'dart:html' as html;
 import 'dart:math';
 
-import 'history.dart';
-import 'location.dart';
-import 'transition_manager.dart';
+import '../core/history.dart';
+import '../core/location.dart';
+import '../core/transition_manager.dart';
 import 'hash_transition_manager.dart';
-import 'utils/dom_utils.dart' show DomUtils;
-import 'utils/hash_utils.dart' show EncoderDecoder, HashPathCoders, convert;
-import 'utils/path_utils.dart'
+import '../utils/dom_utils.dart' show DomUtils;
+import '../utils/hash_utils.dart' show EncoderDecoder, HashPathCoders, convert;
+import '../utils/path_utils.dart'
     show addLeadingSlash, stripTrailingSlash, hasBasename, stripBasename;
-import 'utils/utils.dart' show Action, Confirmation, HashType, validatePath;
+import '../utils/utils.dart' show Action, Confirmation, HashType, validatePath;
 
 /// Mixin contains [HashHistory] specific definitions
 abstract class HashMixin {

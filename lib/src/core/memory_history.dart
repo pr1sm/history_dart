@@ -4,7 +4,7 @@ import 'dart:math';
 import 'history.dart';
 import 'location.dart';
 import 'transition_manager.dart';
-import 'utils/utils.dart' show Action, Confirmation, validatePath;
+import '../utils/utils.dart' show Action, Confirmation, validatePath;
 
 /// Mixin contains [MemoryHistory] specific definitions
 abstract class MemoryMixin {

@@ -1,6 +1,6 @@
 import 'dart:async' show Future;
 
-import '../location.dart';
+import '../core/location.dart';
 
 /// The type of History transition
 ///

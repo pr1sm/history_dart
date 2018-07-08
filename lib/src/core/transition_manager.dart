@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'location.dart';
-import 'utils/utils.dart' show Action, Confirmation, Prompt, getPrompt;
+import '../utils/utils.dart' show Action, Confirmation, Prompt, getPrompt;
 
 class TransitionManager<T> {
   dynamic _prompt = null;

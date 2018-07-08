@@ -2,13 +2,13 @@ import 'dart:async';
 import 'dart:html' as html;
 import 'dart:math';
 
-import 'history.dart';
-import 'location.dart';
+import '../core/history.dart';
+import '../core/location.dart';
 import 'browser_transition_manager.dart';
-import 'utils/dom_utils.dart' show DomUtils;
-import 'utils/path_utils.dart'
+import '../utils/dom_utils.dart' show DomUtils;
+import '../utils/path_utils.dart'
     show stripTrailingSlash, addLeadingSlash, hasBasename, stripBasename;
-import 'utils/utils.dart' show Action, Confirmation, validatePath;
+import '../utils/utils.dart' show Action, Confirmation, validatePath;
 
 /// Mixin contains [BrowserHistory] specific definitions
 abstract class BrowserMixin {
