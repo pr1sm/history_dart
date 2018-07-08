@@ -4,8 +4,8 @@ import 'dart:html';
 
 import 'package:test/test.dart';
 
-import 'package:history/src/browser_history.dart';
-import 'package:history/src/browser_transition_manager.dart';
+import 'package:history/src/browser/browser_history.dart';
+import 'package:history/src/browser/browser_transition_manager.dart';
 import 'package:history/src/utils/utils.dart' show Prompt, Action;
 
 import 'html_mocks.dart' show MockBrowserHistory;

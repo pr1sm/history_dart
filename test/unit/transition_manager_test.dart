@@ -3,7 +3,7 @@ import 'dart:async';
 
 import 'package:test/test.dart';
 
-import 'package:history/src/transition_manager.dart';
+import 'package:history/src/core/transition_manager.dart';
 import 'package:history/src/utils/utils.dart' show Action, Prompt;
 
 import 'mocks.dart' show MockLocation;

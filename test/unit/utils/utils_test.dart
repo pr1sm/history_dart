@@ -1,7 +1,7 @@
 @TestOn('browser || vm')
 import 'package:test/test.dart';
 
-import 'package:history/src/location.dart';
+import 'package:history/src/core/location.dart';
 import 'package:history/src/utils/utils.dart';
 
 void main() {

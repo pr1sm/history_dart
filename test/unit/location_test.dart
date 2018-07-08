@@ -2,7 +2,7 @@
 
 import 'package:test/test.dart';
 
-import 'package:history/src/location.dart';
+import 'package:history/src/core/location.dart';
 
 void main() {
   group('Location', () {

@@ -2,8 +2,8 @@ import 'dart:html';
 
 import 'package:mockito/mockito.dart';
 
-import 'package:history/src/browser_history.dart';
-import 'package:history/src/hash_history.dart';
+import 'package:history/src/browser/browser_history.dart';
+import 'package:history/src/browser/hash_history.dart';
 
 class MockHtmlWindow extends Mock implements Window {}
 

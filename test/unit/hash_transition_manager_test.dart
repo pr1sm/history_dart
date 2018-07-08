@@ -4,8 +4,8 @@ import 'dart:html';
 
 import 'package:test/test.dart';
 
-import 'package:history/src/hash_history.dart';
-import 'package:history/src/hash_transition_manager.dart';
+import 'package:history/src/browser/hash_history.dart';
+import 'package:history/src/browser/hash_transition_manager.dart';
 import 'package:history/src/utils/utils.dart' show Prompt, Action;
 
 import 'html_mocks.dart' show MocKHashHistory;
