@@ -98,7 +98,7 @@ class _HashHistoryImpl extends HashHistory {
   String get basename => _basename;
 
   @override
-  Stream<HashHistory> get onChange => _transitionManager;
+  Stream<HashHistory> get onChange => _transitionManager.stream;
 
   @override
   Future<Null> push(dynamic path, [dynamic state]) async {
@@ -193,10 +193,10 @@ class _HashHistoryImpl extends HashHistory {
   }
 
   @override
-  void block(dynamic prompt) => _transitionManager.prompt(prompt);
+  void block(dynamic prompt) => _transitionManager.prompt = prompt;
 
   @override
-  void unblock() => _transitionManager.prompt(null);
+  void unblock() => _transitionManager.prompt = null;
 
   Location get _domLocation {
     var path = _ed.decodePath(_hashPath);

@@ -8,77 +8,51 @@ typedef HashChangeHandler = Function(Event e);
 
 class HashTransitionManager<T extends HashHistory>
     extends TransitionManager<T> {
-  int _listenerCount = 0;
+  int _domCheck;
   HashChangeHandler _hashChangeHandler;
 
+  StreamController<T> _controller;
+
   HashTransitionManager({HashChangeHandler hashChangeHandler}) : super() {
+    _domCheck = 0;
     _hashChangeHandler = hashChangeHandler;
+    _controller = new StreamController<T>.broadcast(
+        onCancel: _onControllerCancel, onListen: _onControllerListen);
   }
+
+  @override
+  Stream<T> get stream => _controller.stream;
 
   @override
   void set prompt(nextPrompt) {
     if (prompt == null && nextPrompt != null) {
-      _checkDomListeners(1);
+      _handleDomListener(1);
     } else if (prompt != null && nextPrompt == null) {
-      _checkDomListeners(-1);
+      _handleDomListener(-1);
     }
     super.prompt = nextPrompt;
   }
 
   @override
-  StreamSubscription<T> listen(void onData(T transition),
-      {Function onError, void onDone(), bool cancelOnError}) {
-    var toWrap = super.listen(onData,
-        onError: onError, onDone: onDone, cancelOnError: cancelOnError);
-    return new HashStreamSubscription(toWrap, onCancel: _onCancel);
+  void notify(T transition) {
+    _controller.add(transition);
   }
 
-  void _checkDomListeners(int delta) {
-    _listenerCount += delta;
-    if (_listenerCount == 1) {
+  void _handleDomListener(int delta) {
+    // no change: do nothing
+    if (delta == 0) {
+      return;
+    }
+    int nextDomCheck = (_domCheck + delta).clamp(0, 2);
+    if (_domCheck == 0 && nextDomCheck != 0) {
       window.addEventListener('hashchange', _hashChangeHandler);
-    } else if (_listenerCount == 0) {
+    } else if (_domCheck != 0 && nextDomCheck == 0) {
       window.removeEventListener('hashchange', _hashChangeHandler);
     }
+    _domCheck = nextDomCheck;
   }
 
-  void _onCancel() {
-    _checkDomListeners(-1);
-  }
-}
+  void _onControllerCancel() => _handleDomListener(-1);
 
-class HashStreamSubscription<T> extends StreamSubscription<T> {
-  final StreamSubscription<T> wrapped;
-  final void Function() onCancel;
-
-  HashStreamSubscription(this.wrapped, {this.onCancel});
-
-  @override
-  Future cancel() {
-    if (onCancel != null) {
-      onCancel();
-    }
-    return wrapped.cancel();
-  }
-
-  @override
-  void onData(void handleData(T data)) => wrapped.onData(handleData);
-
-  @override
-  void onError(Function handleError) => wrapped.onError(handleError);
-
-  @override
-  void onDone(void handleDone()) => wrapped.onDone(handleDone);
-
-  @override
-  void pause([Future resumeSignal]) => wrapped.pause(resumeSignal);
-
-  @override
-  void resume() => wrapped.resume();
-
-  @override
-  bool get isPaused => wrapped.isPaused;
-
-  @override
-  Future<E> asFuture<E>([E value]) => wrapped.asFuture(value);
+  void _onControllerListen() => _handleDomListener(1);
 }

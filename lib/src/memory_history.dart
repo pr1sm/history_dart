@@ -84,7 +84,7 @@ class _MemoryHistoryImpl extends MemoryHistory {
   bool get isBlocking => _transitionManager.prompt != null;
 
   @override
-  Stream<MemoryHistory> get onChange => _transitionManager;
+  Stream<MemoryHistory> get onChange => _transitionManager.stream;
 
   @override
   Future<Null> push(dynamic path, [dynamic state]) async {
@@ -183,10 +183,10 @@ class _MemoryHistoryImpl extends MemoryHistory {
   }
 
   @override
-  void block(dynamic prompt) => _transitionManager.prompt(prompt);
+  void block(dynamic prompt) => _transitionManager.prompt = prompt;
 
   @override
-  void unblock() => _transitionManager.prompt(null);
+  void unblock() => _transitionManager.prompt = null;
 
   String _createKey() =>
       _r.nextInt((1 << 32) - 1).toRadixString(36).substring(2, 2 + _keyLength);
