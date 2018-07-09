@@ -6,6 +6,7 @@ library test.unit.generated_runner;
 import './browser/browser_transition_manager_test.dart' as browser_browser_transition_manager_test;
 import './browser/hash_transition_manager_test.dart' as browser_hash_transition_manager_test;
 import './core/location_test.dart' as core_location_test;
+import './core/memory_history_test.dart' as core_memory_history_test;
 import './core/transition_manager_test.dart' as core_transition_manager_test;
 import './utils/dom_utils_test.dart' as utils_dom_utils_test;
 import './utils/hash_utils_test.dart' as utils_hash_utils_test;
@@ -17,6 +18,7 @@ void main() {
   browser_browser_transition_manager_test.main();
   browser_hash_transition_manager_test.main();
   core_location_test.main();
+  core_memory_history_test.main();
   core_transition_manager_test.main();
   utils_dom_utils_test.main();
   utils_hash_utils_test.main();
