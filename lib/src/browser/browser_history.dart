@@ -83,7 +83,7 @@ class BrowserHistory extends History with BrowserMixin, BasenameMixin {
     validatePath(path);
     if (path is Location && path.state != null && state != null) {
       print(
-          'WARNING: You should avoid adding the 2nd argument (state) when the 1st argument is a "Location" with a defined state; it will be ignored');
+          'WARNING: You should avoid adding the 2nd argument (state) when the 1st argument is a "Location" with a defined state; 2nd argument state will be ignored');
     }
 
     // Compute next location and action
@@ -132,7 +132,7 @@ class BrowserHistory extends History with BrowserMixin, BasenameMixin {
     validatePath(path);
     if (path is Location && path.state != null && state != null) {
       print(
-          'WARNING: You should avoid adding the 2nd argument (state) when the 1st argument is a "Location" with a defined state; it will be ignored');
+          'WARNING: You should avoid adding the 2nd argument (state) when the 1st argument is a "Location" with a defined state; 2nd argument state will be ignored');
     }
 
     // Compute next location and action
@@ -254,6 +254,9 @@ class BrowserHistory extends History with BrowserMixin, BasenameMixin {
     }
   }
 
-  String _createKey() =>
-      _r.nextInt((1 << 32) - 1).toRadixString(36).substring(2, 2 + _keyLength);
+  String _createKey() => _r
+      .nextInt((1 << 31) - 1)
+      .toRadixString(36)
+      .padRight(_keyLength)
+      .substring(0, _keyLength);
 }
