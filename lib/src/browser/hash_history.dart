@@ -4,7 +4,6 @@ import 'dart:math';
 
 import '../core/history.dart';
 import '../core/location.dart';
-import '../core/transition_manager.dart';
 import 'hash_transition_manager.dart';
 import '../utils/dom_utils.dart' show DomUtils;
 import '../utils/hash_utils.dart' show EncoderDecoder, HashPathCoders, convert;
@@ -31,15 +30,17 @@ class HashHistory extends History with BasenameMixin, HashMixin {
   Action _action;
   Confirmation _getConfirmation;
   EncoderDecoder _ed;
+  Completer _hashChangeHandlerCompleter;
 
   bool _forceNextPop = false;
   String _ignorePath = null;
 
   List<String> _allPaths;
 
-  html.History _globalHistory = html.window.history;
-  TransitionManager<HashHistory> _transitionManager;
-  final DomUtils _domUtils = new DomUtils();
+  html.Window _window;
+  html.History _globalHistory;
+  HashTransitionManager<HashHistory> _transitionManager;
+  DomUtils _domUtils = new DomUtils();
 
   /// Construct a new [HashHistory]
   ///
@@ -50,11 +51,15 @@ class HashHistory extends History with BasenameMixin, HashMixin {
   HashHistory(
       {String basename = '',
       HashType hashType = HashType.slash,
-      Confirmation getConfirmation}) {
+      Confirmation getConfirmation,
+      html.Window window}) {
+    _window = window ?? html.window;
+    _domUtils = new DomUtils(windowImpl: _window);
     if (!_domUtils.canUseDom) {
       throw new StateError('Hash History needs a DOM');
     }
 
+    _globalHistory = _window.history;
     _basename =
         (basename != null) ? stripTrailingSlash(addLeadingSlash(basename)) : '';
     _hashType = hashType ?? HashType.slash;
@@ -99,14 +104,15 @@ class HashHistory extends History with BasenameMixin, HashMixin {
   @override
   Future<Null> push(dynamic path, [dynamic state]) async {
     validatePath(path);
-    if (state != null) {
+    if (state != null || (path is Location && path.state != null)) {
       print('WARNING: HashHistory does not support state; it will be ignored');
     }
 
     // Compute next location and action
     Location nextLocation = (path is String)
         ? new Location(pathname: path)
-        : new Location.copy(path);
+        : new Location(
+            pathname: path.pathname, hash: path.hash, search: path.search);
     var nextAction = Action.push;
     nextLocation.relateTo(_location);
 
@@ -124,13 +130,17 @@ class HashHistory extends History with BasenameMixin, HashMixin {
       // We can't tell if hashchange was caused by a push, so we force a
       // notify here and ignore the HashChangeEvent. the caveat here is that
       // other histories will view this as a pop.
-      _ignorePath = nextPath;
+      if (_transitionManager.listeningToWindowEvents) {
+        _ignorePath = nextPath;
+      }
       _pushHashPath(encodedPath);
 
       var prevIndex = _allPaths.lastIndexOf(_location.path);
       _allPaths = _allPaths.sublist(0, prevIndex == -1 ? 0 : prevIndex + 1)
         ..add(nextPath);
 
+      _location = nextLocation;
+      _action = nextAction;
       _transitionManager.notify(this);
     } else {
       print(
@@ -142,14 +152,15 @@ class HashHistory extends History with BasenameMixin, HashMixin {
   @override
   Future<Null> replace(dynamic path, [dynamic state]) async {
     validatePath(path);
-    if (state != null) {
+    if (state != null || (path is Location && path.state != null)) {
       print('WARNING: HashHistory does not support state; it will be ignored');
     }
 
     // Compute next location and action
     Location nextLocation = (path is String)
         ? new Location(pathname: path)
-        : new Location.copy(path);
+        : new Location(
+            pathname: path.pathname, hash: path.hash, search: path.search);
     var nextAction = Action.replace;
     nextLocation.relateTo(_location);
 
@@ -167,7 +178,9 @@ class HashHistory extends History with BasenameMixin, HashMixin {
       // We can't tell if hashchange was caused by a push, so we force a
       // notify here and ignore the HashChangeEvent. the caveat here is that
       // other histories will view this as a pop.
-      _ignorePath = nextPath;
+      if (_transitionManager.listeningToWindowEvents) {
+        _ignorePath = nextPath;
+      }
       _replaceHashPath(encodedPath);
     }
 
@@ -176,6 +189,8 @@ class HashHistory extends History with BasenameMixin, HashMixin {
       _allPaths[prevIndex] = nextPath;
     }
 
+    _location = nextLocation;
+    _action = nextAction;
     _transitionManager.notify(this);
   }
 
@@ -185,7 +200,16 @@ class HashHistory extends History with BasenameMixin, HashMixin {
       print(
           'WARNING: Hash History go(n) causes a full page reload in the browser');
     }
+    if (_transitionManager.listeningToWindowEvents) {
+      _hashChangeHandlerCompleter = new Completer();
+    }
     _globalHistory.go(n);
+    if (!_transitionManager.listeningToWindowEvents) {
+      await _handleHashChange(null);
+    } else {
+      await _hashChangeHandlerCompleter.future;
+      _hashChangeHandlerCompleter = null;
+    }
   }
 
   @override
@@ -212,19 +236,19 @@ class HashHistory extends History with BasenameMixin, HashMixin {
   String get _hashPath {
     // We can't use window.location.hash here because it's not
     // consistent across browsers -- Firefox will pre-decode it
-    final href = html.window.location.href;
+    final href = _window.location.href;
     final hashIndex = href.indexOf('#');
     return hashIndex == -1 ? '' : href.substring(hashIndex + 1);
   }
 
   void _pushHashPath(String path) {
-    html.window.location.hash = path;
+    _window.location.hash = path;
   }
 
   void _replaceHashPath(String path) {
-    final hashIndex = html.window.location.href.indexOf('#');
-    html.window.location.replace(
-        '${html.window.location.href.substring(0, hashIndex >= 0 ? hashIndex : 0)}#${path}');
+    final hashIndex = _window.location.href.indexOf('#');
+    _window.location.replace(
+        '${_window.location.href.substring(0, hashIndex >= 0 ? hashIndex : null)}#${path}');
   }
 
   _handleHashChange(html.Event e) async {
@@ -236,7 +260,7 @@ class HashHistory extends History with BasenameMixin, HashMixin {
       _replaceHashPath(encodedPath);
     } else {
       var location = _domLocation;
-      var prevLocation = convert(html.window.location);
+      var prevLocation = convert(_window.location);
 
       if (!_forceNextPop && location == prevLocation) {
         return; // not all hash changes are location changes
@@ -247,8 +271,10 @@ class HashHistory extends History with BasenameMixin, HashMixin {
       }
 
       _ignorePath = null;
-
       await _handlePop(location);
+      if (_hashChangeHandlerCompleter != null) {
+        _hashChangeHandlerCompleter.complete();
+      }
     }
   }
 
@@ -261,6 +287,8 @@ class HashHistory extends History with BasenameMixin, HashMixin {
       bool ok = await _transitionManager.confirmTransitionTo(
           location, action, _getConfirmation);
       if (ok) {
+        _location = location;
+        _action = action;
         _transitionManager.notify(this);
       } else {
         _revertPop(location);
@@ -269,7 +297,7 @@ class HashHistory extends History with BasenameMixin, HashMixin {
   }
 
   void _revertPop(Location fromLocation) {
-    var toLocation = _location; // convert(html.window.location);
+    var toLocation = _location; // convert(_window.location);
 
     var toIndex = max(_allPaths.lastIndexOf(toLocation.path), 0);
     var fromIndex = max(_allPaths.lastIndexOf(fromLocation.path), 0);

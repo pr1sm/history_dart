@@ -20,6 +20,8 @@ class HashTransitionManager<T extends HashHistory>
         onCancel: _onControllerCancel, onListen: _onControllerListen);
   }
 
+  bool get listeningToWindowEvents => _domCheck != 0;
+
   @override
   Stream<T> get stream => _controller.stream;
 
