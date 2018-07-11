@@ -27,23 +27,23 @@ void main() {
 
     group('default constructor', () {
       test('constructs with no parameters', () {
-        Location loc = new Location();
+        var loc = new Location();
         compareToExpected(loc);
       });
 
       test('constructs with pathname', () {
-        Location loc = new Location(pathname: 'pathname');
+        var loc = new Location(pathname: 'pathname');
         compareToExpected(loc, 'pathname', '', '', null, null, 'pathname');
       });
 
       test('constructs when path is passed to pathname', () {
-        Location loc = new Location(pathname: '/pathname?search#hash');
+        var loc = new Location(pathname: '/pathname?search#hash');
         compareToExpected(loc, '/pathname', 'hash', 'search', null, null,
             '/pathname?search#hash');
       });
 
       test('overrides hash and search when path is passed to pathname', () {
-        Location loc = new Location(
+        var loc = new Location(
             pathname: '/pathname?search#hash',
             hash: 'myHash',
             search: 'mySearch');
@@ -52,27 +52,27 @@ void main() {
       });
 
       test('constructs with hash', () {
-        Location loc = new Location(hash: 'hash');
+        var loc = new Location(hash: 'hash');
         compareToExpected(loc, '/', 'hash', '', null, null, '/#hash');
       });
 
       test('constructs with search', () {
-        Location loc = new Location(search: 'search');
+        var loc = new Location(search: 'search');
         compareToExpected(loc, '/', '', 'search', null, null, '/?search');
       });
 
       test('constructs with key', () {
-        Location loc = new Location(key: 'key');
+        var loc = new Location(key: 'key');
         compareToExpected(loc, '/', '', '', 'key', null, '/');
       });
 
       test('constructs with state', () {
-        Location loc = new Location(state: 'state');
+        var loc = new Location(state: 'state');
         compareToExpected(loc, '/', '', '', null, 'state', '/');
       });
 
       test('constructs when null is given', () {
-        Location loc = new Location(
+        var loc = new Location(
             pathname: null, hash: null, key: null, search: null, state: null);
         compareToExpected(loc);
       });
@@ -100,7 +100,7 @@ void main() {
       });
 
       test('copies when no overrides are given', () {
-        Location loc = new Location.copy(base);
+        var loc = new Location.copy(base);
         expect(loc, equals(base));
         expect(loc.hashCode, equals(base.hashCode));
         compareToExpected(loc, 'basepath', 'basehash', 'basesearch', 'basekey',
@@ -108,7 +108,7 @@ void main() {
       });
 
       test('copies when null overrides are given', () {
-        Location loc = new Location.copy(base,
+        var loc = new Location.copy(base,
             pathname: null, hash: null, search: null, key: null, state: null);
         expect(loc, equals(base));
         compareToExpected(loc, 'basepath', 'basehash', 'basesearch', 'basekey',
@@ -116,7 +116,7 @@ void main() {
       });
 
       test('overrides pathname', () {
-        Location loc = new Location.copy(base, pathname: 'newpath');
+        var loc = new Location.copy(base, pathname: 'newpath');
         expect(loc, isNot(equals(base)));
         expect(loc.hashCode, isNot(equals(base.hashCode)));
         compareToExpected(loc, 'newpath', 'basehash', 'basesearch', 'basekey',
@@ -124,14 +124,13 @@ void main() {
       });
 
       test('overrides when path is passed to pathname', () {
-        Location loc =
-            new Location.copy(base, pathname: '/pathname?search#hash');
+        var loc = new Location.copy(base, pathname: '/pathname?search#hash');
         compareToExpected(loc, '/pathname', 'hash', 'search', 'basekey',
             'basestate', '/pathname?search#hash');
       });
 
       test('overrides hash', () {
-        Location loc = new Location.copy(base, hash: 'newhash');
+        var loc = new Location.copy(base, hash: 'newhash');
         expect(loc, isNot(equals(base)));
         expect(loc.hashCode, isNot(equals(base.hashCode)));
         compareToExpected(loc, 'basepath', 'newhash', 'basesearch', 'basekey',
@@ -139,7 +138,7 @@ void main() {
       });
 
       test('overrides search', () {
-        Location loc = new Location.copy(base, search: 'newsearch');
+        var loc = new Location.copy(base, search: 'newsearch');
         expect(loc, isNot(equals(base)));
         expect(loc.hashCode, isNot(equals(base.hashCode)));
         compareToExpected(loc, 'basepath', 'basehash', 'newsearch', 'basekey',
@@ -147,7 +146,7 @@ void main() {
       });
 
       test('overrides key', () {
-        Location loc = new Location.copy(base, key: 'newkey');
+        var loc = new Location.copy(base, key: 'newkey');
         expect(loc, isNot(equals(base)));
         expect(loc.hashCode, isNot(equals(base.hashCode)));
         compareToExpected(loc, 'basepath', 'basehash', 'basesearch', 'newkey',
@@ -155,7 +154,7 @@ void main() {
       });
 
       test('overrides state', () {
-        Location loc = new Location.copy(base, state: 'newstate');
+        var loc = new Location.copy(base, state: 'newstate');
         expect(loc, isNot(equals(base)));
         expect(loc.hashCode, isNot(equals(base.hashCode)));
         compareToExpected(loc, 'basepath', 'basehash', 'basesearch', 'basekey',
@@ -168,7 +167,7 @@ void main() {
         var map = {
           'pathname': 'pathname',
         };
-        Location loc = new Location.fromMap(map);
+        var loc = new Location.fromMap(map);
         compareToExpected(loc, 'pathname', '', '', null, null, 'pathname');
       });
 
@@ -176,7 +175,7 @@ void main() {
         var map = {
           'pathname': 'pathname?search#hash',
         };
-        Location loc = new Location.fromMap(map);
+        var loc = new Location.fromMap(map);
         compareToExpected(loc, 'pathname', 'hash', 'search', null, null,
             'pathname?search#hash');
       });
@@ -187,7 +186,7 @@ void main() {
           'hash': 'myHash',
           'search': 'mySearch',
         };
-        Location loc = new Location.fromMap(map);
+        var loc = new Location.fromMap(map);
         compareToExpected(loc, 'pathname', 'hash', 'search', null, null,
             'pathname?search#hash');
       });
@@ -196,7 +195,7 @@ void main() {
         var map = {
           'hash': 'hash',
         };
-        Location loc = new Location.fromMap(map);
+        var loc = new Location.fromMap(map);
         compareToExpected(loc, '/', 'hash', '', null, null, '/#hash');
       });
 
@@ -204,7 +203,7 @@ void main() {
         var map = {
           'search': 'search',
         };
-        Location loc = new Location.fromMap(map);
+        var loc = new Location.fromMap(map);
         compareToExpected(loc, '/', '', 'search', null, null, '/?search');
       });
 
@@ -212,7 +211,7 @@ void main() {
         var map = {
           'key': 'key',
         };
-        Location loc = new Location.fromMap(map);
+        var loc = new Location.fromMap(map);
         compareToExpected(loc, '/', '', '', 'key', null, '/');
       });
 
@@ -220,12 +219,12 @@ void main() {
         var map = {
           'state': 'state',
         };
-        Location loc = new Location.fromMap(map);
+        var loc = new Location.fromMap(map);
         compareToExpected(loc, '/', '', '', null, 'state', '/');
       });
 
       test('constructs when null is given', () {
-        Location loc = new Location.fromMap(null);
+        var loc = new Location.fromMap(null);
         compareToExpected(loc);
       });
     });
@@ -243,39 +242,39 @@ void main() {
       });
 
       test('constructs default values with null base', () {
-        Location loc = new Location.relativeTo(null);
+        var loc = new Location.relativeTo(null);
         compareToExpected(loc);
       });
 
       test('constructs with no relation with null base', () {
-        Location loc = new Location.relativeTo(null, pathname: 'myPath');
+        var loc = new Location.relativeTo(null, pathname: 'myPath');
         compareToExpected(loc, 'myPath', '', '', null, null, 'myPath');
       });
 
       test('constructs with no absolute relation with null base', () {
-        Location loc = new Location.relativeTo(null, pathname: '/myPath');
+        var loc = new Location.relativeTo(null, pathname: '/myPath');
         compareToExpected(loc, '/myPath', '', '', null, null, '/myPath');
       });
 
       test('constructs with no relation when absolute path is used', () {
-        Location loc = new Location.relativeTo(base, pathname: '/myPath');
+        var loc = new Location.relativeTo(base, pathname: '/myPath');
         compareToExpected(loc, '/myPath', '', '', null, null, '/myPath');
       });
 
       test('constructs path with current parent when fragment is used', () {
-        Location loc = new Location.relativeTo(base, pathname: 'path2');
+        var loc = new Location.relativeTo(base, pathname: 'path2');
         compareToExpected(
             loc, '/base/path2', '', '', null, null, '/base/path2');
       });
 
       test('constructs path relative to base when "./" is used', () {
-        Location loc = new Location.relativeTo(base, pathname: './path2');
+        var loc = new Location.relativeTo(base, pathname: './path2');
         compareToExpected(
             loc, '/base/path2', '', '', null, null, '/base/path2');
       });
 
       test('constructs path relative to base when "../" is used', () {
-        Location loc = new Location.relativeTo(base, pathname: '../path2');
+        var loc = new Location.relativeTo(base, pathname: '../path2');
         compareToExpected(loc, '/path2', '', '', null, null, '/path2');
       });
 
@@ -286,8 +285,7 @@ void main() {
             search: 'basesearch',
             key: 'basekey',
             state: 'basestate');
-        Location loc =
-            new Location.relativeTo(base, pathname: '../../path2/path3');
+        var loc = new Location.relativeTo(base, pathname: '../../path2/path3');
         compareToExpected(
             loc, '/path2/path3', '', '', null, null, '/path2/path3');
       });
@@ -301,13 +299,13 @@ void main() {
             search: 'basesearch',
             key: 'basekey',
             state: 'basestate');
-        Location loc =
+        var loc =
             new Location.relativeTo(base, pathname: '../../../../../../path2');
         compareToExpected(loc, '/path2', '', '', null, null, '/path2');
       });
 
       test('constructs with given parameters instead of base', () {
-        Location loc = new Location.relativeTo(base,
+        var loc = new Location.relativeTo(base,
             pathname: 'path2',
             hash: 'myHash',
             search: 'mySearch',
@@ -318,7 +316,7 @@ void main() {
       });
 
       test('overrides hash and search when path is given for pathname', () {
-        Location loc = new Location.relativeTo(base,
+        var loc = new Location.relativeTo(base,
             pathname: 'path2?search#hash', hash: 'myHash', search: 'mySearch');
         compareToExpected(loc, '/base/path2', 'hash', 'search', null, null,
             '/base/path2?search#hash');
@@ -338,45 +336,45 @@ void main() {
       });
 
       test('works with default values with null base', () {
-        Location loc = new Location();
+        var loc = new Location();
         loc.relateTo(null);
         compareToExpected(loc);
       });
 
       test('works with no relation with null base', () {
-        Location loc = new Location(pathname: 'myPath');
+        var loc = new Location(pathname: 'myPath');
         loc.relateTo(null);
         compareToExpected(loc, 'myPath', '', '', null, null, 'myPath');
       });
 
       test('works with no absolute relation with null base', () {
-        Location loc = new Location(pathname: '/myPath');
+        var loc = new Location(pathname: '/myPath');
         loc.relateTo(null);
         compareToExpected(loc, '/myPath', '', '', null, null, '/myPath');
       });
 
       test('works with no relation when absolute path is used', () {
-        Location loc = new Location(pathname: '/myPath');
+        var loc = new Location(pathname: '/myPath');
         loc.relateTo(base);
         compareToExpected(loc, '/myPath', '', '', null, null, '/myPath');
       });
 
       test('works when path with current parent when fragment is used', () {
-        Location loc = new Location(pathname: 'path2');
+        var loc = new Location(pathname: 'path2');
         loc.relateTo(base);
         compareToExpected(
             loc, '/base/path2', '', '', null, null, '/base/path2');
       });
 
       test('works when path relative to base when "./" is used', () {
-        Location loc = new Location(pathname: './path2');
+        var loc = new Location(pathname: './path2');
         loc.relateTo(base);
         compareToExpected(
             loc, '/base/path2', '', '', null, null, '/base/path2');
       });
 
       test('works when path relative to base when "../" is used', () {
-        Location loc = new Location(pathname: '../path2');
+        var loc = new Location(pathname: '../path2');
         loc.relateTo(base);
         compareToExpected(loc, '/path2', '', '', null, null, '/path2');
       });
@@ -388,7 +386,7 @@ void main() {
             search: 'basesearch',
             key: 'basekey',
             state: 'basestate');
-        Location loc = new Location(pathname: '../../path2/path3');
+        var loc = new Location(pathname: '../../path2/path3');
         loc.relateTo(base);
         compareToExpected(
             loc, '/path2/path3', '', '', null, null, '/path2/path3');
@@ -403,13 +401,13 @@ void main() {
             search: 'basesearch',
             key: 'basekey',
             state: 'basestate');
-        Location loc = new Location(pathname: '../../../../../../path2');
+        var loc = new Location(pathname: '../../../../../../path2');
         loc.relateTo(base);
         compareToExpected(loc, '/path2', '', '', null, null, '/path2');
       });
 
       test('works with given parameters instead of base', () {
-        Location loc = new Location(
+        var loc = new Location(
             pathname: 'path2',
             hash: 'myHash',
             search: 'mySearch',
@@ -421,7 +419,7 @@ void main() {
       });
 
       test('uses base pathname when current pathname is empty', () {
-        Location loc = new Location(pathname: '?search#hash');
+        var loc = new Location(pathname: '?search#hash');
         loc.relateTo(base);
         compareToExpected(loc, '/base/path', 'hash', 'search', null, null,
             '/base/path?search#hash');

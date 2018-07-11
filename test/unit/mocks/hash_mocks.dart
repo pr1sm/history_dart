@@ -2,21 +2,20 @@ import 'dart:html';
 
 import 'package:mockito/mockito.dart';
 
-import 'package:history/src/browser/browser_history.dart';
-import 'package:history/src/browser/hash_history.dart';
+import 'html_mocks.dart';
 
-class MockHtmlWindow extends Mock implements Window {
+class MockHashHtmlWindow extends MockHtmlWindow {
   MockHtmlDocument mockDocument;
   MockHtmlNavigator mockNavigator;
-  _MockHtmlHistory mockHistory;
+  MockHashHtmlHistory mockHistory;
   bool mockPrint;
 
-  MockHtmlWindow({this.mockPrint = false}) {
+  MockHashHtmlWindow({this.mockPrint = false}) {
     mockNavigator = new MockHtmlNavigator();
     when(mockNavigator.userAgent).thenReturn(
         'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36');
     mockDocument = new MockHtmlDocument();
-    mockHistory = new _MockHtmlHistory(mockPrint: mockPrint);
+    mockHistory = new MockHashHtmlHistory(mockPrint: mockPrint);
   }
 
   @override
@@ -32,19 +31,19 @@ class MockHtmlWindow extends Mock implements Window {
   Navigator get navigator => mockNavigator;
 }
 
-class _MockHtmlHistory extends Mock implements History {
+class MockHashHtmlHistory extends MockHtmlHistory {
   int mockIndex;
   bool mockPrint;
   List<Location> mockLocations;
 
-  _MockHtmlHistory({this.mockPrint = false}) {
+  MockHashHtmlHistory({this.mockPrint = false}) {
     mockIndex = 0;
-    mockLocations = [new _MockHtmlLocation(this, mockPrint: mockPrint)];
+    mockLocations = [new MockHashHtmlLocation(this, mockPrint: mockPrint)];
   }
 
-  _MockHtmlLocation get mockLocation => mockLocations[mockIndex];
+  MockHashHtmlLocation get mockLocation => mockLocations[mockIndex];
 
-  void mockOnReplace(_MockHtmlLocation location) {
+  void mockOnReplace(MockHashHtmlLocation location) {
     if (mockPrint) {
       print('mock on replace ${location.href}');
     }
@@ -52,7 +51,7 @@ class _MockHtmlHistory extends Mock implements History {
     window.dispatchEvent(new HashChangeEvent('hashchange'));
   }
 
-  void mockOnPush(_MockHtmlLocation location) {
+  void mockOnPush(MockHashHtmlLocation location) {
     if (mockPrint) {
       print('mock on push ${location.href}');
     }
@@ -83,13 +82,13 @@ class _MockHtmlHistory extends Mock implements History {
   }
 }
 
-class _MockHtmlLocation extends Mock implements Location {
+class MockHashHtmlLocation extends MockHtmlLocation {
   bool mockPrint;
   String mockPath = '/start';
   String mockHash = '';
-  _MockHtmlHistory mockHistory;
+  MockHashHtmlHistory mockHistory;
 
-  _MockHtmlLocation(this.mockHistory, {this.mockPrint = false});
+  MockHashHtmlLocation(this.mockHistory, {this.mockPrint = false});
 
   @override
   String get href => '${mockPath}${mockHash.isNotEmpty ? '#' : ''}${mockHash}';
@@ -97,13 +96,11 @@ class _MockHtmlLocation extends Mock implements Location {
   @override
   void set href(String newHref) {
     final hashIndex = newHref.indexOf('#');
-    String newMockHash =
-        hashIndex == -1 ? '' : newHref.substring(hashIndex + 1);
-    String newMockPath =
-        newHref.substring(0, hashIndex >= 0 ? hashIndex : null);
+    var newMockHash = hashIndex == -1 ? '' : newHref.substring(hashIndex + 1);
+    var newMockPath = newHref.substring(0, hashIndex >= 0 ? hashIndex : null);
 
-    _MockHtmlLocation newLocation =
-        new _MockHtmlLocation(mockHistory, mockPrint: mockPrint)
+    MockHashHtmlLocation newLocation =
+        new MockHashHtmlLocation(mockHistory, mockPrint: mockPrint)
           ..mockPath = newMockPath
           ..mockHash = newMockHash;
     if (mockPrint) {
@@ -117,7 +114,7 @@ class _MockHtmlLocation extends Mock implements Location {
 
   @override
   void set hash(String newHash) {
-    _MockHtmlLocation newLocation = new _MockHtmlLocation(mockHistory)
+    MockHashHtmlLocation newLocation = new MockHashHtmlLocation(mockHistory)
       ..mockPath = mockPath
       ..mockHash = newHash;
     if (mockPrint) {
@@ -139,19 +136,3 @@ class _MockHtmlLocation extends Mock implements Location {
     mockHistory.mockOnReplace(this);
   }
 }
-
-class MockHtmlWindowNoImpl extends Mock implements Window {}
-
-class MockHtmlHistory extends Mock implements History {}
-
-class MockHtmlLocation extends Mock implements Location {}
-
-class MockHtmlDocument extends Mock implements Document {}
-
-class MockHtmlNavigator extends Mock implements Navigator {}
-
-class MockHtmlPopStateEvent extends Mock implements PopStateEvent {}
-
-class MockBrowserHistory extends Mock implements BrowserHistory {}
-
-class MocKHashHistory extends Mock implements HashHistory {}

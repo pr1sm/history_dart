@@ -7,10 +7,10 @@ import 'package:test/test.dart';
 import 'package:history/src/browser/hash_history.dart';
 import 'package:history/src/utils/utils.dart' show Confirmation, HashType;
 
-import 'html_mocks.dart'
-    show MockHtmlNavigator, MockHtmlWindow, MockHtmlWindowNoImpl;
+import '../mocks/hash_mocks.dart';
+import '../mocks/html_mocks.dart';
 
-import '../core/history_core_tests.dart';
+import '../core/history_test_core.dart';
 
 void main() {
   group('HashHistory', () {
@@ -18,12 +18,12 @@ void main() {
 
     group('constructor', () {
       test('constructs correctly when dom is available', () {
-        MockHtmlWindow window = new MockHtmlWindow();
+        var window = new MockHashHtmlWindow();
         new HashHistory(window: window);
       });
 
       test('fails to construct when dom is unavailable', () {
-        MockHtmlWindowNoImpl window = new MockHtmlWindowNoImpl();
+        var window = new MockHtmlWindow();
         try {
           new HashHistory(window: window);
         } on StateError catch (_) {
@@ -36,15 +36,15 @@ void main() {
 
     group(
         'core:',
-        testHistoryCore(({Confirmation confirmation}) {
-          MockHtmlWindow window = new MockHtmlWindow();
+        testCoreHistory(({Confirmation confirmation}) {
+          var window = new MockHashHtmlWindow();
           return new HashHistory(
               getConfirmation: confirmation ?? autoConfirm, window: window);
         }, supportsState: false));
 
     group('HashMixin', () {
       test('hashType responds correctly after construction', () {
-        MockHtmlWindow window = new MockHtmlWindow();
+        var window = new MockHashHtmlWindow();
         HashHistory hashHistory = new HashHistory(window: window);
         expect(hashHistory.hashType, equals(HashType.slash));
         hashHistory =
@@ -59,8 +59,8 @@ void main() {
 
       test('go prints warning message when hash reloading is not supported',
           () async {
-        MockHtmlWindow mockHtmlWindow = new MockHtmlWindow();
-        MockHtmlNavigator mockNav = mockHtmlWindow.mockNavigator;
+        var mockHtmlWindow = new MockHashHtmlWindow();
+        var mockNav = mockHtmlWindow.mockNavigator;
         when(mockNav.userAgent).thenReturn('Firefox');
         HashHistory hashHistory = new HashHistory(window: mockHtmlWindow);
         await hashHistory.go(0);
@@ -69,14 +69,14 @@ void main() {
       test(
           'getting location prints warning message when basename is different from path',
           () {
-        MockHtmlWindow mockHtmlWindow = new MockHtmlWindow();
+        var mockHtmlWindow = new MockHashHtmlWindow();
         HashHistory hashHistory =
             new HashHistory(basename: '/base', window: mockHtmlWindow);
         expect(hashHistory.location.path, isNot(startsWith('/base')));
       });
 
       test('correct hash type encoding on hash change', () async {
-        MockHtmlWindow mockHtmlWindow = new MockHtmlWindow();
+        var mockHtmlWindow = new MockHashHtmlWindow();
         HashHistory hashHistory = new HashHistory(window: mockHtmlWindow);
         Future<HashHistory> update = hashHistory.onChange.first;
 

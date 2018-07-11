@@ -6,14 +6,14 @@ import 'package:test/test.dart';
 import 'package:history/src/core/memory_history.dart';
 import 'package:history/src/utils/utils.dart' show Action, Confirmation;
 
-import 'mocks.dart' show MockLocation;
-import 'history_core_tests.dart';
+import '../mocks/mocks.dart' show MockLocation;
+import 'history_test_core.dart';
 
 void main() {
   group('MemoryHistory', () {
     group('constructor', () {
       test('constructs with no parameters', () {
-        MemoryHistory mh = new MemoryHistory();
+        var mh = new MemoryHistory();
         expect(mh.index, equals(0));
         expect(mh.entries.isNotEmpty, isTrue);
         expect(mh.length, equals(1));
@@ -26,7 +26,7 @@ void main() {
 
       test('constructs with initial enties', () {
         var initialEntries = ['/test', new MockLocation(), new Object()];
-        MemoryHistory mh = new MemoryHistory(initialEntries: initialEntries);
+        var mh = new MemoryHistory(initialEntries: initialEntries);
         expect(mh.index, equals(0));
         expect(mh.entries.isNotEmpty, isTrue);
         expect(mh.length, equals(2));
@@ -39,7 +39,7 @@ void main() {
 
       test('constructs with initial index', () {
         var initialEntries = ['/', '/test'];
-        MemoryHistory mh =
+        var mh =
             new MemoryHistory(initialEntries: initialEntries, initialIndex: 1);
         expect(mh.index, equals(1));
         expect(mh.entries.isNotEmpty, isTrue);
@@ -74,7 +74,7 @@ void main() {
       });
 
       test('constructs with key length', () {
-        MemoryHistory mh = new MemoryHistory(keyLength: 12);
+        var mh = new MemoryHistory(keyLength: 12);
         expect(mh.index, equals(0));
         expect(mh.entries.isNotEmpty, isTrue);
         expect(mh.length, equals(1));
@@ -87,12 +87,12 @@ void main() {
       });
 
       test('constructs with confirmation', () async {
-        Completer c = new Completer();
-        Confirmation confirm = (_) async {
+        var c = new Completer();
+        var confirm = (_) async {
           c.complete();
           return new Future.value(true);
         };
-        MemoryHistory mh = new MemoryHistory(getConfirmation: confirm);
+        var mh = new MemoryHistory(getConfirmation: confirm);
         mh.block('temp');
         mh.push('/test');
         await c.future;
@@ -101,7 +101,7 @@ void main() {
 
     group(
         'core:',
-        testHistoryCore(({Confirmation confirmation}) =>
+        testCoreHistory(({Confirmation confirmation}) =>
             new MemoryHistory(getConfirmation: confirmation)));
 
     group('MemoryMixin', () {

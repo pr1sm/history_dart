@@ -8,7 +8,7 @@ import 'package:history/src/core/location.dart';
 import 'package:history/src/utils/hash_utils.dart';
 import 'package:history/src/utils/utils.dart';
 
-import '../browser/html_mocks.dart' show MockHtmlLocation;
+import '../mocks/html_mocks.dart' show MockHtmlLocation;
 
 void main() {
   group('HashUtils', () {
@@ -25,7 +25,7 @@ void main() {
           return 'pong';
         };
         EncoderDecoder ed = new EncoderDecoder(encoder, null);
-        String encoded = ed.encodePath('ping');
+        var encoded = ed.encodePath('ping');
         await c.future;
         expect(encoded, equals('pong'));
       });
@@ -37,7 +37,7 @@ void main() {
           return 'pong';
         };
         EncoderDecoder ed = new EncoderDecoder(null, decoder);
-        String encoded = ed.decodePath('ping');
+        var encoded = ed.decodePath('ping');
         await c.future;
         expect(encoded, equals('pong'));
       });
@@ -51,27 +51,27 @@ void main() {
         });
 
         test('encodes when path starts with "!"', () {
-          String path = '!test';
+          var path = '!test';
           expect(ed.encodePath(path), equals(path));
         });
 
         test('encodes when path starts with "!/"', () {
-          String path = '!/test';
+          var path = '!/test';
           expect(ed.encodePath(path), equals(path));
         });
 
         test('encodes when path doesn\'t start with "!"', () {
-          String path = 'test';
+          var path = 'test';
           expect(ed.encodePath(path), equals('!/${path}'));
         });
 
         test('decodes when path starts with "!"', () {
-          String path = '!/test';
+          var path = '!/test';
           expect(ed.decodePath(path), equals('/test'));
         });
 
         test('decodes when path doesn\' start with "!"', () {
-          String path = '/test';
+          var path = '/test';
           expect(ed.decodePath(path), equals(path));
         });
       });
@@ -82,22 +82,22 @@ void main() {
         });
 
         test('encodes when path starts with "/"', () {
-          String path = 'test';
+          var path = 'test';
           expect(ed.encodePath('/${path}'), equals(path));
         });
 
         test('encodes when path doesn\'t start with "/"', () {
-          String path = 'test';
+          var path = 'test';
           expect(ed.encodePath(path), equals(path));
         });
 
         test('decodes when path starts with "/"', () {
-          String path = 'test';
+          var path = 'test';
           expect(ed.decodePath('/${path}'), equals('/${path}'));
         });
 
         test('decodes when path doesn\'t start with "/"', () {
-          String path = 'test';
+          var path = 'test';
           expect(ed.decodePath(path), equals('/${path}'));
         });
       });
@@ -108,22 +108,22 @@ void main() {
         });
 
         test('encodes when path starts with "/"', () {
-          String path = 'test';
+          var path = 'test';
           expect(ed.encodePath('/${path}'), equals('/${path}'));
         });
 
         test('encodes when path doesn\'t start with "/"', () {
-          String path = 'test';
+          var path = 'test';
           expect(ed.encodePath(path), equals('/${path}'));
         });
 
         test('decodes when path starts with "/"', () {
-          String path = 'test';
+          var path = 'test';
           expect(ed.decodePath('/${path}'), equals('/${path}'));
         });
 
         test('decodes when path doesn\'t start with "/"', () {
-          String path = 'test';
+          var path = 'test';
           expect(ed.decodePath(path), equals('/${path}'));
         });
       });
@@ -144,7 +144,7 @@ void main() {
         when(mockLocation.pathname).thenReturn('testpath');
         when(mockLocation.hash).thenReturn('');
         when(mockLocation.search).thenReturn('');
-        Location convertLoc = convert(mockLocation);
+        var convertLoc = convert(mockLocation);
         expect(convertLoc.pathname, equals('testpath'));
       });
 
@@ -152,7 +152,7 @@ void main() {
         when(mockLocation.pathname).thenReturn('');
         when(mockLocation.hash).thenReturn('testhash');
         when(mockLocation.search).thenReturn('');
-        Location convertLoc = convert(mockLocation);
+        var convertLoc = convert(mockLocation);
         expect(convertLoc.hash, equals('testhash'));
       });
 
@@ -160,7 +160,7 @@ void main() {
         when(mockLocation.pathname).thenReturn('');
         when(mockLocation.hash).thenReturn('');
         when(mockLocation.search).thenReturn('testsearch');
-        Location convertLoc = convert(mockLocation);
+        var convertLoc = convert(mockLocation);
         expect(convertLoc.search, equals('testsearch'));
       });
 
@@ -168,7 +168,7 @@ void main() {
         when(mockLocation.pathname).thenReturn('testpath');
         when(mockLocation.hash).thenReturn('testhash');
         when(mockLocation.search).thenReturn('testsearch');
-        Location convertLoc = convert(mockLocation);
+        var convertLoc = convert(mockLocation);
         expect(convertLoc.pathname, equals('testpath'));
         expect(convertLoc.hash, equals('testhash'));
         expect(convertLoc.search, equals('testsearch'));

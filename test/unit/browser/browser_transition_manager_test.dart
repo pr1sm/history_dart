@@ -8,8 +8,8 @@ import 'package:history/src/browser/browser_history.dart';
 import 'package:history/src/browser/browser_transition_manager.dart';
 import 'package:history/src/utils/utils.dart' show Prompt, Action;
 
-import 'html_mocks.dart' show MockBrowserHistory;
-import '../core/mocks.dart' show MockLocation;
+import '../mocks/history_mocks.dart' show MockBrowserHistory;
+import '../mocks/mocks.dart' show MockLocation;
 
 void main() {
   group('BrowserTransitionManager', () {

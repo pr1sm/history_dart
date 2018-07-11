@@ -8,8 +8,8 @@ import 'package:history/src/browser/hash_history.dart';
 import 'package:history/src/browser/hash_transition_manager.dart';
 import 'package:history/src/utils/utils.dart' show Prompt, Action;
 
-import 'html_mocks.dart' show MocKHashHistory;
-import '../core/mocks.dart' show MockLocation;
+import '../mocks/history_mocks.dart' show MockHashHistory;
+import '../mocks/mocks.dart' show MockLocation;
 
 void main() {
   group('HashTransitionManager', () {
@@ -23,9 +23,9 @@ void main() {
 
       test('returns true when prompt is null', () async {
         transitionManager.prompt = null;
-        bool nullCheck =
+        var nullCheck =
             await transitionManager.confirmTransitionTo(null, null, null);
-        bool nonNullCheck = await transitionManager.confirmTransitionTo(
+        var nonNullCheck = await transitionManager.confirmTransitionTo(
             new MockLocation(),
             Action.pop,
             (_) async => new Future.value(false));
@@ -35,7 +35,7 @@ void main() {
 
       test('returns true when prompt is not null, but confirmation is null',
           () async {
-        bool check = await transitionManager.confirmTransitionTo(
+        var check = await transitionManager.confirmTransitionTo(
             new MockLocation(), Action.pop, null);
         expect(check, isTrue);
       });
@@ -43,7 +43,7 @@ void main() {
       test(
           'returns confirmation result when all necessary parameters are provided',
           () async {
-        bool check = await transitionManager.confirmTransitionTo(
+        var check = await transitionManager.confirmTransitionTo(
             new MockLocation(),
             Action.pop,
             (_) async => new Future.value(true));
@@ -61,10 +61,10 @@ void main() {
 
       test('notifies stream listeners when valid transition is passed',
           () async {
-        MocKHashHistory mockBrowserHistory = new MocKHashHistory();
-        MocKHashHistory completeBrowserHistory = new MocKHashHistory();
-        Completer c = new Completer();
-        int callCount = 0;
+        var mockBrowserHistory = new MockHashHistory();
+        var completeBrowserHistory = new MockHashHistory();
+        var c = new Completer();
+        var callCount = 0;
         transitionManager.stream.listen((data) {
           callCount += 1;
           if (data == completeBrowserHistory) {
@@ -83,10 +83,10 @@ void main() {
       });
 
       test('handles null transition correctly', () async {
-        MocKHashHistory mockBrowserHistory = new MocKHashHistory();
-        MocKHashHistory completeBrowserHistory = new MocKHashHistory();
-        Completer c = new Completer();
-        int callCount = 0;
+        var mockBrowserHistory = new MockHashHistory();
+        var completeBrowserHistory = new MockHashHistory();
+        var c = new Completer();
+        var callCount = 0;
         transitionManager.stream.listen((data) {
           callCount += 1;
           if (data == completeBrowserHistory) {

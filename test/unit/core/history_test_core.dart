@@ -9,7 +9,7 @@ import 'package:history/src/utils/utils.dart' show Action, Confirmation, Prompt;
 
 typedef History HistoryGenerator({Confirmation confirmation});
 
-dynamic testHistoryCore(HistoryGenerator getHistory,
+dynamic testCoreHistory(HistoryGenerator getHistory,
         {bool supportsState = true}) =>
     () {
       History history;
@@ -314,9 +314,9 @@ dynamic testHistoryCore(HistoryGenerator getHistory,
         });
 
         test('waits for confirmation when in blocking mode', () async {
-          Completer c = new Completer();
-          Completer confirmed = new Completer();
-          Confirmation confirm = (_) async {
+          var c = new Completer();
+          var confirmed = new Completer();
+          var confirm = (_) async {
             confirmed.complete();
             expect(c.isCompleted, isFalse);
             return new Future.value(true);
@@ -347,7 +347,7 @@ dynamic testHistoryCore(HistoryGenerator getHistory,
         test('works when using a Location', () async {
           expect(history.length, equals(1));
           expect(history.location.pathname, equals('/'));
-          Location next = new Location(pathname: '/path', key: 'key');
+          var next = new Location(pathname: '/path', key: 'key');
           await history.push(next);
           expect(history.length, equals(2));
           expect(history.location, isNot(equals(next)));
@@ -356,8 +356,8 @@ dynamic testHistoryCore(HistoryGenerator getHistory,
         });
 
         test('waits for confirmation when in blocking mode', () async {
-          Completer c = new Completer();
-          Confirmation confirm = (_) async {
+          var c = new Completer();
+          var confirm = (_) async {
             if (!c.isCompleted) {
               c.complete();
             }
@@ -378,8 +378,8 @@ dynamic testHistoryCore(HistoryGenerator getHistory,
         });
 
         test('does nothing when transition is denied', () async {
-          Completer c = new Completer();
-          Confirmation confirm = (_) async {
+          var c = new Completer();
+          var confirm = (_) async {
             if (!c.isCompleted) {
               c.complete();
             }
@@ -404,8 +404,7 @@ dynamic testHistoryCore(HistoryGenerator getHistory,
         test(
             'uses Location.state when state is both provided in Location and by parameter',
             () async {
-          Location next =
-              new Location(pathname: '/path', state: 'locationstate');
+          var next = new Location(pathname: '/path', state: 'locationstate');
           await history.push(next, 'parameterstate');
           var stateMatcher = supportsState ? equals('locationstate') : isNull;
           expect(history.location.state, stateMatcher);
@@ -424,7 +423,7 @@ dynamic testHistoryCore(HistoryGenerator getHistory,
         test('works when using a Location', () async {
           expect(history.length, equals(1));
           expect(history.location.pathname, equals('/'));
-          Location next = new Location(pathname: '/path', key: 'key');
+          var next = new Location(pathname: '/path', key: 'key');
           await history.replace(next);
           expect(history.length, equals(1));
           expect(history.location, isNot(equals(next)));
@@ -433,8 +432,8 @@ dynamic testHistoryCore(HistoryGenerator getHistory,
         });
 
         test('waits for confirmation when in blocking mode', () async {
-          Completer c = new Completer();
-          Confirmation confirm = (_) async {
+          var c = new Completer();
+          var confirm = (_) async {
             if (!c.isCompleted) {
               c.complete();
             }
@@ -455,8 +454,8 @@ dynamic testHistoryCore(HistoryGenerator getHistory,
         });
 
         test('does nothing when transition is denied', () async {
-          Completer c = new Completer();
-          Confirmation confirm = (_) async {
+          var c = new Completer();
+          var confirm = (_) async {
             if (!c.isCompleted) {
               c.complete();
             }
@@ -481,8 +480,7 @@ dynamic testHistoryCore(HistoryGenerator getHistory,
         test(
             'uses Location.state when state is both provided in Location and by parameter',
             () async {
-          Location next =
-              new Location(pathname: '/path', state: 'locationstate');
+          var next = new Location(pathname: '/path', state: 'locationstate');
           await history.replace(next, 'parameterstate');
           var stateMatcher = supportsState ? equals('locationstate') : isNull;
           expect(history.location.state, stateMatcher);
@@ -522,8 +520,8 @@ dynamic testHistoryCore(HistoryGenerator getHistory,
         });
 
         test('waits for confirmation when in blocking mode', () async {
-          Completer c = new Completer();
-          Confirmation confirm = (_) async {
+          var c = new Completer();
+          var confirm = (_) async {
             if (!c.isCompleted) {
               c.complete();
             }
@@ -549,9 +547,9 @@ dynamic testHistoryCore(HistoryGenerator getHistory,
         });
 
         test('still emits a change when transition is denied', () async {
-          Completer c = new Completer();
-          Completer c2 = new Completer();
-          Confirmation confirm = (_) async {
+          var c = new Completer();
+          var c2 = new Completer();
+          var confirm = (_) async {
             if (!c.isCompleted) {
               c.complete();
             }
@@ -577,8 +575,8 @@ dynamic testHistoryCore(HistoryGenerator getHistory,
 
       group('goForward', () {
         test('waits for confirmation when in blocking mode', () async {
-          Completer c = new Completer();
-          Confirmation confirm = (_) async {
+          var c = new Completer();
+          var confirm = (_) async {
             if (!c.isCompleted) {
               c.complete();
             }
@@ -607,9 +605,9 @@ dynamic testHistoryCore(HistoryGenerator getHistory,
         });
 
         test('still emits a change when transition is denied', () async {
-          Completer c = new Completer();
-          Completer c2 = new Completer();
-          Confirmation confirm = (_) async {
+          var c = new Completer();
+          var c2 = new Completer();
+          var confirm = (_) async {
             if (!c.isCompleted) {
               c.complete();
             }
@@ -634,9 +632,9 @@ dynamic testHistoryCore(HistoryGenerator getHistory,
 
         test('still emits a change when triggered at the end of history',
             () async {
-          Completer c = new Completer();
-          Completer c2 = new Completer();
-          Confirmation confirm = (_) async {
+          var c = new Completer();
+          var c2 = new Completer();
+          var confirm = (_) async {
             if (!c.isCompleted) {
               c.complete();
             }
@@ -661,8 +659,8 @@ dynamic testHistoryCore(HistoryGenerator getHistory,
 
       group('goBack', () {
         test('waits for confirmation when in blocking mode', () async {
-          Completer c = new Completer();
-          Confirmation confirm = (_) async {
+          var c = new Completer();
+          var confirm = (_) async {
             if (!c.isCompleted) {
               c.complete();
             }
@@ -689,9 +687,9 @@ dynamic testHistoryCore(HistoryGenerator getHistory,
         });
 
         test('still emits a change when transition is denied', () async {
-          Completer c = new Completer();
-          Completer c2 = new Completer();
-          Confirmation confirm = (_) async {
+          var c = new Completer();
+          var c2 = new Completer();
+          var confirm = (_) async {
             if (!c.isCompleted) {
               c.complete();
             }
@@ -715,9 +713,9 @@ dynamic testHistoryCore(HistoryGenerator getHistory,
 
         test('still emits a change when triggered at the start of history',
             () async {
-          Completer c = new Completer();
-          Completer c2 = new Completer();
-          Confirmation confirm = (_) async {
+          var c = new Completer();
+          var c2 = new Completer();
+          var confirm = (_) async {
             if (!c.isCompleted) {
               c.complete();
             }

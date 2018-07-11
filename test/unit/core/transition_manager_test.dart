@@ -6,7 +6,7 @@ import 'package:test/test.dart';
 import 'package:history/src/core/transition_manager.dart';
 import 'package:history/src/utils/utils.dart' show Action, Prompt;
 
-import 'mocks.dart' show MockLocation;
+import '../mocks/mocks.dart' show MockLocation;
 
 void main() {
   group('TransitionManager', () {
@@ -23,9 +23,9 @@ void main() {
 
       test('returns true when prompt is null', () async {
         transitionManager.prompt = null;
-        bool nullCheck =
+        var nullCheck =
             await transitionManager.confirmTransitionTo(null, null, null);
-        bool nonNullCheck = await transitionManager.confirmTransitionTo(
+        var nonNullCheck = await transitionManager.confirmTransitionTo(
             new MockLocation(),
             Action.pop,
             (_) async => new Future.value(false));
@@ -35,7 +35,7 @@ void main() {
 
       test('returns true when prompt is not null, but confirmation is null',
           () async {
-        bool check = await transitionManager.confirmTransitionTo(
+        var check = await transitionManager.confirmTransitionTo(
             new MockLocation(), Action.pop, null);
         expect(check, isTrue);
       });
@@ -43,7 +43,7 @@ void main() {
       test(
           'returns confirmation result when all necessary parameters are provided',
           () async {
-        bool check = await transitionManager.confirmTransitionTo(
+        var check = await transitionManager.confirmTransitionTo(
             new MockLocation(),
             Action.pop,
             (_) async => new Future.value(true));
@@ -57,8 +57,8 @@ void main() {
     group('notify', () {
       test('notifies stream listeners when valid transition is passed',
           () async {
-        Completer c = new Completer();
-        int callCount = 0;
+        var c = new Completer();
+        var callCount = 0;
         transitionManager.stream.listen((data) {
           callCount += 1;
           if (data == 'end') {
@@ -77,8 +77,8 @@ void main() {
       });
 
       test('handles null transition correctly', () async {
-        Completer c = new Completer();
-        int callCount = 0;
+        var c = new Completer();
+        var callCount = 0;
         transitionManager.stream.listen((data) {
           callCount += 1;
           if (data == 'end') {
