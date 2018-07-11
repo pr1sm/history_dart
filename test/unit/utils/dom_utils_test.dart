@@ -9,7 +9,7 @@ import '../browser/html_mocks.dart'
         MockHtmlHistory,
         MockHtmlNavigator,
         MockHtmlPopStateEvent,
-        MockHtmlWindow;
+        MockHtmlWindowNoImpl;
 
 void main() {
   group('DomUtils', () {
@@ -17,7 +17,7 @@ void main() {
 
     group('canUseDom', () {
       test('is false when document is null', () {
-        MockHtmlWindow mockWindow = new MockHtmlWindow();
+        MockHtmlWindowNoImpl mockWindow = new MockHtmlWindowNoImpl();
         expect(mockWindow.document, isNull);
         domUtils = new DomUtils(windowImpl: mockWindow);
         expect(domUtils.canUseDom, isFalse);
@@ -31,7 +31,7 @@ void main() {
 
     group('getConfirmation', () {
       test('is false when not confirmed', () async {
-        MockHtmlWindow mockWindow = new MockHtmlWindow();
+        MockHtmlWindowNoImpl mockWindow = new MockHtmlWindowNoImpl();
         when(mockWindow.confirm()).thenReturn(false);
         when(mockWindow.confirm(typed(any))).thenReturn(false);
         domUtils = new DomUtils(windowImpl: mockWindow);
@@ -41,7 +41,7 @@ void main() {
       });
 
       test('is true when confirmed', () async {
-        MockHtmlWindow mockWindow = new MockHtmlWindow();
+        MockHtmlWindowNoImpl mockWindow = new MockHtmlWindowNoImpl();
         when(mockWindow.confirm()).thenReturn(true);
         when(mockWindow.confirm(typed(any))).thenReturn(true);
         domUtils = new DomUtils(windowImpl: mockWindow);
@@ -53,10 +53,10 @@ void main() {
 
     group('supportsHistory', () {
       MockHtmlNavigator mockNav;
-      MockHtmlWindow mockWindow;
+      MockHtmlWindowNoImpl mockWindow;
 
       setUpAll(() {
-        mockWindow = new MockHtmlWindow();
+        mockWindow = new MockHtmlWindowNoImpl();
         mockNav = new MockHtmlNavigator();
         MockHtmlHistory mockHistory = new MockHtmlHistory();
         when(mockWindow.history).thenReturn(mockHistory);
@@ -158,10 +158,10 @@ void main() {
 
     group('supportsPopStateOnHashChange', () {
       MockHtmlNavigator mockNav;
-      MockHtmlWindow mockWindow;
+      MockHtmlWindowNoImpl mockWindow;
 
       setUpAll(() {
-        mockWindow = new MockHtmlWindow();
+        mockWindow = new MockHtmlWindowNoImpl();
         mockNav = new MockHtmlNavigator();
         MockHtmlHistory mockHistory = new MockHtmlHistory();
         when(mockWindow.history).thenReturn(mockHistory);
@@ -246,10 +246,10 @@ void main() {
 
     group('supportsGoWithoutReloadUsingHash', () {
       MockHtmlNavigator mockNav;
-      MockHtmlWindow mockWindow;
+      MockHtmlWindowNoImpl mockWindow;
 
       setUpAll(() {
-        mockWindow = new MockHtmlWindow();
+        mockWindow = new MockHtmlWindowNoImpl();
         mockNav = new MockHtmlNavigator();
         MockHtmlHistory mockHistory = new MockHtmlHistory();
         when(mockWindow.history).thenReturn(mockHistory);
@@ -334,10 +334,10 @@ void main() {
 
     group('isExtraneousPopStateEvent', () {
       MockHtmlNavigator mockNav;
-      MockHtmlWindow mockWindow;
+      MockHtmlWindowNoImpl mockWindow;
 
       setUpAll(() {
-        mockWindow = new MockHtmlWindow();
+        mockWindow = new MockHtmlWindowNoImpl();
         mockNav = new MockHtmlNavigator();
         MockHtmlHistory mockHistory = new MockHtmlHistory();
         when(mockWindow.history).thenReturn(mockHistory);
