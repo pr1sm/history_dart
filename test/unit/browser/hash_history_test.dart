@@ -45,7 +45,7 @@ void main() {
     group('HashMixin', () {
       test('hashType responds correctly after construction', () {
         var window = new MockHashHtmlWindow();
-        HashHistory hashHistory = new HashHistory(window: window);
+        var hashHistory = new HashHistory(window: window);
         expect(hashHistory.hashType, equals(HashType.slash));
         hashHistory =
             new HashHistory(window: window, hashType: HashType.hashbang);
@@ -62,7 +62,7 @@ void main() {
         var mockHtmlWindow = new MockHashHtmlWindow();
         var mockNav = mockHtmlWindow.mockNavigator;
         when(mockNav.userAgent).thenReturn('Firefox');
-        HashHistory hashHistory = new HashHistory(window: mockHtmlWindow);
+        var hashHistory = new HashHistory(window: mockHtmlWindow);
         await hashHistory.go(0);
       });
 
@@ -70,19 +70,19 @@ void main() {
           'getting location prints warning message when basename is different from path',
           () {
         var mockHtmlWindow = new MockHashHtmlWindow();
-        HashHistory hashHistory =
+        var hashHistory =
             new HashHistory(basename: '/base', window: mockHtmlWindow);
         expect(hashHistory.location.path, isNot(startsWith('/base')));
       });
 
       test('correct hash type encoding on hash change', () async {
         var mockHtmlWindow = new MockHashHtmlWindow();
-        HashHistory hashHistory = new HashHistory(window: mockHtmlWindow);
-        Future<HashHistory> update = hashHistory.onChange.first;
+        var hashHistory = new HashHistory(window: mockHtmlWindow);
+        var update = hashHistory.onChange.first;
 
         mockHtmlWindow.mockHistory.mockLocation.href = '#hash';
 
-        HashHistory check = await update;
+        var check = await update;
         expect(check.location.path, isNot(equals('#hash')));
         expect(check.location.path, equals('/hash'));
       });
