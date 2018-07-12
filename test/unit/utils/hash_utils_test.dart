@@ -4,7 +4,6 @@ import 'dart:async';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-import 'package:history/src/core/location.dart';
 import 'package:history/src/utils/hash_utils.dart';
 import 'package:history/src/utils/utils.dart';
 

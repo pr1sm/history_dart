@@ -7,9 +7,7 @@ main(args) async {
 
   config.coverage..html = false;
 
-  config.format
-    ..paths = ['lib/', 'tool/', 'test/']
-    ..exclude = ['test/unit/generated_runner.dart'];
+  config.format..paths = ['lib/', 'tool/', 'test/'];
 
   config.local
     ..taskPaths.add('bin')
@@ -18,11 +16,8 @@ main(args) async {
 
   config.test
     ..pubServe = true
-    ..unitTests = ['test/unit'];
-
-  config.genTestRunner
-    ..configs = [
-      new TestRunnerConfig(directory: 'test/unit/', env: Environment.both),
+    ..unitTests = [
+      'test/unit/',
     ];
 
   await dev(args);
