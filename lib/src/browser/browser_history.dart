@@ -8,7 +8,7 @@ import 'browser_transition_manager.dart';
 import '../utils/dom_utils.dart' show DomUtils;
 import '../utils/path_utils.dart'
     show stripTrailingSlash, addLeadingSlash, hasBasename, stripBasename;
-import '../utils/utils.dart' show Action, Confirmation, validatePath;
+import '../utils/utils.dart' show Action, Confirmation, PopMode, validatePath;
 
 /// Mixin contains [BrowserHistory] specific definitions
 abstract class BrowserMixin {
@@ -25,29 +25,40 @@ class BrowserHistory extends History with BrowserMixin, BasenameMixin {
   BrowserTransitionManager<BrowserHistory> _transitionManager;
   Action _action;
   Location _location;
-  bool _forceNextPop;
+  PopMode _popMode;
   List<String> _allKeys;
+  DomUtils _domUtils;
+  html.History _globalHistory;
+  html.Window _window;
+  Completer _popHandlerCompleter;
 
   final bool _forceRefresh;
   final Confirmation _getConfirmation;
   final Random _r = new Random();
   final int _keyLength;
-  final html.History _globalHistory = html.window.history;
-  final DomUtils _domUtils = new DomUtils();
 
   BrowserHistory(
       {String basename = '',
       bool forcedRefresh = false,
       int keyLength = 6,
-      Confirmation getConfirmation})
+      Confirmation getConfirmation,
+      html.Window window})
       : _forceRefresh = forcedRefresh,
         _getConfirmation = getConfirmation,
         _keyLength = keyLength {
+    _window = window ?? html.window;
+    _domUtils = new DomUtils(windowImpl: _window);
+    if (!_domUtils.canUseDom) {
+      throw new StateError('Browser History needs a DOM');
+    }
+
+    _globalHistory = _window.history;
     _basename =
         basename != null ? stripTrailingSlash(addLeadingSlash(basename)) : '';
-    _forceNextPop = false;
+    _popMode = PopMode.normal;
 
     _location = _domLocation(_historyState);
+    _action = Action.pop;
     _allKeys = [_location.key];
 
     _transitionManager = new BrowserTransitionManager(
@@ -104,25 +115,28 @@ class BrowserHistory extends History with BrowserMixin, BasenameMixin {
     var href = _href(nextLocation);
 
     if (_domUtils.supportsHistory) {
+      if (_transitionManager.listeningToWindowEvents) {
+        _popMode = PopMode.force;
+      }
       _globalHistory.pushState(
           {'key': nextLocation.key, 'state': nextLocation.state}, null, href);
 
       if (_forceRefresh) {
-        html.window.location.href = href;
+        _window.location.href = href;
       } else {
         var prevIndex = _allKeys.indexOf(_location.key);
         _allKeys = _allKeys.sublist(0, prevIndex == -1 ? 0 : prevIndex + 1)
           ..add(nextLocation.key);
-
+        _location = nextLocation;
+        _action = nextAction;
         _transitionManager.notify(this);
       }
     } else {
-      if (state == null) {
+      if (state != null) {
         print(
             'WARNING: Browser history cannot push state in browsers that do not support HTML5 history');
       }
-
-      html.window.location.href = href;
+      _window.location.href = href;
     }
   }
 
@@ -153,16 +167,21 @@ class BrowserHistory extends History with BrowserMixin, BasenameMixin {
     var href = _href(nextLocation);
 
     if (_domUtils.supportsHistory) {
+      if (_transitionManager.listeningToWindowEvents) {
+        _popMode = PopMode.force;
+      }
       _globalHistory.replaceState(
           {'key': nextLocation.key, 'state': nextLocation.state}, null, href);
 
       if (_forceRefresh) {
-        html.window.location.href = href;
+        _window.location.href = href;
       } else {
         var prevIndex = _allKeys.indexOf(_location.key);
         if (prevIndex != -1) {
           _allKeys[prevIndex] = location.key;
         }
+        _location = nextLocation;
+        _action = nextAction;
         _transitionManager.notify(this);
       }
     } else {
@@ -170,13 +189,22 @@ class BrowserHistory extends History with BrowserMixin, BasenameMixin {
         print(
             'WARNING: Browser history cannot push state in browsers that do not support HTML5 history');
       }
-
-      html.window.location.replace(href);
+      _window.location.replace(href);
     }
   }
 
   @override
-  void go(int n) => _globalHistory.go(n);
+  Future<Null> go(int n) async {
+    if (_transitionManager.listeningToWindowEvents) {
+      _popHandlerCompleter = new Completer();
+      _globalHistory.go(n);
+      await _popHandlerCompleter.future;
+      _popHandlerCompleter = null;
+    } else {
+      _globalHistory.go(n);
+      await _handlePop(_domLocation(_historyState));
+    }
+  }
 
   @override
   void block(dynamic prompt) => _transitionManager.prompt = prompt;
@@ -186,7 +214,7 @@ class BrowserHistory extends History with BrowserMixin, BasenameMixin {
 
   dynamic get _historyState {
     try {
-      return html.window.history.state ?? {};
+      return _window.history.state ?? {};
     } catch (e) {
       return {};
     }
@@ -199,11 +227,14 @@ class BrowserHistory extends History with BrowserMixin, BasenameMixin {
     var key = historyState['key'];
     var state = historyState['state'];
 
-    var pathname = html.window.location.pathname;
-    var search = html.window.location.search;
-    var hash = html.window.location.hash;
+    var pathname = _window.location.pathname;
+    var search = _window.location.search;
+    var hash = _window.location.hash;
 
-    var path = pathname + search + hash;
+    // var path = pathname + search + hash;
+    var path = pathname +
+        (search.isNotEmpty ? '?${search}' : '') +
+        (hash.isNotEmpty ? '#${hash}' : '');
 
     if (basename != null && !hasBasename(path, basename)) {
       print(
@@ -227,18 +258,25 @@ class BrowserHistory extends History with BrowserMixin, BasenameMixin {
       await _handlePop(_domLocation(_historyState));
 
   Future<Null> _handlePop(Location location) async {
-    if (_forceNextPop) {
-      _forceNextPop = false;
+    if (_popMode == PopMode.force) {
+      _popMode = PopMode.normal;
+    } else if (_popMode == PopMode.forceAndNotify) {
+      _popMode = PopMode.normal;
       _transitionManager.notify(this);
     } else {
       var action = Action.pop;
       bool ok = await _transitionManager.confirmTransitionTo(
           location, action, _getConfirmation);
       if (ok) {
+        _location = location;
+        _action = action;
         _transitionManager.notify(this);
       } else {
         _revertPop(location);
       }
+    }
+    if (_popHandlerCompleter != null && !_popHandlerCompleter.isCompleted) {
+      _popHandlerCompleter.complete();
     }
   }
 
@@ -249,7 +287,7 @@ class BrowserHistory extends History with BrowserMixin, BasenameMixin {
     var fromIndex = max(_allKeys.indexOf(fromLocation.key), 0);
     var delta = toIndex - fromIndex;
     if (delta != 0) {
-      _forceNextPop = true;
+      _popMode = PopMode.forceAndNotify;
       go(delta);
     }
   }

@@ -19,6 +19,14 @@ enum Action { push, replace, pop }
 /// * HASHBANG - use '#!/' (e.g. '#!/home')
 enum HashType { slash, noSlash, hashbang }
 
+/// How the PopStateEvent handler should behave
+///
+/// Represents the way in which BrowserHistory should handle the
+/// PopStateEvent. This is used to prevent double confirmations and
+/// other syncing issues that occur between BrowserHistory and the
+/// window's history.
+enum PopMode { normal, force, forceAndNotify }
+
 /// Confirm History Transition given a [prompt]
 ///
 /// When a History is in blocking mode, this is used to determine whether or
