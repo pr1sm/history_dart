@@ -1,7 +1,8 @@
 name: history
 version: 0.1.0
-description: Support for HTML5 History Api calls in web and non-web contexts (based on npm history)
+description: Abstraction of HTML5 History API for use in any environment
 author: Srinivas Dhanwada <dhanwada.dev@gmail.com>
+homepage: https://github.com/pr1sm/history_dart
 dependencies:
   quiver: ^0.29.0
 dev_dependencies:
