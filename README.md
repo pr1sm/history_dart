@@ -1,3 +1,4 @@
+[![Pub](https://img.shields.io/pub/v/history.svg)](https://github.com/pr1sm/history_dart)
 [![Build Status](https://travis-ci.com/pr1sm/history_dart.svg?branch=master)](https://travis-ci.com/pr1sm/history_dart)
 [![codecov](https://codecov.io/gh/pr1sm/history_dart/branch/master/graph/badge.svg)](https://codecov.io/gh/pr1sm/history_dart)
 
@@ -20,22 +21,23 @@ import 'package:history/history.dart';
 // For use in VM
 // import 'package:history/vm.dart'; 
 
-const history = new BrowserHistory();
+Confirmation confirmation = (_) => new Future.value(true);
+MemoryHistory history = new MemoryHistory(getConfirmation: confirmation);
 
 // Listen for changes
-const sub = history.onChange.listen((updatedHistory) {
-  const location = updatedHistory.location;
+var sub = history.onChange.listen((updatedHistory) {
+  var location = updatedHistory.location;
   print('Transitioned to ${location.path} with action ${updatedHistory.action}!');
   print('State associated with this location: ${location.state}');
 });
 
 // Manipulate the history
-history.push('/first');
-history.push('/second', 'with a state');
-history.replace('/third', {'with': 'a', 'state': 'object'});
-history.goBack();
-history.goForward();
-history.go(-1);
+await history.push('/first');
+await history.push('/second', 'with a state');
+await history.replace('/third', {'with': 'a', 'state': 'object'});
+await history.goBack();
+await history.goForward();
+await history.go(-1);
 
 // Block transitions until they are confirmed by the user
 history.block('Are you sure you want to navigate?');
@@ -46,16 +48,16 @@ history.push('/confirmed');
 // Use a more complex Prompt for more flexibilty
 history.block((Location l, Action a) {
   if (l.path == '/logout') {
-    return 'Logging out will cause you to lose all unsaved data!'
-  } else if (action == Action.pop) {
+    return 'Logging out will cause you to lose all unsaved data!';
+  } else if (a == Action.pop) {
     return 'Are you sure you want to go back?';
   }
   return 'Are you sure you want to navigate?';
 });
 
 // Prints different prompts based on the transition
-history.goBack();
-history.push('/logout');
+await history.goBack();
+await history.push('/logout');
 
 // Return to non-blocking mode
 history.unblock();
