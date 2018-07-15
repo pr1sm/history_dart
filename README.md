@@ -1,4 +1,4 @@
-[![Pub](https://img.shields.io/pub/v/history.svg)](https://github.com/pr1sm/history_dart)
+[![Pub](https://img.shields.io/pub/v/history.svg)](https://pub.dartlang.org/packages/history)
 [![Build Status](https://travis-ci.com/pr1sm/history_dart.svg?branch=master)](https://travis-ci.com/pr1sm/history_dart)
 [![codecov](https://codecov.io/gh/pr1sm/history_dart/branch/master/graph/badge.svg)](https://codecov.io/gh/pr1sm/history_dart)
 

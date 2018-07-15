@@ -43,7 +43,7 @@ class Location {
       String hash = '',
       String key = null,
       String search = '',
-      String state = null}) {
+      dynamic state = null}) {
     // Call initialization with given inputs
     _initialize(pathname ?? '/', hash ?? '', key, search ?? '', state);
   }

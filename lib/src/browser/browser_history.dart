@@ -53,9 +53,9 @@ class BrowserHistory extends History with BrowserMixin, BasenameMixin {
   html.History _globalHistory;
   html.Window _window;
   Completer _popHandlerCompleter;
+  Confirmation _getConfirmation;
 
   final bool _forceRefresh;
-  final Confirmation _getConfirmation;
   final Random _r = new Random();
   final int _keyLength;
 
@@ -73,7 +73,7 @@ class BrowserHistory extends History with BrowserMixin, BasenameMixin {
     if (!_domUtils.canUseDom) {
       throw new StateError('Browser History needs a DOM');
     }
-
+    _getConfirmation ??= _domUtils.getConfirmation;
     _globalHistory = _window.history;
     _basename =
         basename != null ? stripTrailingSlash(addLeadingSlash(basename)) : '';
