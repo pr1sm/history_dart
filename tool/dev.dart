@@ -7,7 +7,7 @@ main(args) async {
 
   config.coverage..html = false;
 
-  config.format..paths = ['lib/', 'tool/', 'test/'];
+  config.format..paths = ['lib/', 'tool/', 'test/', 'example/'];
 
   config.local
     ..taskPaths.add('bin')

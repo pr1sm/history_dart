@@ -66,6 +66,11 @@ history.unblock();
 sub.cancel();
 ```
 
+## Examples
+Examples are available in the `examples/` folder -- one for each type of `history` variant.
+- For Browser Examples, run `pub get` and `pub serve example`. Then navigate to `localhost:8080`
+- For a VM Example, run `pub get` then run `dart example/example_vm.dart`
+
 ## Inspiration
 
 This project is largely based on [`history`](https://www.npmjs.com/package/history), an npm package provided by [React Training](https://reacttraining.com/)
