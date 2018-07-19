@@ -1,12 +1,12 @@
 name: history
-version: 0.2.0
+version: 0.2.1
 description: Abstraction of HTML5 History API for use in any environment. Control session history with ease!
 author: Srinivas Dhanwada <dhanwada.dev@gmail.com>
 homepage: https://github.com/pr1sm/history_dart
 environment:
   sdk: '>=1.24.0 <2.0.0'
 dependencies:
-  quiver: '>=0.14.0'
+  quiver: '>=0.14.0 <3.0.0'
 dev_dependencies:
   browser: ^0.10.0
   coverage: '>=0.9.3 <0.11.0'

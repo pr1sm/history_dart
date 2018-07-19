@@ -3,6 +3,11 @@ All notable changes to this project will be documented here.
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v0.2.1] - 2016-7-18
+
+### Changed
+- `quiver` dependency loosened 
+
 ## [v0.2.0] - 2018-7-15
 
 ### Added
