@@ -4,7 +4,6 @@ dart:
   - stable
 addons:
   chrome: stable
-with_content_shell: true
 script:
   - TEST_ENV="travis" bash ./tool/travis.bash
-  - bash <(curl -s https://codecov.io/bash) -f coverage/coverage.lcov
+#  - bash <(curl -s https://codecov.io/bash) -f coverage/coverage.lcov # TODO: add this back in when coverage is setup
