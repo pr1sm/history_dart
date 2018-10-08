@@ -293,17 +293,18 @@ class HashHistory extends History with BasenameMixin, HashMixin {
       }
 
       _ignorePath = null;
-      await _handlePop(location);
-      if (_hashChangeHandlerCompleter != null) {
+      bool notified = await _handlePop(location);
+      if (_hashChangeHandlerCompleter != null && notified) {
         _hashChangeHandlerCompleter.complete();
       }
     }
   }
 
-  Future<Null> _handlePop(Location location) async {
+  Future<bool> _handlePop(Location location) async {
     if (_forceNextPop) {
       _forceNextPop = false;
       _transitionManager.notify(this);
+      return true;
     } else {
       var action = Action.pop;
       bool ok = await _transitionManager.confirmTransitionTo(
@@ -314,8 +315,10 @@ class HashHistory extends History with BasenameMixin, HashMixin {
         _transitionManager.notify(this);
       } else {
         _revertPop(location);
+        return false;
       }
     }
+    return true;
   }
 
   void _revertPop(Location fromLocation) {
