@@ -18,7 +18,8 @@ void main() {
 
     group('confirmTransitionTo', () {
       setUp(() {
-        Prompt prompt = (Location _, Action __) async => new Future.value('test');
+        Prompt prompt =
+            (Location _, Action __) async => new Future.value('test');
         transitionManager = new HashTransitionManager<HashHistory>();
         transitionManager.prompt = prompt;
       });
@@ -122,7 +123,8 @@ void main() {
       });
 
       test('overriding prompt works correctly', () async {
-        var newPrompt = (Location _, Action __) async => new Future.value('newtest');
+        var newPrompt =
+            (Location _, Action __) async => new Future.value('newtest');
 
         transitionManager.prompt = prompt;
         expect(transitionManager.prompt, equals(prompt));
@@ -181,7 +183,8 @@ void main() {
         await new Future.delayed(new Duration(microseconds: 1), () {});
         expect(callCount, equals(0));
 
-        transitionManager.prompt = (Location _, Action __) async => new Future.value('yes');
+        transitionManager.prompt =
+            (Location _, Action __) async => new Future.value('yes');
         window.dispatchEvent(new PopStateEvent('hashchange'));
         await c.future;
         expect(callCount, equals(1));
@@ -193,7 +196,8 @@ void main() {
         await new Future.delayed(new Duration(microseconds: 1), () {});
         expect(callCount, equals(0));
 
-        transitionManager.prompt = (Location _, Action __) async => new Future.value('yes');
+        transitionManager.prompt =
+            (Location _, Action __) async => new Future.value('yes');
         window.dispatchEvent(new PopStateEvent('hashchange'));
         await c.future;
         expect(callCount, equals(1));
@@ -259,7 +263,8 @@ void main() {
         expect(callCount, equals(1));
 
         c = new Completer();
-        transitionManager.prompt = (Location _, Action __) async => new Future.value('yes');
+        transitionManager.prompt =
+            (Location _, Action __) async => new Future.value('yes');
         window.dispatchEvent(new PopStateEvent('hashchange'));
         await c.future;
         expect(callCount, equals(2));
@@ -277,7 +282,8 @@ void main() {
         await new Future.delayed(new Duration(microseconds: 1), () {});
         expect(callCount, equals(0));
 
-        transitionManager.prompt = (Location _, Action __) async => new Future.value('yes');
+        transitionManager.prompt =
+            (Location _, Action __) async => new Future.value('yes');
         window.dispatchEvent(new PopStateEvent('hashchange'));
         await c.future;
         expect(callCount, equals(1));
@@ -295,7 +301,8 @@ void main() {
         await new Future.delayed(new Duration(microseconds: 1), () {});
         expect(callCount, equals(0));
 
-        transitionManager.prompt = (Location _, Action __) async => new Future.value('yes');
+        transitionManager.prompt =
+            (Location _, Action __) async => new Future.value('yes');
         window.dispatchEvent(new PopStateEvent('hashchange'));
         await c.future;
         expect(callCount, equals(1));
@@ -322,7 +329,8 @@ void main() {
         await new Future.delayed(new Duration(microseconds: 1), () {});
         expect(callCount, equals(0));
 
-        transitionManager.prompt = (Location _, Action __) async => new Future.value('yes');
+        transitionManager.prompt =
+            (Location _, Action __) async => new Future.value('yes');
         window.dispatchEvent(new PopStateEvent('hashchange'));
         await c.future;
         expect(callCount, equals(1));
@@ -353,7 +361,8 @@ void main() {
         await new Future.delayed(new Duration(microseconds: 1), () {});
         expect(callCount, equals(0));
 
-        transitionManager.prompt = (Location _, Action __) async => new Future.value('yes');
+        transitionManager.prompt =
+            (Location _, Action __) async => new Future.value('yes');
         window.dispatchEvent(new PopStateEvent('hashchange'));
         await c.future;
         expect(callCount, equals(1));
@@ -384,7 +393,8 @@ void main() {
         await new Future.delayed(new Duration(microseconds: 1), () {});
         expect(callCount, equals(0));
 
-        transitionManager.prompt = (Location _, Action __) async => new Future.value('yes');
+        transitionManager.prompt =
+            (Location _, Action __) async => new Future.value('yes');
         window.dispatchEvent(new PopStateEvent('hashchange'));
         await c.future;
         expect(callCount, equals(1));
@@ -421,7 +431,8 @@ void main() {
         await c.future;
         expect(callCount, equals(1));
 
-        transitionManager.prompt = (Location _, Action __) async => new Future.value('yes');
+        transitionManager.prompt =
+            (Location _, Action __) async => new Future.value('yes');
         window.dispatchEvent(new PopStateEvent('hashchange'));
         await c.future;
         expect(callCount, equals(2));
@@ -452,7 +463,8 @@ void main() {
         await c.future;
         expect(callCount, equals(1));
 
-        transitionManager.prompt = (Location _, Action __) async => new Future.value('yes');
+        transitionManager.prompt =
+            (Location _, Action __) async => new Future.value('yes');
         window.dispatchEvent(new PopStateEvent('hashchange'));
         await c.future;
         expect(callCount, equals(2));
@@ -489,7 +501,8 @@ void main() {
         expect(callCount, equals(1));
 
         c = new Completer();
-        transitionManager.prompt = (Location _, Action __) async => new Future.value('yes');
+        transitionManager.prompt =
+            (Location _, Action __) async => new Future.value('yes');
         window.dispatchEvent(new PopStateEvent('hashchange'));
         await c.future;
         expect(callCount, equals(2));

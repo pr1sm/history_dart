@@ -18,7 +18,8 @@ void main() {
 
     group('confirmTransitionTo', () {
       setUp(() {
-        Prompt prompt = (Location _, Action __) async => new Future.value('test');
+        Prompt prompt =
+            (Location _, Action __) async => new Future.value('test');
         transitionManager = new BrowserTransitionManager<BrowserHistory>();
         transitionManager.prompt = prompt;
       });
@@ -122,7 +123,8 @@ void main() {
       });
 
       test('overriding prompt works correctly', () async {
-        var newPrompt = (Location _, Action __) async => new Future.value('newtest');
+        var newPrompt =
+            (Location _, Action __) async => new Future.value('newtest');
 
         transitionManager.prompt = prompt;
         expect(transitionManager.prompt, equals(prompt));

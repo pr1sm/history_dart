@@ -24,7 +24,8 @@ dynamic testCoreHistory(HistoryGenerator getHistory,
         if (history != null) {
           history.unblock();
           history = null;
-        };
+        }
+        ;
         if (sub != null) {
           sub.cancel();
           sub = null;

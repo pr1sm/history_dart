@@ -19,7 +19,8 @@ void main() {
 
     group('confirmTransitionTo', () {
       setUp(() {
-        Prompt prompt = (Location _, Action __) async => new Future.value('test');
+        Prompt prompt =
+            (Location _, Action __) async => new Future.value('test');
         transitionManager.prompt = prompt;
       });
 

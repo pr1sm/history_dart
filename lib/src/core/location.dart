@@ -58,8 +58,7 @@ class Location {
     String key,
     String search,
     dynamic state,
-  })
-      : this(
+  }) : this(
             pathname: pathname ?? other.pathname,
             hash: hash ?? other.hash,
             key: key ?? other.key,
