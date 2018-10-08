@@ -3,6 +3,7 @@ import 'dart:async';
 
 import 'package:test/test.dart';
 
+import 'package:history/src/core/location.dart';
 import 'package:history/src/core/transition_manager.dart';
 import 'package:history/src/utils/utils.dart' show Action, Prompt;
 
@@ -18,7 +19,8 @@ void main() {
 
     group('confirmTransitionTo', () {
       setUp(() {
-        transitionManager.prompt = (_, __) async => new Future.value('test');
+        Prompt prompt = (Location _, Action __) async => new Future.value('test');
+        transitionManager.prompt = prompt;
       });
 
       test('returns true when prompt is null', () async {

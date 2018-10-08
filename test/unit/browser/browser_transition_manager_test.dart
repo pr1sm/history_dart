@@ -1,9 +1,10 @@
 @TestOn('browser')
 import 'dart:async';
-import 'dart:html';
+import 'dart:html' hide Location;
 
 import 'package:test/test.dart';
 
+import 'package:history/src/core/location.dart';
 import 'package:history/src/browser/browser_history.dart';
 import 'package:history/src/browser/browser_transition_manager.dart';
 import 'package:history/src/utils/utils.dart' show Prompt, Action;
@@ -17,8 +18,9 @@ void main() {
 
     group('confirmTransitionTo', () {
       setUp(() {
+        Prompt prompt = (Location _, Action __) async => new Future.value('test');
         transitionManager = new BrowserTransitionManager<BrowserHistory>();
-        transitionManager.prompt = (_, __) async => new Future.value('test');
+        transitionManager.prompt = prompt;
       });
 
       test('returns true when prompt is null', () async {
@@ -110,7 +112,7 @@ void main() {
 
       setUp(() {
         transitionManager = new BrowserTransitionManager<BrowserHistory>();
-        prompt = (_, __) async => new Future.value('test');
+        prompt = (Location _, Action __) async => new Future.value('test');
       });
 
       test('setting new prompt works correctly', () async {
@@ -120,7 +122,7 @@ void main() {
       });
 
       test('overriding prompt works correctly', () async {
-        var newPrompt = (_, __) async => new Future.value('newtest');
+        var newPrompt = (Location _, Action __) async => new Future.value('newtest');
 
         transitionManager.prompt = prompt;
         expect(transitionManager.prompt, equals(prompt));
@@ -148,6 +150,7 @@ void main() {
       int callCount;
       StreamSubscription sub;
       PopStateChangeHandler handler;
+      Prompt prompt;
 
       setUp(() {
         c = new Completer();
@@ -157,6 +160,7 @@ void main() {
           callCount += 1;
           c.complete();
         };
+        prompt = (Location _, Action __) async => new Future.value('yes');
         transitionManager = new BrowserTransitionManager<BrowserHistory>(
             popStateChangeHandler: handler);
       });
@@ -179,7 +183,7 @@ void main() {
         await new Future.delayed(new Duration(microseconds: 1), () {});
         expect(callCount, equals(0));
 
-        transitionManager.prompt = ((_, __) async => new Future.value('yes'));
+        transitionManager.prompt = prompt;
         window.dispatchEvent(new PopStateEvent('popstate'));
         await c.future;
         expect(callCount, equals(1));
@@ -191,7 +195,7 @@ void main() {
         await new Future.delayed(new Duration(microseconds: 1), () {});
         expect(callCount, equals(0));
 
-        transitionManager.prompt = ((_, __) async => new Future.value('yes'));
+        transitionManager.prompt = prompt;
         window.dispatchEvent(new PopStateEvent('popstate'));
         await c.future;
         expect(callCount, equals(1));
@@ -240,7 +244,7 @@ void main() {
         expect(callCount, equals(1));
 
         c = new Completer();
-        transitionManager.prompt = ((_, __) async => new Future.value('yes'));
+        transitionManager.prompt = prompt;
         window.dispatchEvent(new PopStateEvent('popstate'));
         await c.future;
         expect(callCount, equals(2));
@@ -257,7 +261,7 @@ void main() {
         expect(callCount, equals(1));
 
         c = new Completer();
-        transitionManager.prompt = ((_, __) async => new Future.value('yes'));
+        transitionManager.prompt = prompt;
         window.dispatchEvent(new PopStateEvent('popstate'));
         await c.future;
         expect(callCount, equals(2));
@@ -275,7 +279,7 @@ void main() {
         await new Future.delayed(new Duration(microseconds: 1), () {});
         expect(callCount, equals(0));
 
-        transitionManager.prompt = ((_, __) async => new Future.value('yes'));
+        transitionManager.prompt = prompt;
         window.dispatchEvent(new PopStateEvent('popstate'));
         await c.future;
         expect(callCount, equals(1));
@@ -293,7 +297,7 @@ void main() {
         await new Future.delayed(new Duration(microseconds: 1), () {});
         expect(callCount, equals(0));
 
-        transitionManager.prompt = ((_, __) async => new Future.value('yes'));
+        transitionManager.prompt = prompt;
         window.dispatchEvent(new PopStateEvent('popstate'));
         await c.future;
         expect(callCount, equals(1));
@@ -320,7 +324,7 @@ void main() {
         await new Future.delayed(new Duration(microseconds: 1), () {});
         expect(callCount, equals(0));
 
-        transitionManager.prompt = ((_, __) async => new Future.value('yes'));
+        transitionManager.prompt = prompt;
         window.dispatchEvent(new PopStateEvent('popstate'));
         await c.future;
         expect(callCount, equals(1));
@@ -351,7 +355,7 @@ void main() {
         await new Future.delayed(new Duration(microseconds: 1), () {});
         expect(callCount, equals(0));
 
-        transitionManager.prompt = ((_, __) async => new Future.value('yes'));
+        transitionManager.prompt = prompt;
         window.dispatchEvent(new PopStateEvent('popstate'));
         await c.future;
         expect(callCount, equals(1));
@@ -382,7 +386,7 @@ void main() {
         await new Future.delayed(new Duration(microseconds: 1), () {});
         expect(callCount, equals(0));
 
-        transitionManager.prompt = ((_, __) async => new Future.value('yes'));
+        transitionManager.prompt = prompt;
         window.dispatchEvent(new PopStateEvent('popstate'));
         await c.future;
         expect(callCount, equals(1));
@@ -419,7 +423,7 @@ void main() {
         await c.future;
         expect(callCount, equals(1));
 
-        transitionManager.prompt = ((_, __) async => new Future.value('yes'));
+        transitionManager.prompt = prompt;
         window.dispatchEvent(new PopStateEvent('popstate'));
         await c.future;
         expect(callCount, equals(2));
@@ -450,7 +454,7 @@ void main() {
         await c.future;
         expect(callCount, equals(1));
 
-        transitionManager.prompt = ((_, __) async => new Future.value('yes'));
+        transitionManager.prompt = prompt;
         window.dispatchEvent(new PopStateEvent('popstate'));
         await c.future;
         expect(callCount, equals(2));
@@ -487,7 +491,7 @@ void main() {
         expect(callCount, equals(1));
 
         c = new Completer();
-        transitionManager.prompt = ((_, __) async => new Future.value('yes'));
+        transitionManager.prompt = prompt;
         window.dispatchEvent(new PopStateEvent('popstate'));
         await c.future;
         expect(callCount, equals(2));
@@ -513,7 +517,7 @@ void main() {
             needsHashChangeHandler: true);
 
         c = new Completer();
-        transitionManager.prompt = ((_, __) async => new Future.value('yes'));
+        transitionManager.prompt = prompt;
         window.dispatchEvent(new PopStateEvent('popstate'));
         window.dispatchEvent(new HashChangeEvent('hashchange'));
         await c.future;
@@ -537,7 +541,7 @@ void main() {
             needsHashChangeHandler: false);
 
         c = new Completer();
-        transitionManager.prompt = ((_, __) async => new Future.value('yes'));
+        transitionManager.prompt = prompt;
         window.dispatchEvent(new PopStateEvent('popstate'));
         window.dispatchEvent(new HashChangeEvent('hashchange'));
         await c.future;

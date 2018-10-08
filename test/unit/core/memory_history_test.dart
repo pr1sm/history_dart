@@ -88,7 +88,7 @@ void main() {
 
       test('constructs with confirmation', () async {
         var c = new Completer();
-        var confirm = (_) async {
+        Confirmation confirm = (String _) async {
           c.complete();
           return new Future.value(true);
         };
