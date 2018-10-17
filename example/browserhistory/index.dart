@@ -14,7 +14,7 @@ void main() {
 
   history.onChange.listen((h) {
     print('transitioned to (${h.location}) using (${h.action})');
-    if (h.location.state['prompted']) {
+    if (h.location.state['prompted'] == true) {
       pageContent.setInnerHtml('''
         <h3>Prompted Transition Confirmed!</h3>
         ''');
@@ -28,7 +28,7 @@ void main() {
   forward.onClick.listen((_) {
     count = history.location.state == null
         ? 1
-        : history.location.state['count'] + 1;
+        : int.tryParse(history.location.state['count'].toString()) + 1;
     history.push('/${count}', {'count': count, 'prompted': false});
   });
 
@@ -37,7 +37,7 @@ void main() {
         0,
         history.location.state == null
             ? 0
-            : history.location.state['count'] - 1);
+            : int.tryParse(history.location.state['count'].toString()) - 1);
     history.push('/${count}', {'count': count, 'prompted': false});
   });
 

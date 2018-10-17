@@ -37,7 +37,7 @@ class MockBrowserHtmlHistory extends MockHtmlHistory {
   bool mockErrorOnState;
   bool mockNullOnState;
   bool mockUsePopState;
-  List<Location> mockLocations;
+  List<MockBrowserHtmlLocation> mockLocations;
 
   MockBrowserHtmlHistory(
       {this.mockPrint = false,
@@ -109,7 +109,7 @@ class MockBrowserHtmlHistory extends MockHtmlHistory {
       print('mock go delta: ${delta}');
     }
     delta ??= 0;
-    mockIndex = (mockIndex + delta).clamp(0, mockLocations.length - 1);
+    mockIndex = (mockIndex + delta).clamp(0, mockLocations.length - 1).toInt();
     if (mockPrint) {
       print('mock go mockIndex: ${mockIndex}');
     }
@@ -138,7 +138,7 @@ class MockBrowserHtmlHistory extends MockHtmlHistory {
           ..mockPath = newMockPath
           ..mockHash = newMockHash
           ..mockSearch = newMockSearch
-          ..mockKey = newMockKey
+          ..mockKey = newMockKey.toString()
           ..mockState = newMockState;
     if (mockPrint) {
       print(
@@ -165,7 +165,7 @@ class MockBrowserHtmlHistory extends MockHtmlHistory {
           ..mockPath = newMockPath
           ..mockHash = newMockHash
           ..mockSearch = newMockSearch
-          ..mockKey = newMockKey
+          ..mockKey = newMockKey.toString()
           ..mockState = newMockState;
     if (mockPrint) {
       print(

@@ -22,7 +22,7 @@ void main() {
     } else {
       var countStr = h.location.pathname;
       countStr = countStr.length < 1 ? '0' : countStr.substring(1);
-      count = int.parse(countStr, onError: (_) => 0);
+      count = int.tryParse(countStr) ?? 0;
       pageContent.setInnerHtml('''
         <h3>Current Page Index: ${count}</h3>
         ''');

@@ -33,7 +33,7 @@ void main() {
       test('is false when not confirmed', () async {
         var mockWindow = new MockHtmlWindow();
         when(mockWindow.confirm()).thenReturn(false);
-        when(mockWindow.confirm(typed(any))).thenReturn(false);
+        when(mockWindow.confirm(any)).thenReturn(false);
         domUtils = new DomUtils(windowImpl: mockWindow);
         expect(await domUtils.getConfirmation(null), isFalse);
         expect(await domUtils.getConfirmation(''), isFalse);
@@ -43,7 +43,7 @@ void main() {
       test('is true when confirmed', () async {
         var mockWindow = new MockHtmlWindow();
         when(mockWindow.confirm()).thenReturn(true);
-        when(mockWindow.confirm(typed(any))).thenReturn(true);
+        when(mockWindow.confirm(any)).thenReturn(true);
         domUtils = new DomUtils(windowImpl: mockWindow);
         expect(await domUtils.getConfirmation(null), isTrue);
         expect(await domUtils.getConfirmation(''), isTrue);

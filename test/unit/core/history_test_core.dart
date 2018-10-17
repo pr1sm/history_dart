@@ -9,7 +9,9 @@ import 'package:history/src/utils/utils.dart' show Action, Confirmation, Prompt;
 
 typedef History HistoryGenerator({Confirmation confirmation});
 
-dynamic testCoreHistory(HistoryGenerator getHistory,
+typedef dynamic testSuiteRunner();
+
+testSuiteRunner testCoreHistory(HistoryGenerator getHistory,
         {bool supportsState = true}) =>
     () {
       History history;

@@ -1,9 +1,10 @@
 #!/bin/bash
 cd "$(git rev-parse --show-toplevel)"
 pub get
-dartanalyzer . # TODO: move this back into success check
+# TODO Clean this up!
 pub run dart_style:format -n test/ lib/ example/ && \
-[[ "$(pub run dart_style:format -n test/ lib/ example/ | grep -c .dart)" -eq "0" ]] && \ # TODO: Simplify this!
+[[ "$(dartanalyzer . | grep -c "No issues found")" -eq "1" ]] && \
+[[ "$(pub run dart_style:format -n test/ lib/ example/ | grep -c .dart)" -eq "0" ]] && \
 pub run build_runner test -- -p "chrome,vm" test/unit/browser_runner_test.dart test/unit/core_runner_test.dart # TODO: add option to specify test runner files
 # TODO: add converage back when it becomes available https://github.com/dart-lang/coverage/issues/229
 # if [ "$TEST_ENV" = "travis" ]; then

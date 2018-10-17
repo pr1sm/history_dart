@@ -192,10 +192,10 @@ class Location {
 
   Location._fromMap(Map<String, dynamic> map)
       : this(
-            pathname: map['pathname'],
-            hash: map['hash'],
-            key: map['key'],
-            search: map['search'],
+            pathname: map['pathname'] as String,
+            hash: map['hash'] as String,
+            key: map['key'] as String,
+            search: map['search'] as String,
             state: map['state']);
 
   void _initialize(

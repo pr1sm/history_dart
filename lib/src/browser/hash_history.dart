@@ -134,7 +134,9 @@ class HashHistory extends History with BasenameMixin, HashMixin {
     Location nextLocation = (path is String)
         ? new Location(pathname: path)
         : new Location(
-            pathname: path.pathname, hash: path.hash, search: path.search);
+            pathname: (path as Location).pathname,
+            hash: (path as Location).hash,
+            search: (path as Location).search);
     var nextAction = Action.push;
     nextLocation.relateTo(_location);
 
@@ -182,7 +184,9 @@ class HashHistory extends History with BasenameMixin, HashMixin {
     Location nextLocation = (path is String)
         ? new Location(pathname: path)
         : new Location(
-            pathname: path.pathname, hash: path.hash, search: path.search);
+            pathname: (path as Location).pathname,
+            hash: (path as Location).hash,
+            search: (path as Location).search);
     var nextAction = Action.replace;
     nextLocation.relateTo(_location);
 

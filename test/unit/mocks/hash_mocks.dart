@@ -34,7 +34,7 @@ class MockHashHtmlWindow extends MockHtmlWindow {
 class MockHashHtmlHistory extends MockHtmlHistory {
   int mockIndex;
   bool mockPrint;
-  List<Location> mockLocations;
+  List<MockHashHtmlLocation> mockLocations;
 
   MockHashHtmlHistory({this.mockPrint = false}) {
     mockIndex = 0;
@@ -74,7 +74,7 @@ class MockHashHtmlHistory extends MockHtmlHistory {
       print('mock go delta: ${delta}');
     }
     delta ??= 0;
-    mockIndex = (mockIndex + delta).clamp(0, mockLocations.length - 1);
+    mockIndex = (mockIndex + delta).clamp(0, mockLocations.length - 1).toInt();
     if (mockPrint) {
       print('mock go mockIndex: ${mockIndex}');
     }

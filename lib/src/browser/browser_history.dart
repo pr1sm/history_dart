@@ -122,7 +122,7 @@ class BrowserHistory extends History with BrowserMixin, BasenameMixin {
     // Compute next location and action
     Location nextLocation = (path is String)
         ? new Location(pathname: path, state: state, key: _createKey())
-        : new Location.copy(path,
+        : new Location.copy((path as Location),
             key: _createKey(), state: path.state ?? state);
     var nextAction = Action.push;
     nextLocation.relateTo(_location);
@@ -174,7 +174,7 @@ class BrowserHistory extends History with BrowserMixin, BasenameMixin {
     // Compute next location and action
     Location nextLocation = (path is String)
         ? new Location(pathname: path, state: state, key: _createKey())
-        : new Location.copy(path,
+        : new Location.copy((path as Location),
             key: _createKey(), state: path.state ?? state);
     var nextAction = Action.replace;
     nextLocation.relateTo(_location);
@@ -267,13 +267,14 @@ class BrowserHistory extends History with BrowserMixin, BasenameMixin {
       path = stripBasename(path, basename);
     }
 
-    return new Location(pathname: path, state: state, key: key);
+    return new Location(pathname: path, state: state, key: key.toString());
   }
 
-  Future<Null> _handlePopState(event) async {
-    if (_domUtils.isExtraneousPopStateEvent(event)) return;
+  Future<Null> _handlePopState(html.Event event) async {
+    var popStateEvent = event as html.PopStateEvent;
+    if (_domUtils.isExtraneousPopStateEvent(popStateEvent)) return;
 
-    await _handlePop(_domLocation(event.state));
+    await _handlePop(_domLocation(popStateEvent.state));
   }
 
   Future<Null> _handleHashChange(e) async =>
