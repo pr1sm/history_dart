@@ -21,6 +21,4 @@ dev_dependencies:
   test: ^1.0.0
   version: ^1.0.3
   webdev: ^1.0.0
-transformers:
-  - test/pub_serve:
-      $include: test/**_test{.*,}.dart
+

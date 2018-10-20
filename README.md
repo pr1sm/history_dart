@@ -46,14 +46,15 @@ history.block('Are you sure you want to navigate?');
 history.push('/confirmed');
 
 // Use a more complex Prompt for more flexibilty
-history.block((Location l, Action a) {
+Prompt prompt = (Location l, Action a) {
   if (l.path == '/logout') {
-    return 'Logging out will cause you to lose all unsaved data!';
+    return Future.value('Logging out will cause you to lose all unsaved data!');
   } else if (a == Action.pop) {
-    return 'Are you sure you want to go back?';
+    return Future.value('Are you sure you want to go back?');
   }
-  return 'Are you sure you want to navigate?';
-});
+  return Future.value('Are you sure you want to navigate?');
+};
+history.block(prompt);
 
 // Prints different prompts based on the transition
 await history.goBack();
@@ -68,7 +69,7 @@ sub.cancel();
 
 ## Examples
 Examples are available in the `examples/` folder -- one for each type of `history` variant.
-- For Browser Examples, run `pub get` and `pub serve example`. Then navigate to `localhost:8080`
+- For Browser Examples, run `pub get` and `pub run build_runner serve example`. Then navigate to `localhost:8080`
 - For a VM Example, run `pub get` then run `dart example/example_vm.dart`
 
 ## Inspiration

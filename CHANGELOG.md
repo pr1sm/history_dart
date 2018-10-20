@@ -3,7 +3,19 @@ All notable changes to this project will be documented here.
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v0.2.1] - 2016-7-18
+## [v1.0.0] - 2018-10-19
+
+### Added
+- Support for Dart 2!
+- Tooling using `build_runner`
+
+### Changed
+- Updated examples to work with Dart 2
+
+### Removed
+- Support for Dart 1.x
+
+## [v0.2.1] - 2018-7-18
 
 ### Changed
 - `quiver` dependency loosened 
