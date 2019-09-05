@@ -77,7 +77,7 @@ class BrowserTransitionManager<T extends BrowserHistory>
     if (delta == 0) {
       return;
     }
-    int nextDomCheck = (_domCheck + delta).clamp(0, 2);
+    int nextDomCheck = (_domCheck + delta).clamp(0, 2).toInt();
     if (_domCheck == 0 && nextDomCheck != 0) {
       window.addEventListener('popstate', _popStateChangeHandler);
       if (_needsHashChangeHandler) {
