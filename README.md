@@ -43,7 +43,7 @@ await history.go(-1);
 history.block('Are you sure you want to navigate?');
 
 // This call waits for a user confirmation before continuing
-history.push('/confirmed');
+await history.push('/confirmed');
 
 // Use a more complex Prompt for more flexibilty
 Prompt prompt = (Location l, Action a) {

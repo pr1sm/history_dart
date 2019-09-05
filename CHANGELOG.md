@@ -3,6 +3,15 @@ All notable changes to this project will be documented here.
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.0.1] - 2019-9-5
+
+### Changed
+- Upgrade dev dependency ranges to prevent build failures
+  - mockito (`^3.0.0` -> `^4.0.0`)
+  - dartdoc (`^0.20.0` -> `>= 0.24.0 <1.0.0`)
+- Fix Analyzer Errors
+- Fix missing `await` in README
+
 ## [v1.0.0] - 2018-10-19
 
 ### Added
