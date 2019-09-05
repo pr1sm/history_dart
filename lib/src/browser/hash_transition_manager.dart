@@ -69,7 +69,7 @@ class HashTransitionManager<T extends HashHistory>
     if (delta == 0) {
       return;
     }
-    int nextDomCheck = (_domCheck + delta).clamp(0, 2);
+    int nextDomCheck = (_domCheck + delta).clamp(0, 2).toInt();
     if (_domCheck == 0 && nextDomCheck != 0) {
       window.addEventListener('hashchange', _hashChangeHandler);
     } else if (_domCheck != 0 && nextDomCheck == 0) {
