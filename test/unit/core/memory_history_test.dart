@@ -94,8 +94,8 @@ void main() {
         };
         var mh = new MemoryHistory(getConfirmation: confirm);
         mh.block('temp');
-        mh.push('/test');
-        await c.future;
+        await mh.push('/test');
+        expect(c.isCompleted, true);
       });
     });
 

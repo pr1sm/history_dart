@@ -56,7 +56,7 @@ class BrowserTransitionManager<T extends BrowserHistory>
   Stream<T> get stream => _controller.stream;
 
   @override
-  void set prompt(nextPrompt) {
+  set prompt(nextPrompt) {
     if (prompt == null && nextPrompt != null) {
       _handleDomListener(1);
     } else if (prompt != null && nextPrompt == null) {

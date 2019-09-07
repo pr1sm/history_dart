@@ -41,9 +41,9 @@ class Location {
   Location(
       {String pathname = '/',
       String hash = '',
-      String key = null,
+      String key,
       String search = '',
-      dynamic state = null}) {
+      dynamic state}) {
     // Call initialization with given inputs
     _initialize(pathname ?? '/', hash ?? '', key, search ?? '', state);
   }
@@ -130,7 +130,7 @@ class Location {
   /// print(relative.pathname) // Output: /home/second
   /// ```
   void relateTo(Location base) {
-    String resolvedPathname = null;
+    String resolvedPathname;
     if (base != null) {
       // Current pathname is empty, use base pathname
       if (_pathname.isEmpty) {

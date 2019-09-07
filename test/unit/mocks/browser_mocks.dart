@@ -180,9 +180,9 @@ class MockBrowserHtmlLocation extends Mock implements Location {
   String mockPath = '/';
   String mockHash = '';
   String mockSearch = '';
-  String mockKey = null;
-  String mockTitle = null;
-  dynamic mockState = null;
+  String mockKey;
+  String mockTitle;
+  dynamic mockState;
   MockBrowserHtmlHistory mockHistory;
 
   MockBrowserHtmlLocation(this.mockHistory, {this.mockPrint = false});
@@ -192,7 +192,7 @@ class MockBrowserHtmlLocation extends Mock implements Location {
       '${mockPath}${mockSearch.isNotEmpty ? '?' : ''}${mockSearch}${mockHash.isNotEmpty ? '#' : ''}${mockHash}';
 
   @override
-  void set href(String newHref) {
+  set href(String newHref) {
     final searchIndex = newHref.indexOf('?');
     final hashIndex = newHref.indexOf('#');
     var newMockHash = hashIndex == -1 ? '' : newHref.substring(hashIndex + 1);
@@ -217,7 +217,7 @@ class MockBrowserHtmlLocation extends Mock implements Location {
   String get hash => mockHash;
 
   @override
-  void set hash(String newHash) {
+  set hash(String newHash) {
     MockBrowserHtmlLocation newLocation =
         new MockBrowserHtmlLocation(mockHistory)
           ..mockPath = mockPath
@@ -233,7 +233,7 @@ class MockBrowserHtmlLocation extends Mock implements Location {
   String get pathname => mockPath;
 
   @override
-  void set pathname(String newPath) {
+  set pathname(String newPath) {
     MockBrowserHtmlLocation newLocation =
         new MockBrowserHtmlLocation(mockHistory)
           ..mockPath = newPath
@@ -249,7 +249,7 @@ class MockBrowserHtmlLocation extends Mock implements Location {
   String get search => mockSearch;
 
   @override
-  void set search(String newSearch) {
+  set search(String newSearch) {
     MockBrowserHtmlLocation newLocation =
         new MockBrowserHtmlLocation(mockHistory)
           ..mockPath = mockPath

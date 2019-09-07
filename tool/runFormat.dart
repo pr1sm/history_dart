@@ -24,7 +24,7 @@ List<String> formatArgs = new List()
   ..add('tool/');
 
 void startFormat() async {
-  Process.start(formatExecutable, formatArgs).then((process) {
+  return Process.start(formatExecutable, formatArgs).then((process) {
     process.stdout.transform(utf8.decoder).transform(new LineSplitter()).listen(
         (line) {
       formatStdOut.add(line);

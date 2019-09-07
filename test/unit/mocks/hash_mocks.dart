@@ -94,7 +94,7 @@ class MockHashHtmlLocation extends MockHtmlLocation {
   String get href => '${mockPath}${mockHash.isNotEmpty ? '#' : ''}${mockHash}';
 
   @override
-  void set href(String newHref) {
+  set href(String newHref) {
     final hashIndex = newHref.indexOf('#');
     var newMockHash = hashIndex == -1 ? '' : newHref.substring(hashIndex + 1);
     var newMockPath = newHref.substring(0, hashIndex >= 0 ? hashIndex : null);
@@ -113,7 +113,7 @@ class MockHashHtmlLocation extends MockHtmlLocation {
   String get hash => mockHash;
 
   @override
-  void set hash(String newHash) {
+  set hash(String newHash) {
     MockHashHtmlLocation newLocation = new MockHashHtmlLocation(mockHistory)
       ..mockPath = mockPath
       ..mockHash = newHash;

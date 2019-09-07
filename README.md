@@ -64,7 +64,7 @@ await history.push('/logout');
 history.unblock();
 
 // Stop listening
-sub.cancel();
+await sub.cancel();
 ```
 
 ## Examples

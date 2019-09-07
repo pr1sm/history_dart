@@ -14,7 +14,7 @@ String analyzerExecutable = 'dartanalyzer';
 List<String> analyzerArgs = new List()..add('.');
 
 void startAnalyzer() async {
-  Process.start(analyzerExecutable, analyzerArgs).then((process) {
+  return Process.start(analyzerExecutable, analyzerArgs).then((process) {
     process.stdout
         .transform(utf8.decoder)
         .transform(new LineSplitter())

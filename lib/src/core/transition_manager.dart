@@ -26,7 +26,7 @@ import 'location.dart';
 import '../utils/utils.dart' show Action, Confirmation, getPrompt;
 
 class TransitionManager<T> {
-  dynamic _prompt = null;
+  dynamic _prompt;
 
   StreamController<T> _controller = new StreamController<T>.broadcast();
 
@@ -34,7 +34,7 @@ class TransitionManager<T> {
 
   dynamic get prompt => _prompt;
 
-  void set prompt(dynamic nextPrompt) {
+  set prompt(dynamic nextPrompt) {
     if (_prompt != null && nextPrompt != null) {
       print(
           'WARNING: A history supports only one prompt at a time! Current Prompt will be overridden');

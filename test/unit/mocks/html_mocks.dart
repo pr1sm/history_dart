@@ -14,7 +14,7 @@ class MockHtmlWindow extends Mock implements Window {
   WindowBase get opener => _opener;
 
   @override
-  void set opener(WindowBase opener) => _opener = opener;
+  set opener(WindowBase opener) => _opener = opener;
 }
 
 class MockHtmlHistory extends Mock implements History {}

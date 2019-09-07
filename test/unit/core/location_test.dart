@@ -10,8 +10,8 @@ void main() {
         [String pathname = '/',
         String hash = '',
         String search = '',
-        String key = null,
-        String state = null,
+        String key,
+        String state,
         String path = '/']) {
       expect(loc.pathname, equals(pathname));
       expect(loc.hash, equals(hash));

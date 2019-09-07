@@ -55,7 +55,7 @@ class HashHistory extends History with BasenameMixin, HashMixin {
   Completer _hashChangeHandlerCompleter;
 
   bool _forceNextPop = false;
-  String _ignorePath = null;
+  String _ignorePath;
 
   List<String> _allPaths;
 

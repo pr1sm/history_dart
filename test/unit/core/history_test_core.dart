@@ -281,7 +281,7 @@ testSuiteRunner testCoreHistory(HistoryGenerator getHistory,
           });
 
           test('go', () async {
-            sub.cancel();
+            await sub.cancel();
             await history.push('/path');
             await history.push('/path2');
             sub = history.onChange.listen((h) {
@@ -296,7 +296,7 @@ testSuiteRunner testCoreHistory(HistoryGenerator getHistory,
           });
 
           test('goForward', () async {
-            sub.cancel();
+            await sub.cancel();
             await history.push('/path');
             await history.go(-1);
             sub = history.onChange.listen((h) {
@@ -311,7 +311,7 @@ testSuiteRunner testCoreHistory(HistoryGenerator getHistory,
           });
 
           test('goBack', () async {
-            sub.cancel();
+            await sub.cancel();
             await history.push('/path');
             sub = history.onChange.listen((h) {
               expect(h, equals(history));
@@ -583,7 +583,7 @@ testSuiteRunner testCoreHistory(HistoryGenerator getHistory,
           await c2.future;
           expect(c.isCompleted, isTrue);
           expect(history.location.pathname, equals('/path2'));
-          sub.cancel();
+          await sub.cancel();
         });
       });
 
@@ -638,7 +638,7 @@ testSuiteRunner testCoreHistory(HistoryGenerator getHistory,
           await c2.future;
           expect(c.isCompleted, isTrue);
           expect(history.location.pathname, equals('/'));
-          sub.cancel();
+          await sub.cancel();
         });
 
         test('still emits a change when triggered at the end of history',
@@ -655,7 +655,7 @@ testSuiteRunner testCoreHistory(HistoryGenerator getHistory,
           await c2.future;
           expect(c.isCompleted, isTrue);
           expect(history.location.pathname, equals('/path'));
-          sub.cancel();
+          await sub.cancel();
         });
       });
 
@@ -709,7 +709,7 @@ testSuiteRunner testCoreHistory(HistoryGenerator getHistory,
           await c2.future;
           expect(c.isCompleted, isTrue);
           expect(history.location.pathname, equals('/path'));
-          sub.cancel();
+          await sub.cancel();
         });
 
         test('still emits a change when triggered at the start of history',
@@ -727,7 +727,7 @@ testSuiteRunner testCoreHistory(HistoryGenerator getHistory,
           await c2.future;
           expect(c.isCompleted, isTrue);
           expect(history.location.pathname, equals('/'));
-          sub.cancel();
+          await sub.cancel();
         });
       });
 

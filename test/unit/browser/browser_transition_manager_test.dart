@@ -229,7 +229,7 @@ void main() {
         await c.future;
         expect(callCount, equals(1));
 
-        sub.cancel();
+        await sub.cancel();
         window.dispatchEvent(new PopStateEvent('popstate'));
         await new Future.delayed(new Duration(microseconds: 1), () {});
         expect(callCount, equals(1));
@@ -311,7 +311,7 @@ void main() {
         expect(callCount, equals(2));
 
         c = new Completer();
-        sub.cancel();
+        await sub.cancel();
         window.dispatchEvent(new PopStateEvent('popstate'));
         await c.future;
         expect(callCount, equals(3));
@@ -338,7 +338,7 @@ void main() {
         expect(callCount, equals(2));
 
         c = new Completer();
-        sub.cancel();
+        await sub.cancel();
         window.dispatchEvent(new PopStateEvent('popstate'));
         await c.future;
         expect(callCount, equals(3));
@@ -375,7 +375,7 @@ void main() {
         expect(callCount, equals(3));
 
         c = new Completer();
-        sub.cancel();
+        await sub.cancel();
         window.dispatchEvent(new PopStateEvent('popstate'));
         await new Future.delayed(new Duration(microseconds: 1), () {});
         expect(callCount, equals(3));
@@ -406,7 +406,7 @@ void main() {
         expect(callCount, equals(2));
 
         c = new Completer();
-        sub.cancel();
+        await sub.cancel();
         window.dispatchEvent(new PopStateEvent('popstate'));
         await new Future.delayed(new Duration(microseconds: 1), () {});
         expect(callCount, equals(2));
@@ -437,7 +437,7 @@ void main() {
         expect(callCount, equals(3));
 
         c = new Completer();
-        sub.cancel();
+        await sub.cancel();
         window.dispatchEvent(new PopStateEvent('popstate'));
         await new Future.delayed(new Duration(microseconds: 1), () {});
         expect(callCount, equals(3));
@@ -462,7 +462,7 @@ void main() {
         expect(callCount, equals(2));
 
         c = new Completer();
-        sub.cancel();
+        await sub.cancel();
         window.dispatchEvent(new PopStateEvent('popstate'));
         await c.future;
         expect(callCount, equals(3));
@@ -487,7 +487,7 @@ void main() {
         expect(callCount, equals(1));
 
         c = new Completer();
-        sub.cancel();
+        await sub.cancel();
         window.dispatchEvent(new PopStateEvent('popstate'));
         await new Future.delayed(new Duration(microseconds: 1), () {});
         expect(callCount, equals(1));

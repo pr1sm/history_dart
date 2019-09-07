@@ -61,7 +61,7 @@ void main() {
         });
         await browserHistory.push('/push');
         await completer.future;
-        sub.cancel();
+        await sub.cancel();
       });
 
       test('window events are still handled when pop state is not supported',
@@ -78,7 +78,7 @@ void main() {
         });
         window.location.href = '/path';
         await completer.future;
-        sub.cancel();
+        await sub.cancel();
         expect(browserHistory.location.pathname, equals('/path'));
       });
 
@@ -106,7 +106,7 @@ void main() {
           await browserHistory.push('/path');
           expect(window.location.href, equals('/path'));
           expect(completer.isCompleted, isFalse);
-          sub.cancel();
+          await sub.cancel();
         });
 
         test('causes location.href set on replace', () async {
@@ -120,7 +120,7 @@ void main() {
           await browserHistory.replace('/path');
           expect(window.location.href, equals('/path'));
           expect(completer.isCompleted, isFalse);
-          sub.cancel();
+          await sub.cancel();
         });
       });
 
