@@ -1,5 +1,5 @@
 name: history
-version: 1.0.1
+version: 1.0.2
 description: Abstraction of HTML5 History API for use in any environment. Control session history with ease!
 author: Srinivas Dhanwada <dhanwada.dev@gmail.com>
 homepage: https://github.com/pr1sm/history_dart

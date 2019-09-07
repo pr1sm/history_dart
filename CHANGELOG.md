@@ -3,6 +3,16 @@ All notable changes to this project will be documented here.
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.0.2] - 2019-9-6
+
+### Added
+- `pedantic` package as a dev dependency
+- recommended analysis options
+
+### Changed
+- Updated code to fix analysis lints
+  - no functionality is affected
+
 ## [v1.0.1] - 2019-9-5
 
 ### Changed
