@@ -14,18 +14,18 @@ import '../core/history_test_core.dart';
 
 void main() {
   group('HashHistory', () {
-    Confirmation autoConfirm = (_) => new Future.value(true);
+    Confirmation autoConfirm = (_) => Future.value(true);
 
     group('constructor', () {
       test('constructs correctly when dom is available', () {
-        var window = new MockHashHtmlWindow();
-        new HashHistory(window: window);
+        var window = MockHashHtmlWindow();
+        HashHistory(window: window);
       });
 
       test('fails to construct when dom is unavailable', () {
-        var window = new MockHtmlWindow();
+        var window = MockHtmlWindow();
         try {
-          new HashHistory(window: window);
+          HashHistory(window: window);
         } on StateError catch (_) {
           return;
         }
@@ -37,47 +37,45 @@ void main() {
     group(
         'core:',
         testCoreHistory(({Confirmation confirmation}) {
-          var window = new MockHashHtmlWindow();
-          return new HashHistory(
+          var window = MockHashHtmlWindow();
+          return HashHistory(
               getConfirmation: confirmation ?? autoConfirm, window: window);
         }, supportsState: false));
 
     group('HashMixin', () {
       test('hashType responds correctly after construction', () {
-        var window = new MockHashHtmlWindow();
-        var hashHistory = new HashHistory(window: window);
+        var window = MockHashHtmlWindow();
+        var hashHistory = HashHistory(window: window);
         expect(hashHistory.hashType, equals(HashType.slash));
-        hashHistory =
-            new HashHistory(window: window, hashType: HashType.hashbang);
+        hashHistory = HashHistory(window: window, hashType: HashType.hashbang);
         expect(hashHistory.hashType, equals(HashType.hashbang));
-        hashHistory = new HashHistory(window: window, hashType: HashType.slash);
+        hashHistory = HashHistory(window: window, hashType: HashType.slash);
         expect(hashHistory.hashType, equals(HashType.slash));
-        hashHistory =
-            new HashHistory(window: window, hashType: HashType.noSlash);
+        hashHistory = HashHistory(window: window, hashType: HashType.noSlash);
         expect(hashHistory.hashType, equals(HashType.noSlash));
       });
 
       test('go prints warning message when hash reloading is not supported',
           () async {
-        var mockHtmlWindow = new MockHashHtmlWindow();
+        var mockHtmlWindow = MockHashHtmlWindow();
         var mockNav = mockHtmlWindow.mockNavigator;
         when(mockNav.userAgent).thenReturn('Firefox');
-        var hashHistory = new HashHistory(window: mockHtmlWindow);
+        var hashHistory = HashHistory(window: mockHtmlWindow);
         await hashHistory.go(0);
       });
 
       test(
           'getting location prints warning message when basename is different from path',
           () {
-        var mockHtmlWindow = new MockHashHtmlWindow();
+        var mockHtmlWindow = MockHashHtmlWindow();
         var hashHistory =
-            new HashHistory(basename: '/base', window: mockHtmlWindow);
+            HashHistory(basename: '/base', window: mockHtmlWindow);
         expect(hashHistory.location.path, isNot(startsWith('/base')));
       });
 
       test('correct hash type encoding on hash change', () async {
-        var mockHtmlWindow = new MockHashHtmlWindow();
-        var hashHistory = new HashHistory(window: mockHtmlWindow);
+        var mockHtmlWindow = MockHashHtmlWindow();
+        var hashHistory = HashHistory(window: mockHtmlWindow);
         var update = hashHistory.onChange.first;
 
         mockHtmlWindow.mockHistory.mockLocation.href = '#hash';

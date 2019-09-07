@@ -46,7 +46,7 @@ class BrowserTransitionManager<T extends BrowserHistory>
     _hashChangeHandler = hashChangeHandler ?? (_) {};
     _popStateChangeHandler = popStateChangeHandler ?? (_) {};
     _needsHashChangeHandler = needsHashChangeHandler;
-    _controller = new StreamController<T>.broadcast(
+    _controller = StreamController<T>.broadcast(
         onCancel: _onControllerCancel, onListen: _onControllerListen);
   }
 

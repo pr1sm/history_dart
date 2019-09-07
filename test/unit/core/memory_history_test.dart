@@ -13,7 +13,7 @@ void main() {
   group('MemoryHistory', () {
     group('constructor', () {
       test('constructs with no parameters', () {
-        var mh = new MemoryHistory();
+        var mh = MemoryHistory();
         expect(mh.index, equals(0));
         expect(mh.entries.isNotEmpty, isTrue);
         expect(mh.length, equals(1));
@@ -25,8 +25,8 @@ void main() {
       });
 
       test('constructs with initial enties', () {
-        var initialEntries = ['/test', new MockLocation(), new Object()];
-        var mh = new MemoryHistory(initialEntries: initialEntries);
+        var initialEntries = ['/test', MockLocation(), Object()];
+        var mh = MemoryHistory(initialEntries: initialEntries);
         expect(mh.index, equals(0));
         expect(mh.entries.isNotEmpty, isTrue);
         expect(mh.length, equals(2));
@@ -39,8 +39,7 @@ void main() {
 
       test('constructs with initial index', () {
         var initialEntries = ['/', '/test'];
-        var mh =
-            new MemoryHistory(initialEntries: initialEntries, initialIndex: 1);
+        var mh = MemoryHistory(initialEntries: initialEntries, initialIndex: 1);
         expect(mh.index, equals(1));
         expect(mh.entries.isNotEmpty, isTrue);
         expect(mh.length, equals(2));
@@ -50,7 +49,7 @@ void main() {
         expect(mh.isBlocking, isFalse);
         expect(mh.onChange, isNotNull);
 
-        mh = new MemoryHistory(initialEntries: initialEntries, initialIndex: 2);
+        mh = MemoryHistory(initialEntries: initialEntries, initialIndex: 2);
         expect(mh.index, equals(1));
         expect(mh.entries.isNotEmpty, isTrue);
         expect(mh.length, equals(2));
@@ -61,7 +60,7 @@ void main() {
         expect(mh.isBlocking, isFalse);
         expect(mh.onChange, isNotNull);
 
-        mh = new MemoryHistory(initialEntries: initialEntries, initialIndex: 0);
+        mh = MemoryHistory(initialEntries: initialEntries, initialIndex: 0);
         expect(mh.index, equals(0));
         expect(mh.entries.isNotEmpty, isTrue);
         expect(mh.length, equals(2));
@@ -74,7 +73,7 @@ void main() {
       });
 
       test('constructs with key length', () {
-        var mh = new MemoryHistory(keyLength: 12);
+        var mh = MemoryHistory(keyLength: 12);
         expect(mh.index, equals(0));
         expect(mh.entries.isNotEmpty, isTrue);
         expect(mh.length, equals(1));
@@ -87,12 +86,12 @@ void main() {
       });
 
       test('constructs with confirmation', () async {
-        var c = new Completer();
+        var c = Completer();
         Confirmation confirm = (String _) async {
           c.complete();
-          return new Future.value(true);
+          return Future.value(true);
         };
-        var mh = new MemoryHistory(getConfirmation: confirm);
+        var mh = MemoryHistory(getConfirmation: confirm);
         mh.block('temp');
         await mh.push('/test');
         expect(c.isCompleted, true);
@@ -102,13 +101,13 @@ void main() {
     group(
         'core:',
         testCoreHistory(({Confirmation confirmation}) =>
-            new MemoryHistory(getConfirmation: confirmation)));
+            MemoryHistory(getConfirmation: confirmation)));
 
     group('MemoryMixin', () {
       MemoryHistory mh;
 
       setUp(() {
-        mh = new MemoryHistory();
+        mh = MemoryHistory();
       });
 
       group('index correctly responds to', () {

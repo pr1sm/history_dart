@@ -50,7 +50,7 @@ abstract class History {
   /// [String] or [Location] is given to it.
   void push(dynamic path, [dynamic state]);
 
-  /// Replace the current entry with a new one ([String] or [Location]) on to the History list
+  /// Replace the current entry with a one ([String] or [Location]) on to the History list
   ///
   /// You can optionally add a [state] object to add information about the
   /// entry that doesn't appear in the path.

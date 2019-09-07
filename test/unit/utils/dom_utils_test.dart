@@ -17,34 +17,34 @@ void main() {
 
     group('canUseDom', () {
       test('is false when document is null', () {
-        var mockWindow = new MockHtmlWindow();
+        var mockWindow = MockHtmlWindow();
         expect(mockWindow.document, isNull);
-        domUtils = new DomUtils(windowImpl: mockWindow);
+        domUtils = DomUtils(windowImpl: mockWindow);
         expect(domUtils.canUseDom, isFalse);
       });
 
       test('is true when using html window', () {
-        domUtils = new DomUtils();
+        domUtils = DomUtils();
         expect(domUtils.canUseDom, isTrue);
       });
     });
 
     group('getConfirmation', () {
       test('is false when not confirmed', () async {
-        var mockWindow = new MockHtmlWindow();
+        var mockWindow = MockHtmlWindow();
         when(mockWindow.confirm()).thenReturn(false);
         when(mockWindow.confirm(any)).thenReturn(false);
-        domUtils = new DomUtils(windowImpl: mockWindow);
+        domUtils = DomUtils(windowImpl: mockWindow);
         expect(await domUtils.getConfirmation(null), isFalse);
         expect(await domUtils.getConfirmation(''), isFalse);
         expect(await domUtils.getConfirmation('message'), isFalse);
       });
 
       test('is true when confirmed', () async {
-        var mockWindow = new MockHtmlWindow();
+        var mockWindow = MockHtmlWindow();
         when(mockWindow.confirm()).thenReturn(true);
         when(mockWindow.confirm(any)).thenReturn(true);
-        domUtils = new DomUtils(windowImpl: mockWindow);
+        domUtils = DomUtils(windowImpl: mockWindow);
         expect(await domUtils.getConfirmation(null), isTrue);
         expect(await domUtils.getConfirmation(''), isTrue);
         expect(await domUtils.getConfirmation('message'), isTrue);
@@ -57,12 +57,12 @@ void main() {
       MockHtmlWindow mockWindow;
 
       setUpAll(() {
-        mockHistory = new MockHtmlHistory();
-        mockNav = new MockHtmlNavigator();
-        mockWindow = new MockHtmlWindow();
+        mockHistory = MockHtmlHistory();
+        mockNav = MockHtmlNavigator();
+        mockWindow = MockHtmlWindow();
         when(mockWindow.history).thenReturn(mockHistory);
         when(mockWindow.navigator).thenReturn(mockNav);
-        domUtils = new DomUtils(windowImpl: mockWindow);
+        domUtils = DomUtils(windowImpl: mockWindow);
       });
 
       void checkSupportHistory(String ua, {bool result = true}) {
@@ -163,12 +163,12 @@ void main() {
       MockHtmlWindow mockWindow;
 
       setUpAll(() {
-        mockHistory = new MockHtmlHistory();
-        mockNav = new MockHtmlNavigator();
-        mockWindow = new MockHtmlWindow();
+        mockHistory = MockHtmlHistory();
+        mockNav = MockHtmlNavigator();
+        mockWindow = MockHtmlWindow();
         when(mockWindow.history).thenReturn(mockHistory);
         when(mockWindow.navigator).thenReturn(mockNav);
-        domUtils = new DomUtils(windowImpl: mockWindow);
+        domUtils = DomUtils(windowImpl: mockWindow);
       });
 
       void checkPopStateOnHashChange(String ua, {bool result = true}) {
@@ -252,12 +252,12 @@ void main() {
       MockHtmlWindow mockWindow;
 
       setUpAll(() {
-        mockHistory = new MockHtmlHistory();
-        mockNav = new MockHtmlNavigator();
-        mockWindow = new MockHtmlWindow();
+        mockHistory = MockHtmlHistory();
+        mockNav = MockHtmlNavigator();
+        mockWindow = MockHtmlWindow();
         when(mockWindow.history).thenReturn(mockHistory);
         when(mockWindow.navigator).thenReturn(mockNav);
-        domUtils = new DomUtils(windowImpl: mockWindow);
+        domUtils = DomUtils(windowImpl: mockWindow);
       });
 
       void checkGoWithoutReloadUsingHash(String ua, {bool result = true}) {
@@ -341,29 +341,29 @@ void main() {
       MockHtmlWindow mockWindow;
 
       setUpAll(() {
-        mockHistory = new MockHtmlHistory();
-        mockNav = new MockHtmlNavigator();
-        mockWindow = new MockHtmlWindow();
+        mockHistory = MockHtmlHistory();
+        mockNav = MockHtmlNavigator();
+        mockWindow = MockHtmlWindow();
         when(mockWindow.history).thenReturn(mockHistory);
         when(mockWindow.navigator).thenReturn(mockNav);
-        domUtils = new DomUtils(windowImpl: mockWindow);
+        domUtils = DomUtils(windowImpl: mockWindow);
       });
 
       test('fails when event state is not null', () {
-        var mockEvent = new MockHtmlPopStateEvent();
+        var mockEvent = MockHtmlPopStateEvent();
         when(mockNav.userAgent).thenReturn('Mobile');
         when(mockEvent.state).thenReturn('Hello!');
         expect(domUtils.isExtraneousPopStateEvent(mockEvent), isFalse);
       });
 
       test('fails when UA contains "CriOS"', () {
-        var mockEvent = new MockHtmlPopStateEvent();
+        var mockEvent = MockHtmlPopStateEvent();
         when(mockNav.userAgent).thenReturn('CriOS');
         expect(domUtils.isExtraneousPopStateEvent(mockEvent), isFalse);
       });
 
       test('fails when event state is not null AND UA contains "CriOS"', () {
-        var mockEvent = new MockHtmlPopStateEvent();
+        var mockEvent = MockHtmlPopStateEvent();
         when(mockNav.userAgent).thenReturn('CriOS');
         when(mockEvent.state).thenReturn({});
         expect(domUtils.isExtraneousPopStateEvent(mockEvent), isFalse);
@@ -371,7 +371,7 @@ void main() {
 
       test('succeeds when event state is null AND UA doesn\'t contain "CriOS"',
           () {
-        var mockEvent = new MockHtmlPopStateEvent();
+        var mockEvent = MockHtmlPopStateEvent();
         when(mockNav.userAgent).thenReturn('Mobile');
         expect(domUtils.isExtraneousPopStateEvent(mockEvent), isTrue);
       });

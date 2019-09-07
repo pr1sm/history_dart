@@ -11,11 +11,11 @@ class MockBrowserHtmlWindow extends MockHtmlWindow {
   bool mockPrint;
 
   MockBrowserHtmlWindow({this.mockPrint = false}) {
-    mockNavigator = new MockHtmlNavigator();
+    mockNavigator = MockHtmlNavigator();
     when(mockNavigator.userAgent).thenReturn(
         'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36');
-    mockDocument = new MockHtmlDocument();
-    mockHistory = new MockBrowserHtmlHistory(mockPrint: mockPrint);
+    mockDocument = MockHtmlDocument();
+    mockHistory = MockBrowserHtmlHistory(mockPrint: mockPrint);
   }
 
   @override
@@ -45,7 +45,7 @@ class MockBrowserHtmlHistory extends MockHtmlHistory {
       this.mockNullOnState = false,
       this.mockUsePopState = true}) {
     mockIndex = 0;
-    mockLocations = [new MockBrowserHtmlLocation(this, mockPrint: mockPrint)];
+    mockLocations = [MockBrowserHtmlLocation(this, mockPrint: mockPrint)];
   }
 
   MockBrowserHtmlLocation get mockLocation {
@@ -61,9 +61,9 @@ class MockBrowserHtmlHistory extends MockHtmlHistory {
     }
     mockLocations[mockIndex] = location;
     if (mockUsePopState) {
-      window.dispatchEvent(new PopStateEvent('popstate', {'state': state}));
+      window.dispatchEvent(PopStateEvent('popstate', {'state': state}));
     } else {
-      window.dispatchEvent(new HashChangeEvent('hashchange'));
+      window.dispatchEvent(HashChangeEvent('hashchange'));
     }
   }
 
@@ -79,16 +79,16 @@ class MockBrowserHtmlHistory extends MockHtmlHistory {
     }
     mockIndex = nextIndex;
     if (mockUsePopState) {
-      window.dispatchEvent(new PopStateEvent('popstate', {'state': state}));
+      window.dispatchEvent(PopStateEvent('popstate', {'state': state}));
     } else {
-      window.dispatchEvent(new HashChangeEvent('hashchange'));
+      window.dispatchEvent(HashChangeEvent('hashchange'));
     }
   }
 
   @override
   dynamic get state {
     if (mockErrorOnState) {
-      throw new StateError('expected error');
+      throw StateError('expected error');
     }
     if (mockNullOnState) {
       return null;
@@ -114,9 +114,9 @@ class MockBrowserHtmlHistory extends MockHtmlHistory {
       print('mock go mockIndex: ${mockIndex}');
     }
     if (mockUsePopState) {
-      window.dispatchEvent(new PopStateEvent('popstate', {'state': state}));
+      window.dispatchEvent(PopStateEvent('popstate', {'state': state}));
     } else {
-      window.dispatchEvent(new HashChangeEvent('hashchange'));
+      window.dispatchEvent(HashChangeEvent('hashchange'));
     }
   }
 
@@ -134,7 +134,7 @@ class MockBrowserHtmlHistory extends MockHtmlHistory {
     var newMockState = (data is Map) ? data['state'] : data.state;
 
     MockBrowserHtmlLocation newLocation =
-        new MockBrowserHtmlLocation(this, mockPrint: mockPrint)
+        MockBrowserHtmlLocation(this, mockPrint: mockPrint)
           ..mockPath = newMockPath
           ..mockHash = newMockHash
           ..mockSearch = newMockSearch
@@ -161,7 +161,7 @@ class MockBrowserHtmlHistory extends MockHtmlHistory {
     var newMockState = (data is Map) ? data['state'] : data.state;
 
     MockBrowserHtmlLocation newLocation =
-        new MockBrowserHtmlLocation(this, mockPrint: mockPrint)
+        MockBrowserHtmlLocation(this, mockPrint: mockPrint)
           ..mockPath = newMockPath
           ..mockHash = newMockHash
           ..mockSearch = newMockSearch
@@ -203,7 +203,7 @@ class MockBrowserHtmlLocation extends Mock implements Location {
         0, searchIndex >= 0 ? searchIndex : hashIndex >= 0 ? hashIndex : null);
 
     MockBrowserHtmlLocation newLocation =
-        new MockBrowserHtmlLocation(mockHistory, mockPrint: mockPrint)
+        MockBrowserHtmlLocation(mockHistory, mockPrint: mockPrint)
           ..mockPath = newMockPath
           ..mockHash = newMockHash
           ..mockSearch = newMockSearch;
@@ -218,11 +218,10 @@ class MockBrowserHtmlLocation extends Mock implements Location {
 
   @override
   set hash(String newHash) {
-    MockBrowserHtmlLocation newLocation =
-        new MockBrowserHtmlLocation(mockHistory)
-          ..mockPath = mockPath
-          ..mockHash = newHash
-          ..mockSearch = mockSearch;
+    MockBrowserHtmlLocation newLocation = MockBrowserHtmlLocation(mockHistory)
+      ..mockPath = mockPath
+      ..mockHash = newHash
+      ..mockSearch = mockSearch;
     if (mockPrint) {
       print('mock hash set (push) ${href} => ${newLocation.href}');
     }
@@ -234,11 +233,10 @@ class MockBrowserHtmlLocation extends Mock implements Location {
 
   @override
   set pathname(String newPath) {
-    MockBrowserHtmlLocation newLocation =
-        new MockBrowserHtmlLocation(mockHistory)
-          ..mockPath = newPath
-          ..mockHash = mockHash
-          ..mockSearch = mockSearch;
+    MockBrowserHtmlLocation newLocation = MockBrowserHtmlLocation(mockHistory)
+      ..mockPath = newPath
+      ..mockHash = mockHash
+      ..mockSearch = mockSearch;
     if (mockPrint) {
       print('mock pathname set (push) ${href} => ${newLocation.href}');
     }
@@ -250,11 +248,10 @@ class MockBrowserHtmlLocation extends Mock implements Location {
 
   @override
   set search(String newSearch) {
-    MockBrowserHtmlLocation newLocation =
-        new MockBrowserHtmlLocation(mockHistory)
-          ..mockPath = mockPath
-          ..mockHash = mockHash
-          ..mockSearch = newSearch;
+    MockBrowserHtmlLocation newLocation = MockBrowserHtmlLocation(mockHistory)
+      ..mockPath = mockPath
+      ..mockHash = mockHash
+      ..mockSearch = newSearch;
     if (mockPrint) {
       print('mock search set (push) ${href} => ${newLocation.href}');
     }

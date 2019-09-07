@@ -62,9 +62,9 @@ class HashHistory extends History with BasenameMixin, HashMixin {
   html.Window _window;
   html.History _globalHistory;
   HashTransitionManager<HashHistory> _transitionManager;
-  DomUtils _domUtils = new DomUtils();
+  DomUtils _domUtils = DomUtils();
 
-  /// Construct a new [HashHistory]
+  /// Construct a [HashHistory]
   ///
   /// Factory constructor takes the following parameters:
   /// * [basename] - The base of all paths for this [HashHistory]
@@ -76,9 +76,9 @@ class HashHistory extends History with BasenameMixin, HashMixin {
       Confirmation getConfirmation,
       html.Window window}) {
     _window = window ?? html.window;
-    _domUtils = new DomUtils(windowImpl: _window);
+    _domUtils = DomUtils(windowImpl: _window);
     if (!_domUtils.canUseDom) {
-      throw new StateError('Hash History needs a DOM');
+      throw StateError('Hash History needs a DOM');
     }
 
     _globalHistory = _window.history;
@@ -98,7 +98,7 @@ class HashHistory extends History with BasenameMixin, HashMixin {
     _action = Action.pop;
     _allPaths = [_domLocation.path];
 
-    _transitionManager = new HashTransitionManager<HashHistory>(
+    _transitionManager = HashTransitionManager<HashHistory>(
         hashChangeHandler: _handleHashChange);
   }
 
@@ -132,8 +132,8 @@ class HashHistory extends History with BasenameMixin, HashMixin {
 
     // Compute next location and action
     Location nextLocation = (path is String)
-        ? new Location(pathname: path)
-        : new Location(
+        ? Location(pathname: path)
+        : Location(
             pathname: (path as Location).pathname,
             hash: (path as Location).hash,
             search: (path as Location).search);
@@ -168,7 +168,7 @@ class HashHistory extends History with BasenameMixin, HashMixin {
       _transitionManager.notify(this);
     } else {
       print(
-          'WARNING: Hash History cannot Push the same path; a new entry will NOT be added to the history stack');
+          'WARNING: Hash History cannot Push the same path; a entry will NOT be added to the history stack');
       // TODO: should we notify listeners in this case?
     }
   }
@@ -182,8 +182,8 @@ class HashHistory extends History with BasenameMixin, HashMixin {
 
     // Compute next location and action
     Location nextLocation = (path is String)
-        ? new Location(pathname: path)
-        : new Location(
+        ? Location(pathname: path)
+        : Location(
             pathname: (path as Location).pathname,
             hash: (path as Location).hash,
             search: (path as Location).search);
@@ -227,7 +227,7 @@ class HashHistory extends History with BasenameMixin, HashMixin {
           'WARNING: Hash History go(n) causes a full page reload in the browser');
     }
     if (_transitionManager.listeningToWindowEvents) {
-      _hashChangeHandlerCompleter = new Completer();
+      _hashChangeHandlerCompleter = Completer();
     }
     _globalHistory.go(n);
     if (!_transitionManager.listeningToWindowEvents) {
@@ -256,7 +256,7 @@ class HashHistory extends History with BasenameMixin, HashMixin {
       path = stripBasename(path, basename);
     }
 
-    return new Location(pathname: path);
+    return Location(pathname: path);
   }
 
   String get _hashPath {

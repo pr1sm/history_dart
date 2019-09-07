@@ -41,13 +41,13 @@ class EncoderDecoder {
 
 /// Map of [EncoderDecoder]s by [HashType]
 final HashPathCoders = {
-  HashType.hashbang: new EncoderDecoder(
+  HashType.hashbang: EncoderDecoder(
       (path) => path.startsWith('!') ? path : '!/${stripLeadingSlash(path)}',
       (path) => stripLeading(path, '!')),
-  HashType.noSlash: new EncoderDecoder(stripLeadingSlash, addLeadingSlash),
-  HashType.slash: new EncoderDecoder(addLeadingSlash, addLeadingSlash),
+  HashType.noSlash: EncoderDecoder(stripLeadingSlash, addLeadingSlash),
+  HashType.slash: EncoderDecoder(addLeadingSlash, addLeadingSlash),
 };
 
 /// Convert [html.Location] to [Location]
-Location convert(html.Location location) => new Location(
+Location convert(html.Location location) => Location(
     pathname: location.pathname, hash: location.hash, search: location.search);

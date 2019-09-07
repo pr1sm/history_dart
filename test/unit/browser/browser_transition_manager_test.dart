@@ -18,9 +18,8 @@ void main() {
 
     group('confirmTransitionTo', () {
       setUp(() {
-        Prompt prompt =
-            (Location _, Action __) async => new Future.value('test');
-        transitionManager = new BrowserTransitionManager<BrowserHistory>();
+        Prompt prompt = (Location _, Action __) async => Future.value('test');
+        transitionManager = BrowserTransitionManager<BrowserHistory>();
         transitionManager.prompt = prompt;
       });
 
@@ -29,9 +28,7 @@ void main() {
         bool nullCheck =
             await transitionManager.confirmTransitionTo(null, null, null);
         bool nonNullCheck = await transitionManager.confirmTransitionTo(
-            new MockLocation(),
-            Action.pop,
-            (_) async => new Future.value(false));
+            MockLocation(), Action.pop, (_) async => Future.value(false));
         expect(nullCheck, isTrue);
         expect(nonNullCheck, isTrue);
       });
@@ -39,7 +36,7 @@ void main() {
       test('returns true when prompt is not null, but confirmation is null',
           () async {
         bool check = await transitionManager.confirmTransitionTo(
-            new MockLocation(), Action.pop, null);
+            MockLocation(), Action.pop, null);
         expect(check, isTrue);
       });
 
@@ -47,26 +44,24 @@ void main() {
           'returns confirmation result when all necessary parameters are provided',
           () async {
         bool check = await transitionManager.confirmTransitionTo(
-            new MockLocation(),
-            Action.pop,
-            (_) async => new Future.value(true));
+            MockLocation(), Action.pop, (_) async => Future.value(true));
         expect(check, isTrue);
-        check = await transitionManager.confirmTransitionTo(new MockLocation(),
-            Action.pop, (_) async => new Future.value(false));
+        check = await transitionManager.confirmTransitionTo(
+            MockLocation(), Action.pop, (_) async => Future.value(false));
         expect(check, isFalse);
       });
     });
 
     group('notify', () {
       setUp(() {
-        transitionManager = new BrowserTransitionManager<BrowserHistory>();
+        transitionManager = BrowserTransitionManager<BrowserHistory>();
       });
 
       test('notifies stream listeners when valid transition is passed',
           () async {
-        MockBrowserHistory mockBrowserHistory = new MockBrowserHistory();
-        MockBrowserHistory completeBrowserHistory = new MockBrowserHistory();
-        Completer c = new Completer();
+        MockBrowserHistory mockBrowserHistory = MockBrowserHistory();
+        MockBrowserHistory completeBrowserHistory = MockBrowserHistory();
+        Completer c = Completer();
         int callCount = 0;
         transitionManager.stream.listen((data) {
           callCount += 1;
@@ -86,9 +81,9 @@ void main() {
       });
 
       test('handles null transition correctly', () async {
-        MockBrowserHistory mockBrowserHistory = new MockBrowserHistory();
-        MockBrowserHistory completeBrowserHistory = new MockBrowserHistory();
-        Completer c = new Completer();
+        MockBrowserHistory mockBrowserHistory = MockBrowserHistory();
+        MockBrowserHistory completeBrowserHistory = MockBrowserHistory();
+        Completer c = Completer();
         int callCount = 0;
         transitionManager.stream.listen((data) {
           callCount += 1;
@@ -112,11 +107,11 @@ void main() {
       Prompt prompt;
 
       setUp(() {
-        transitionManager = new BrowserTransitionManager<BrowserHistory>();
-        prompt = (Location _, Action __) async => new Future.value('test');
+        transitionManager = BrowserTransitionManager<BrowserHistory>();
+        prompt = (Location _, Action __) async => Future.value('test');
       });
 
-      test('setting new prompt works correctly', () async {
+      test('setting prompt works correctly', () async {
         transitionManager.prompt = prompt;
         expect(transitionManager.prompt, equals(prompt));
         expect(await (transitionManager.prompt)(null, null), equals('test'));
@@ -124,7 +119,7 @@ void main() {
 
       test('overriding prompt works correctly', () async {
         var newPrompt =
-            (Location _, Action __) async => new Future.value('newtest');
+            (Location _, Action __) async => Future.value('newtest');
 
         transitionManager.prompt = prompt;
         expect(transitionManager.prompt, equals(prompt));
@@ -155,15 +150,15 @@ void main() {
       Prompt prompt;
 
       setUp(() {
-        c = new Completer();
+        c = Completer();
         callCount = 0;
         handler = (Event e) {
           e.preventDefault();
           callCount += 1;
           c.complete();
         };
-        prompt = (Location _, Action __) async => new Future.value('yes');
-        transitionManager = new BrowserTransitionManager<BrowserHistory>(
+        prompt = (Location _, Action __) async => Future.value('yes');
+        transitionManager = BrowserTransitionManager<BrowserHistory>(
             popStateChangeHandler: handler);
       });
 
@@ -181,138 +176,138 @@ void main() {
       });
 
       test('are added when prompt is added (no stream listeners)', () async {
-        window.dispatchEvent(new PopStateEvent('popstate'));
-        await new Future.delayed(new Duration(microseconds: 1), () {});
+        window.dispatchEvent(PopStateEvent('popstate'));
+        await Future.delayed(Duration(microseconds: 1), () {});
         expect(callCount, equals(0));
 
         transitionManager.prompt = prompt;
-        window.dispatchEvent(new PopStateEvent('popstate'));
+        window.dispatchEvent(PopStateEvent('popstate'));
         await c.future;
         expect(callCount, equals(1));
       });
 
       test('are removed when prompt is removed (no stream listeners)',
           () async {
-        window.dispatchEvent(new PopStateEvent('popstate'));
-        await new Future.delayed(new Duration(microseconds: 1), () {});
+        window.dispatchEvent(PopStateEvent('popstate'));
+        await Future.delayed(Duration(microseconds: 1), () {});
         expect(callCount, equals(0));
 
         transitionManager.prompt = prompt;
-        window.dispatchEvent(new PopStateEvent('popstate'));
+        window.dispatchEvent(PopStateEvent('popstate'));
         await c.future;
         expect(callCount, equals(1));
 
         transitionManager.prompt = null;
-        window.dispatchEvent(new PopStateEvent('popstate'));
-        await new Future.delayed(new Duration(microseconds: 1), () {});
+        window.dispatchEvent(PopStateEvent('popstate'));
+        await Future.delayed(Duration(microseconds: 1), () {});
         expect(callCount, equals(1));
       });
 
       test('are added when stream listeners are added (no prompt)', () async {
-        window.dispatchEvent(new PopStateEvent('popstate'));
-        await new Future.delayed(new Duration(microseconds: 1), () {});
+        window.dispatchEvent(PopStateEvent('popstate'));
+        await Future.delayed(Duration(microseconds: 1), () {});
         expect(callCount, equals(0));
 
         sub = transitionManager.stream.listen((_) {});
-        window.dispatchEvent(new PopStateEvent('popstate'));
+        window.dispatchEvent(PopStateEvent('popstate'));
         await c.future;
         expect(callCount, equals(1));
       });
 
       test('are added when stream listeners are removed (no prompt)', () async {
-        window.dispatchEvent(new PopStateEvent('popstate'));
-        await new Future.delayed(new Duration(microseconds: 1), () {});
+        window.dispatchEvent(PopStateEvent('popstate'));
+        await Future.delayed(Duration(microseconds: 1), () {});
         expect(callCount, equals(0));
 
         sub = transitionManager.stream.listen((_) {});
-        window.dispatchEvent(new PopStateEvent('popstate'));
+        window.dispatchEvent(PopStateEvent('popstate'));
         await c.future;
         expect(callCount, equals(1));
 
         await sub.cancel();
-        window.dispatchEvent(new PopStateEvent('popstate'));
-        await new Future.delayed(new Duration(microseconds: 1), () {});
+        window.dispatchEvent(PopStateEvent('popstate'));
+        await Future.delayed(Duration(microseconds: 1), () {});
         expect(callCount, equals(1));
       });
 
       test('remain when prompt is added (with stream listeners)', () async {
-        window.dispatchEvent(new PopStateEvent('popstate'));
-        await new Future.delayed(new Duration(microseconds: 1), () {});
+        window.dispatchEvent(PopStateEvent('popstate'));
+        await Future.delayed(Duration(microseconds: 1), () {});
         expect(callCount, equals(0));
 
         sub = transitionManager.stream.listen((_) {});
-        window.dispatchEvent(new PopStateEvent('popstate'));
+        window.dispatchEvent(PopStateEvent('popstate'));
         await c.future;
         expect(callCount, equals(1));
 
-        c = new Completer();
+        c = Completer();
         transitionManager.prompt = prompt;
-        window.dispatchEvent(new PopStateEvent('popstate'));
+        window.dispatchEvent(PopStateEvent('popstate'));
         await c.future;
         expect(callCount, equals(2));
       });
 
       test('remain when prompt is removed (with stream listeners)', () async {
-        window.dispatchEvent(new PopStateEvent('popstate'));
-        await new Future.delayed(new Duration(microseconds: 1), () {});
+        window.dispatchEvent(PopStateEvent('popstate'));
+        await Future.delayed(Duration(microseconds: 1), () {});
         expect(callCount, equals(0));
 
         sub = transitionManager.stream.listen((_) {});
-        window.dispatchEvent(new PopStateEvent('popstate'));
+        window.dispatchEvent(PopStateEvent('popstate'));
         await c.future;
         expect(callCount, equals(1));
 
-        c = new Completer();
+        c = Completer();
         transitionManager.prompt = prompt;
-        window.dispatchEvent(new PopStateEvent('popstate'));
+        window.dispatchEvent(PopStateEvent('popstate'));
         await c.future;
         expect(callCount, equals(2));
 
-        c = new Completer();
+        c = Completer();
         transitionManager.prompt = null;
-        window.dispatchEvent(new PopStateEvent('popstate'));
+        window.dispatchEvent(PopStateEvent('popstate'));
         await c.future;
         expect(callCount, equals(3));
       });
 
       test('remain when stream listeners are added (with non-null prompt)',
           () async {
-        window.dispatchEvent(new PopStateEvent('popstate'));
-        await new Future.delayed(new Duration(microseconds: 1), () {});
+        window.dispatchEvent(PopStateEvent('popstate'));
+        await Future.delayed(Duration(microseconds: 1), () {});
         expect(callCount, equals(0));
 
         transitionManager.prompt = prompt;
-        window.dispatchEvent(new PopStateEvent('popstate'));
+        window.dispatchEvent(PopStateEvent('popstate'));
         await c.future;
         expect(callCount, equals(1));
 
-        c = new Completer();
+        c = Completer();
         sub = transitionManager.stream.listen((_) {});
-        window.dispatchEvent(new PopStateEvent('popstate'));
+        window.dispatchEvent(PopStateEvent('popstate'));
         await c.future;
         expect(callCount, equals(2));
       });
 
       test('remain when stream listeners are removed (with non-null prompt)',
           () async {
-        window.dispatchEvent(new PopStateEvent('popstate'));
-        await new Future.delayed(new Duration(microseconds: 1), () {});
+        window.dispatchEvent(PopStateEvent('popstate'));
+        await Future.delayed(Duration(microseconds: 1), () {});
         expect(callCount, equals(0));
 
         transitionManager.prompt = prompt;
-        window.dispatchEvent(new PopStateEvent('popstate'));
+        window.dispatchEvent(PopStateEvent('popstate'));
         await c.future;
         expect(callCount, equals(1));
 
-        c = new Completer();
+        c = Completer();
         sub = transitionManager.stream.listen((_) {});
-        window.dispatchEvent(new PopStateEvent('popstate'));
+        window.dispatchEvent(PopStateEvent('popstate'));
         await c.future;
         expect(callCount, equals(2));
 
-        c = new Completer();
+        c = Completer();
         await sub.cancel();
-        window.dispatchEvent(new PopStateEvent('popstate'));
+        window.dispatchEvent(PopStateEvent('popstate'));
         await c.future;
         expect(callCount, equals(3));
 
@@ -322,206 +317,206 @@ void main() {
       test(
           'are added/removed correctly for the flow: +prompt -> +listen -> -listen -> -prompt',
           () async {
-        window.dispatchEvent(new PopStateEvent('popstate'));
-        await new Future.delayed(new Duration(microseconds: 1), () {});
+        window.dispatchEvent(PopStateEvent('popstate'));
+        await Future.delayed(Duration(microseconds: 1), () {});
         expect(callCount, equals(0));
 
         transitionManager.prompt = prompt;
-        window.dispatchEvent(new PopStateEvent('popstate'));
+        window.dispatchEvent(PopStateEvent('popstate'));
         await c.future;
         expect(callCount, equals(1));
 
-        c = new Completer();
+        c = Completer();
         sub = transitionManager.stream.listen((_) {});
-        window.dispatchEvent(new PopStateEvent('popstate'));
+        window.dispatchEvent(PopStateEvent('popstate'));
         await c.future;
         expect(callCount, equals(2));
 
-        c = new Completer();
+        c = Completer();
         await sub.cancel();
-        window.dispatchEvent(new PopStateEvent('popstate'));
+        window.dispatchEvent(PopStateEvent('popstate'));
         await c.future;
         expect(callCount, equals(3));
 
-        c = new Completer();
+        c = Completer();
         transitionManager.prompt = null;
-        window.dispatchEvent(new PopStateEvent('popstate'));
-        await new Future.delayed(new Duration(microseconds: 1), () {});
+        window.dispatchEvent(PopStateEvent('popstate'));
+        await Future.delayed(Duration(microseconds: 1), () {});
         expect(callCount, equals(3));
       });
 
       test(
           'are added/removed correctly for the flow: +prompt -> +listen -> -prompt -> -listen',
           () async {
-        window.dispatchEvent(new PopStateEvent('popstate'));
-        await new Future.delayed(new Duration(microseconds: 1), () {});
+        window.dispatchEvent(PopStateEvent('popstate'));
+        await Future.delayed(Duration(microseconds: 1), () {});
         expect(callCount, equals(0));
 
         transitionManager.prompt = prompt;
-        window.dispatchEvent(new PopStateEvent('popstate'));
+        window.dispatchEvent(PopStateEvent('popstate'));
         await c.future;
         expect(callCount, equals(1));
 
-        c = new Completer();
+        c = Completer();
         sub = transitionManager.stream.listen((_) {});
-        window.dispatchEvent(new PopStateEvent('popstate'));
+        window.dispatchEvent(PopStateEvent('popstate'));
         await c.future;
         expect(callCount, equals(2));
 
-        c = new Completer();
+        c = Completer();
         transitionManager.prompt = null;
-        window.dispatchEvent(new PopStateEvent('popstate'));
+        window.dispatchEvent(PopStateEvent('popstate'));
         await c.future;
         expect(callCount, equals(3));
 
-        c = new Completer();
+        c = Completer();
         await sub.cancel();
-        window.dispatchEvent(new PopStateEvent('popstate'));
-        await new Future.delayed(new Duration(microseconds: 1), () {});
+        window.dispatchEvent(PopStateEvent('popstate'));
+        await Future.delayed(Duration(microseconds: 1), () {});
         expect(callCount, equals(3));
       });
 
       test(
           'are added/removed correctly for the flow: +prompt -> -prompt -> +listen -> -listen',
           () async {
-        window.dispatchEvent(new PopStateEvent('popstate'));
-        await new Future.delayed(new Duration(microseconds: 1), () {});
+        window.dispatchEvent(PopStateEvent('popstate'));
+        await Future.delayed(Duration(microseconds: 1), () {});
         expect(callCount, equals(0));
 
         transitionManager.prompt = prompt;
-        window.dispatchEvent(new PopStateEvent('popstate'));
+        window.dispatchEvent(PopStateEvent('popstate'));
         await c.future;
         expect(callCount, equals(1));
 
-        c = new Completer();
+        c = Completer();
         transitionManager.prompt = null;
-        window.dispatchEvent(new PopStateEvent('popstate'));
-        await new Future.delayed(new Duration(microseconds: 1), () {});
+        window.dispatchEvent(PopStateEvent('popstate'));
+        await Future.delayed(Duration(microseconds: 1), () {});
         expect(callCount, equals(1));
 
-        c = new Completer();
+        c = Completer();
         sub = transitionManager.stream.listen((_) {});
-        window.dispatchEvent(new PopStateEvent('popstate'));
+        window.dispatchEvent(PopStateEvent('popstate'));
         await c.future;
         expect(callCount, equals(2));
 
-        c = new Completer();
+        c = Completer();
         await sub.cancel();
-        window.dispatchEvent(new PopStateEvent('popstate'));
-        await new Future.delayed(new Duration(microseconds: 1), () {});
+        window.dispatchEvent(PopStateEvent('popstate'));
+        await Future.delayed(Duration(microseconds: 1), () {});
         expect(callCount, equals(2));
       });
 
       test(
           'are added/removed correctly for the flow: +listen -> +prompt -> -prompt -> -listen',
           () async {
-        window.dispatchEvent(new PopStateEvent('popstate'));
-        await new Future.delayed(new Duration(microseconds: 1), () {});
+        window.dispatchEvent(PopStateEvent('popstate'));
+        await Future.delayed(Duration(microseconds: 1), () {});
         expect(callCount, equals(0));
 
-        c = new Completer();
+        c = Completer();
         sub = transitionManager.stream.listen((_) {});
-        window.dispatchEvent(new PopStateEvent('popstate'));
+        window.dispatchEvent(PopStateEvent('popstate'));
         await c.future;
         expect(callCount, equals(1));
 
         transitionManager.prompt = prompt;
-        window.dispatchEvent(new PopStateEvent('popstate'));
+        window.dispatchEvent(PopStateEvent('popstate'));
         await c.future;
         expect(callCount, equals(2));
 
-        c = new Completer();
+        c = Completer();
         transitionManager.prompt = null;
-        window.dispatchEvent(new PopStateEvent('popstate'));
+        window.dispatchEvent(PopStateEvent('popstate'));
         await c.future;
         expect(callCount, equals(3));
 
-        c = new Completer();
+        c = Completer();
         await sub.cancel();
-        window.dispatchEvent(new PopStateEvent('popstate'));
-        await new Future.delayed(new Duration(microseconds: 1), () {});
+        window.dispatchEvent(PopStateEvent('popstate'));
+        await Future.delayed(Duration(microseconds: 1), () {});
         expect(callCount, equals(3));
       });
 
       test(
           'are added/removed correctly for the flow: +listen -> +prompt -> -listen -> -prompt',
           () async {
-        window.dispatchEvent(new PopStateEvent('popstate'));
-        await new Future.delayed(new Duration(microseconds: 1), () {});
+        window.dispatchEvent(PopStateEvent('popstate'));
+        await Future.delayed(Duration(microseconds: 1), () {});
         expect(callCount, equals(0));
 
-        c = new Completer();
+        c = Completer();
         sub = transitionManager.stream.listen((_) {});
-        window.dispatchEvent(new PopStateEvent('popstate'));
+        window.dispatchEvent(PopStateEvent('popstate'));
         await c.future;
         expect(callCount, equals(1));
 
         transitionManager.prompt = prompt;
-        window.dispatchEvent(new PopStateEvent('popstate'));
+        window.dispatchEvent(PopStateEvent('popstate'));
         await c.future;
         expect(callCount, equals(2));
 
-        c = new Completer();
+        c = Completer();
         await sub.cancel();
-        window.dispatchEvent(new PopStateEvent('popstate'));
+        window.dispatchEvent(PopStateEvent('popstate'));
         await c.future;
         expect(callCount, equals(3));
 
-        c = new Completer();
+        c = Completer();
         transitionManager.prompt = null;
-        window.dispatchEvent(new PopStateEvent('popstate'));
-        await new Future.delayed(new Duration(microseconds: 1), () {});
+        window.dispatchEvent(PopStateEvent('popstate'));
+        await Future.delayed(Duration(microseconds: 1), () {});
         expect(callCount, equals(3));
       });
 
       test(
           'are added/removed correctly for the flow: +listen -> -listen -> +prompt -> -prompt',
           () async {
-        window.dispatchEvent(new PopStateEvent('popstate'));
-        await new Future.delayed(new Duration(microseconds: 1), () {});
+        window.dispatchEvent(PopStateEvent('popstate'));
+        await Future.delayed(Duration(microseconds: 1), () {});
         expect(callCount, equals(0));
 
         sub = transitionManager.stream.listen((_) {});
-        window.dispatchEvent(new PopStateEvent('popstate'));
+        window.dispatchEvent(PopStateEvent('popstate'));
         await c.future;
         expect(callCount, equals(1));
 
-        c = new Completer();
+        c = Completer();
         await sub.cancel();
-        window.dispatchEvent(new PopStateEvent('popstate'));
-        await new Future.delayed(new Duration(microseconds: 1), () {});
+        window.dispatchEvent(PopStateEvent('popstate'));
+        await Future.delayed(Duration(microseconds: 1), () {});
         expect(callCount, equals(1));
 
-        c = new Completer();
+        c = Completer();
         transitionManager.prompt = prompt;
-        window.dispatchEvent(new PopStateEvent('popstate'));
+        window.dispatchEvent(PopStateEvent('popstate'));
         await c.future;
         expect(callCount, equals(2));
 
-        c = new Completer();
+        c = Completer();
         transitionManager.prompt = null;
-        window.dispatchEvent(new PopStateEvent('popstate'));
-        await new Future.delayed(new Duration(microseconds: 1), () {});
+        window.dispatchEvent(PopStateEvent('popstate'));
+        await Future.delayed(Duration(microseconds: 1), () {});
         expect(callCount, equals(2));
       });
 
       test('hashchange events are tracked when flag is passed', () async {
-        Completer c2 = new Completer();
+        Completer c2 = Completer();
         int callCount2 = 0;
         HashChangeHandler handler2 = (Event e) {
           e.preventDefault();
           callCount2 += 1;
           c2.complete();
         };
-        transitionManager = new BrowserTransitionManager<BrowserHistory>(
+        transitionManager = BrowserTransitionManager<BrowserHistory>(
             popStateChangeHandler: handler,
             hashChangeHandler: handler2,
             needsHashChangeHandler: true);
 
-        c = new Completer();
+        c = Completer();
         transitionManager.prompt = prompt;
-        window.dispatchEvent(new PopStateEvent('popstate'));
-        window.dispatchEvent(new HashChangeEvent('hashchange'));
+        window.dispatchEvent(PopStateEvent('popstate'));
+        window.dispatchEvent(HashChangeEvent('hashchange'));
         await c.future;
         await c2.future;
         expect(callCount, equals(1));
@@ -530,24 +525,24 @@ void main() {
 
       test('hashchange events are not tracked when flag is not passed',
           () async {
-        Completer c2 = new Completer();
+        Completer c2 = Completer();
         int callCount2 = 0;
         HashChangeHandler handler2 = (Event e) {
           e.preventDefault();
           callCount2 += 1;
           c2.complete();
         };
-        transitionManager = new BrowserTransitionManager<BrowserHistory>(
+        transitionManager = BrowserTransitionManager<BrowserHistory>(
             popStateChangeHandler: handler,
             hashChangeHandler: handler2,
             needsHashChangeHandler: false);
 
-        c = new Completer();
+        c = Completer();
         transitionManager.prompt = prompt;
-        window.dispatchEvent(new PopStateEvent('popstate'));
-        window.dispatchEvent(new HashChangeEvent('hashchange'));
+        window.dispatchEvent(PopStateEvent('popstate'));
+        window.dispatchEvent(HashChangeEvent('hashchange'));
         await c.future;
-        await new Future.delayed(new Duration(microseconds: 1), () {});
+        await Future.delayed(Duration(microseconds: 1), () {});
         expect(callCount, equals(1));
         expect(callCount2, equals(0));
       });

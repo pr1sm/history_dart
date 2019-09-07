@@ -38,7 +38,7 @@ class HashTransitionManager<T extends HashHistory>
   HashTransitionManager({HashChangeHandler hashChangeHandler}) : super() {
     _domCheck = 0;
     _hashChangeHandler = hashChangeHandler ?? (_) {};
-    _controller = new StreamController<T>.broadcast(
+    _controller = StreamController<T>.broadcast(
         onCancel: _onControllerCancel, onListen: _onControllerListen);
   }
 

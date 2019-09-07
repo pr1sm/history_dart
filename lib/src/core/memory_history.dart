@@ -57,7 +57,7 @@ class MemoryHistory extends History with MemoryMixin {
   Location _location;
   TransitionManager<MemoryHistory> _transitionManager;
 
-  /// Construct a new [MemoryHistory]
+  /// Construct a [MemoryHistory]
   ///
   /// Factory constructor takes the following parameters:
   /// * [initialEntries] - List of [String]s or [Location]s that this [History] will start with
@@ -71,17 +71,17 @@ class MemoryHistory extends History with MemoryMixin {
       Confirmation getConfirmation})
       : _keyLength = keyLength,
         _getConfirmation = getConfirmation,
-        _r = new Random() {
-    initialEntries ??= [new Location(pathname: '/')];
+        _r = Random() {
+    initialEntries ??= [Location(pathname: '/')];
     _entries = initialEntries
         .where((i) => i is String || i is Location)
         .map((e) => (e is String)
-            ? new Location(pathname: e, key: _createKey())
-            : new Location.copy(e as Location,
+            ? Location(pathname: e, key: _createKey())
+            : Location.copy(e as Location,
                 key: (e as Location).key ?? _createKey()))
         .toList();
     _index = initialIndex.clamp(0, _entries.length - 1).toInt();
-    _transitionManager = new TransitionManager<MemoryHistory>();
+    _transitionManager = TransitionManager<MemoryHistory>();
     _location = _entries[index];
     _action = Action.pop;
   }
@@ -118,8 +118,8 @@ class MemoryHistory extends History with MemoryMixin {
 
     // Compute next location and action
     Location nextLocation = (path is String)
-        ? new Location(pathname: path, state: state, key: _createKey())
-        : new Location.copy((path as Location),
+        ? Location(pathname: path, state: state, key: _createKey())
+        : Location.copy((path as Location),
             key: _createKey(), state: path.state ?? state);
     var nextAction = Action.push;
     nextLocation.relateTo(_location);
@@ -155,8 +155,8 @@ class MemoryHistory extends History with MemoryMixin {
 
     // Compute next location and action
     Location nextLocation = (path is String)
-        ? new Location(pathname: path, state: state, key: _createKey())
-        : new Location.copy((path as Location),
+        ? Location(pathname: path, state: state, key: _createKey())
+        : Location.copy((path as Location),
             key: _createKey(), state: path.state ?? state);
     var nextAction = Action.replace;
     nextLocation.relateTo(_location);

@@ -14,13 +14,12 @@ void main() {
     TransitionManager<String> transitionManager;
 
     setUp(() {
-      transitionManager = new TransitionManager<String>();
+      transitionManager = TransitionManager<String>();
     });
 
     group('confirmTransitionTo', () {
       setUp(() {
-        Prompt prompt =
-            (Location _, Action __) async => new Future.value('test');
+        Prompt prompt = (Location _, Action __) async => Future.value('test');
         transitionManager.prompt = prompt;
       });
 
@@ -29,9 +28,7 @@ void main() {
         var nullCheck =
             await transitionManager.confirmTransitionTo(null, null, null);
         var nonNullCheck = await transitionManager.confirmTransitionTo(
-            new MockLocation(),
-            Action.pop,
-            (_) async => new Future.value(false));
+            MockLocation(), Action.pop, (_) async => Future.value(false));
         expect(nullCheck, isTrue);
         expect(nonNullCheck, isTrue);
       });
@@ -39,7 +36,7 @@ void main() {
       test('returns true when prompt is not null, but confirmation is null',
           () async {
         var check = await transitionManager.confirmTransitionTo(
-            new MockLocation(), Action.pop, null);
+            MockLocation(), Action.pop, null);
         expect(check, isTrue);
       });
 
@@ -47,12 +44,10 @@ void main() {
           'returns confirmation result when all necessary parameters are provided',
           () async {
         var check = await transitionManager.confirmTransitionTo(
-            new MockLocation(),
-            Action.pop,
-            (_) async => new Future.value(true));
+            MockLocation(), Action.pop, (_) async => Future.value(true));
         expect(check, isTrue);
-        check = await transitionManager.confirmTransitionTo(new MockLocation(),
-            Action.pop, (_) async => new Future.value(false));
+        check = await transitionManager.confirmTransitionTo(
+            MockLocation(), Action.pop, (_) async => Future.value(false));
         expect(check, isFalse);
       });
     });
@@ -60,7 +55,7 @@ void main() {
     group('notify', () {
       test('notifies stream listeners when valid transition is passed',
           () async {
-        var c = new Completer();
+        var c = Completer();
         var callCount = 0;
         transitionManager.stream.listen((data) {
           callCount += 1;
@@ -80,7 +75,7 @@ void main() {
       });
 
       test('handles null transition correctly', () async {
-        var c = new Completer();
+        var c = Completer();
         var callCount = 0;
         transitionManager.stream.listen((data) {
           callCount += 1;
@@ -104,17 +99,17 @@ void main() {
       Prompt prompt;
 
       setUp(() {
-        prompt = (_, __) async => new Future.value('test');
+        prompt = (_, __) async => Future.value('test');
       });
 
-      test('setting new prompt works correctly', () async {
+      test('setting prompt works correctly', () async {
         transitionManager.prompt = prompt;
         expect(transitionManager.prompt, equals(prompt));
         expect(await (transitionManager.prompt)(null, null), equals('test'));
       });
 
       test('overriding prompt works correctly', () async {
-        var newPrompt = (_, __) async => new Future.value('newtest');
+        var newPrompt = (_, __) async => Future.value('newtest');
 
         transitionManager.prompt = prompt;
         expect(transitionManager.prompt, equals(prompt));

@@ -11,11 +11,11 @@ class MockHashHtmlWindow extends MockHtmlWindow {
   bool mockPrint;
 
   MockHashHtmlWindow({this.mockPrint = false}) {
-    mockNavigator = new MockHtmlNavigator();
+    mockNavigator = MockHtmlNavigator();
     when(mockNavigator.userAgent).thenReturn(
         'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36');
-    mockDocument = new MockHtmlDocument();
-    mockHistory = new MockHashHtmlHistory(mockPrint: mockPrint);
+    mockDocument = MockHtmlDocument();
+    mockHistory = MockHashHtmlHistory(mockPrint: mockPrint);
   }
 
   @override
@@ -38,7 +38,7 @@ class MockHashHtmlHistory extends MockHtmlHistory {
 
   MockHashHtmlHistory({this.mockPrint = false}) {
     mockIndex = 0;
-    mockLocations = [new MockHashHtmlLocation(this, mockPrint: mockPrint)];
+    mockLocations = [MockHashHtmlLocation(this, mockPrint: mockPrint)];
   }
 
   MockHashHtmlLocation get mockLocation => mockLocations[mockIndex];
@@ -48,7 +48,7 @@ class MockHashHtmlHistory extends MockHtmlHistory {
       print('mock on replace ${location.href}');
     }
     mockLocations[mockIndex] = location;
-    window.dispatchEvent(new HashChangeEvent('hashchange'));
+    window.dispatchEvent(HashChangeEvent('hashchange'));
   }
 
   void mockOnPush(MockHashHtmlLocation location) {
@@ -62,7 +62,7 @@ class MockHashHtmlHistory extends MockHtmlHistory {
       mockLocations.add(location);
     }
     mockIndex = nextIndex;
-    window.dispatchEvent(new HashChangeEvent('hashchange'));
+    window.dispatchEvent(HashChangeEvent('hashchange'));
   }
 
   @override
@@ -78,7 +78,7 @@ class MockHashHtmlHistory extends MockHtmlHistory {
     if (mockPrint) {
       print('mock go mockIndex: ${mockIndex}');
     }
-    window.dispatchEvent(new HashChangeEvent('hashchange'));
+    window.dispatchEvent(HashChangeEvent('hashchange'));
   }
 }
 
@@ -100,7 +100,7 @@ class MockHashHtmlLocation extends MockHtmlLocation {
     var newMockPath = newHref.substring(0, hashIndex >= 0 ? hashIndex : null);
 
     MockHashHtmlLocation newLocation =
-        new MockHashHtmlLocation(mockHistory, mockPrint: mockPrint)
+        MockHashHtmlLocation(mockHistory, mockPrint: mockPrint)
           ..mockPath = newMockPath
           ..mockHash = newMockHash;
     if (mockPrint) {
@@ -114,7 +114,7 @@ class MockHashHtmlLocation extends MockHtmlLocation {
 
   @override
   set hash(String newHash) {
-    MockHashHtmlLocation newLocation = new MockHashHtmlLocation(mockHistory)
+    MockHashHtmlLocation newLocation = MockHashHtmlLocation(mockHistory)
       ..mockPath = mockPath
       ..mockHash = newHash;
     if (mockPrint) {

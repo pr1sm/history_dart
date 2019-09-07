@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:history/vm.dart';
 
 Future<Null> main() async {
-  Confirmation confirmation = (_) => new Future.value(true);
+  Confirmation confirmation = (_) => Future.value(true);
 
-  MemoryHistory history = new MemoryHistory(getConfirmation: confirmation);
+  MemoryHistory history = MemoryHistory(getConfirmation: confirmation);
 
   // Listen for changes
   var sub = history.onChange.listen((updatedHistory) {

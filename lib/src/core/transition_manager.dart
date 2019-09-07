@@ -28,7 +28,7 @@ import '../utils/utils.dart' show Action, Confirmation, getPrompt;
 class TransitionManager<T> {
   dynamic _prompt;
 
-  StreamController<T> _controller = new StreamController<T>.broadcast();
+  StreamController<T> _controller = StreamController<T>.broadcast();
 
   Stream<T> get stream => _controller.stream;
 
@@ -50,11 +50,11 @@ class TransitionManager<T> {
       if (getConfirmation == null) {
         print(
             'WARNING: In order to use a prompt message, a non-null Confirmation method is needed!');
-        return new Future.value(true);
+        return Future.value(true);
       }
       return getConfirmation(result);
     }
-    return new Future.value(true);
+    return Future.value(true);
   }
 
   void notify(T transition) {

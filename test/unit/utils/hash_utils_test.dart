@@ -13,29 +13,29 @@ void main() {
   group('HashUtils', () {
     group('EncoderDecoder', () {
       test('constructs', () {
-        EncoderDecoder ed = new EncoderDecoder(null, null);
+        EncoderDecoder ed = EncoderDecoder(null, null);
         expect(ed, isNotNull);
       });
 
       test('encodePath is wired properly', () async {
-        Completer c = new Completer();
+        Completer c = Completer();
         var encoder = (input) {
           c.complete();
           return 'pong';
         };
-        EncoderDecoder ed = new EncoderDecoder(encoder, null);
+        EncoderDecoder ed = EncoderDecoder(encoder, null);
         var encoded = ed.encodePath('ping');
         await c.future;
         expect(encoded, equals('pong'));
       });
 
       test('decodePath is wired properly', () async {
-        Completer c = new Completer();
+        Completer c = Completer();
         var decoder = (input) {
           c.complete();
           return 'pong';
         };
-        EncoderDecoder ed = new EncoderDecoder(null, decoder);
+        EncoderDecoder ed = EncoderDecoder(null, decoder);
         var encoded = ed.decodePath('ping');
         await c.future;
         expect(encoded, equals('pong'));
@@ -132,7 +132,7 @@ void main() {
       MockHtmlLocation mockLocation;
 
       setUp(() {
-        mockLocation = new MockHtmlLocation();
+        mockLocation = MockHtmlLocation();
       });
 
       tearDown(() {
