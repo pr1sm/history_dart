@@ -56,7 +56,7 @@ class BrowserHistory extends History with BrowserMixin, BasenameMixin {
   Confirmation _getConfirmation;
 
   final bool _forceRefresh;
-  final Random _r = new Random();
+  final Random _r = Random();
   final int _keyLength;
 
   BrowserHistory(
@@ -69,9 +69,9 @@ class BrowserHistory extends History with BrowserMixin, BasenameMixin {
         _getConfirmation = getConfirmation,
         _keyLength = keyLength {
     _window = window ?? html.window;
-    _domUtils = new DomUtils(windowImpl: _window);
+    _domUtils = DomUtils(windowImpl: _window);
     if (!_domUtils.canUseDom) {
-      throw new StateError('Browser History needs a DOM');
+      throw StateError('Browser History needs a DOM');
     }
     _getConfirmation ??= _domUtils.getConfirmation;
     _globalHistory = _window.history;
@@ -83,7 +83,7 @@ class BrowserHistory extends History with BrowserMixin, BasenameMixin {
     _action = Action.pop;
     _allKeys = [_location.key];
 
-    _transitionManager = new BrowserTransitionManager(
+    _transitionManager = BrowserTransitionManager(
         popStateChangeHandler: _handlePopState,
         hashChangeHandler: _handleHashChange,
         needsHashChangeHandler: !_domUtils.supportsPopStateOnHashChange);
@@ -121,8 +121,8 @@ class BrowserHistory extends History with BrowserMixin, BasenameMixin {
 
     // Compute next location and action
     Location nextLocation = (path is String)
-        ? new Location(pathname: path, state: state, key: _createKey())
-        : new Location.copy((path as Location),
+        ? Location(pathname: path, state: state, key: _createKey())
+        : Location.copy((path as Location),
             key: _createKey(), state: path.state ?? state);
     var nextAction = Action.push;
     nextLocation.relateTo(_location);
@@ -173,8 +173,8 @@ class BrowserHistory extends History with BrowserMixin, BasenameMixin {
 
     // Compute next location and action
     Location nextLocation = (path is String)
-        ? new Location(pathname: path, state: state, key: _createKey())
-        : new Location.copy((path as Location),
+        ? Location(pathname: path, state: state, key: _createKey())
+        : Location.copy((path as Location),
             key: _createKey(), state: path.state ?? state);
     var nextAction = Action.replace;
     nextLocation.relateTo(_location);
@@ -218,7 +218,7 @@ class BrowserHistory extends History with BrowserMixin, BasenameMixin {
   @override
   Future<Null> go(int n) async {
     if (_transitionManager.listeningToWindowEvents) {
-      _popHandlerCompleter = new Completer();
+      _popHandlerCompleter = Completer();
       _globalHistory.go(n);
       await _popHandlerCompleter.future;
       _popHandlerCompleter = null;
@@ -267,7 +267,7 @@ class BrowserHistory extends History with BrowserMixin, BasenameMixin {
       path = stripBasename(path, basename);
     }
 
-    return new Location(pathname: path, state: state, key: key.toString());
+    return Location(pathname: path, state: state, key: key.toString());
   }
 
   Future<Null> _handlePopState(html.Event event) async {

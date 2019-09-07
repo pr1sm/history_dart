@@ -21,8 +21,8 @@ import 'package:history/history.dart';
 // For use in VM
 // import 'package:history/vm.dart'; 
 
-Confirmation confirmation = (_) => new Future.value(true);
-MemoryHistory history = new MemoryHistory(getConfirmation: confirmation);
+Confirmation confirmation = (_) => Future.value(true);
+MemoryHistory history = MemoryHistory(getConfirmation: confirmation);
 
 // Listen for changes
 var sub = history.onChange.listen((updatedHistory) {
@@ -64,7 +64,7 @@ await history.push('/logout');
 history.unblock();
 
 // Stop listening
-sub.cancel();
+await sub.cancel();
 ```
 
 ## Examples

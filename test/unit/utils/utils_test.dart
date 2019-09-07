@@ -21,7 +21,7 @@ void main() {
       });
 
       test('throws error when not a String or Prompt', () {
-        var object = new Object();
+        var object = Object();
         expect(getPrompt(object, null, null), throwsArgumentError);
       });
     });
@@ -37,7 +37,7 @@ void main() {
       });
 
       test('validates when given a Location', () {
-        var test = new Location();
+        var test = Location();
         try {
           validatePath(test);
         } catch (e) {
@@ -46,7 +46,7 @@ void main() {
       });
 
       test('throws error when not a String or Location', () {
-        var test = new Object();
+        var test = Object();
         try {
           validatePath(test);
         } catch (e) {

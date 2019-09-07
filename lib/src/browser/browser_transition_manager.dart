@@ -46,7 +46,7 @@ class BrowserTransitionManager<T extends BrowserHistory>
     _hashChangeHandler = hashChangeHandler ?? (_) {};
     _popStateChangeHandler = popStateChangeHandler ?? (_) {};
     _needsHashChangeHandler = needsHashChangeHandler;
-    _controller = new StreamController<T>.broadcast(
+    _controller = StreamController<T>.broadcast(
         onCancel: _onControllerCancel, onListen: _onControllerListen);
   }
 
@@ -56,7 +56,7 @@ class BrowserTransitionManager<T extends BrowserHistory>
   Stream<T> get stream => _controller.stream;
 
   @override
-  void set prompt(nextPrompt) {
+  set prompt(nextPrompt) {
     if (prompt == null && nextPrompt != null) {
       _handleDomListener(1);
     } else if (prompt != null && nextPrompt == null) {

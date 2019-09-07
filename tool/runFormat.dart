@@ -2,19 +2,19 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-StreamController<String> formatStdOut = new StreamController();
-StreamController<String> formatStdErr = new StreamController();
+StreamController<String> formatStdOut = StreamController();
+StreamController<String> formatStdErr = StreamController();
 
-Completer outc = new Completer();
-Completer errc = new Completer();
-Completer donec = new Completer();
-Completer<int> procExitCode = new Completer();
-Completer<int> formatExitCode = new Completer();
+Completer outc = Completer();
+Completer errc = Completer();
+Completer donec = Completer();
+Completer<int> procExitCode = Completer();
+Completer<int> formatExitCode = Completer();
 
-RegExp failureRegex = new RegExp(r'.dart');
+RegExp failureRegex = RegExp(r'.dart');
 
 String formatExecutable = 'pub';
-List<String> formatArgs = new List()
+List<String> formatArgs = List()
   ..add('run')
   ..add('dart_style:format')
   ..add('-n')
@@ -24,15 +24,15 @@ List<String> formatArgs = new List()
   ..add('tool/');
 
 void startFormat() async {
-  Process.start(formatExecutable, formatArgs).then((process) {
-    process.stdout.transform(utf8.decoder).transform(new LineSplitter()).listen(
+  return Process.start(formatExecutable, formatArgs).then((process) {
+    process.stdout.transform(utf8.decoder).transform(LineSplitter()).listen(
         (line) {
       formatStdOut.add(line);
       if (failureRegex.hasMatch(line) && !formatExitCode.isCompleted) {
         formatExitCode.complete(1);
       }
     }, onDone: outc.complete);
-    process.stderr.transform(utf8.decoder).transform(new LineSplitter()).listen(
+    process.stderr.transform(utf8.decoder).transform(LineSplitter()).listen(
         (line) {
       formatStdOut.add(line);
       if (failureRegex.hasMatch(line) && !formatExitCode.isCompleted) {

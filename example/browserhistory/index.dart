@@ -5,7 +5,7 @@ import 'package:history/history.dart';
 
 void main() {
   var count = 0;
-  var history = new BrowserHistory(basename: '/browserhistory');
+  var history = BrowserHistory(basename: '/browserhistory');
   var forward = querySelector('#forward');
   var back = querySelector('#back');
   var replace = querySelector('#replace');

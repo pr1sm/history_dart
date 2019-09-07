@@ -38,7 +38,7 @@ class HashTransitionManager<T extends HashHistory>
   HashTransitionManager({HashChangeHandler hashChangeHandler}) : super() {
     _domCheck = 0;
     _hashChangeHandler = hashChangeHandler ?? (_) {};
-    _controller = new StreamController<T>.broadcast(
+    _controller = StreamController<T>.broadcast(
         onCancel: _onControllerCancel, onListen: _onControllerListen);
   }
 
@@ -48,7 +48,7 @@ class HashTransitionManager<T extends HashHistory>
   Stream<T> get stream => _controller.stream;
 
   @override
-  void set prompt(nextPrompt) {
+  set prompt(nextPrompt) {
     if (prompt == null && nextPrompt != null) {
       _handleDomListener(1);
     } else if (prompt != null && nextPrompt == null) {

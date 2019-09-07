@@ -27,8 +27,8 @@ import '../core/location.dart';
 /// The type of History transition
 ///
 /// Represents the valid transitions that can change the History list:
-/// * PUSH - add a new entry to the list
-/// * REPLACE - replace the current entry in the list with a new entry
+/// * PUSH - add a entry to the list
+/// * REPLACE - replace the current entry in the list with a entry
 /// * POP - Remove the current entry from the list and go to the previous one
 enum Action { push, replace, pop }
 
@@ -78,14 +78,14 @@ typedef Future<String> Prompt(Location location, Action action);
 Future<String> getPrompt(
     dynamic prompt, Location location, Action action) async {
   if (prompt is String) {
-    return new Future.value(prompt);
+    return Future.value(prompt);
   }
 
   if (prompt is Prompt) {
     return await prompt(location, action);
   }
 
-  throw new ArgumentError.value(prompt, 'validatePrompt',
+  throw ArgumentError.value(prompt, 'validatePrompt',
       'prompt has an invalid type! Valid types are Prompt or String');
 }
 
@@ -95,7 +95,7 @@ Future<String> getPrompt(
 /// History.replace.
 void validatePath(dynamic path) {
   if (path is! String && path is! Location) {
-    throw new ArgumentError.value(path,
+    throw ArgumentError.value(path,
         'Error: path (${path.runtimeType}) is not a valid type (expected String or Location)');
   }
 }

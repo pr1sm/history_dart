@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:history/vm.dart';
 
 Future<Null> main() async {
-  Confirmation confirmation = (_) => new Future.value(true);
+  Confirmation confirmation = (_) => Future.value(true);
 
-  MemoryHistory history = new MemoryHistory(getConfirmation: confirmation);
+  MemoryHistory history = MemoryHistory(getConfirmation: confirmation);
 
   // Listen for changes
   var sub = history.onChange.listen((updatedHistory) {
@@ -27,7 +27,7 @@ Future<Null> main() async {
   history.block('Are you sure you want to navigate?');
 
   // This call waits for a user confirmation before continuing
-  history.push('/confirmed');
+  await history.push('/confirmed');
 
   // Use a more complex Prompt for more flexibilty
   Prompt prompt = (Location l, Action a) {
@@ -49,5 +49,5 @@ Future<Null> main() async {
   history.unblock();
 
   // Stop listening
-  sub.cancel();
+  await sub.cancel();
 }

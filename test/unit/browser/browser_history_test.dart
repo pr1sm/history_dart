@@ -15,18 +15,18 @@ import '../core/history_test_core.dart';
 
 void main() {
   group('BrowserHistory', () {
-    Confirmation autoConfirm = (_) => new Future.value(true);
+    Confirmation autoConfirm = (_) => Future.value(true);
 
     group('constructor', () {
       test('constructs correctly when dom is available', () {
-        var window = new MockBrowserHtmlWindow();
-        new BrowserHistory(window: window);
+        var window = MockBrowserHtmlWindow();
+        BrowserHistory(window: window);
       });
 
       test('fails to construct when dom is unavailable', () {
-        var window = new MockHtmlWindow();
+        var window = MockHtmlWindow();
         try {
-          new BrowserHistory(window: window);
+          BrowserHistory(window: window);
         } on StateError catch (_) {
           return;
         }
@@ -36,100 +36,98 @@ void main() {
     });
 
     group('core:', testCoreHistory(({Confirmation confirmation}) {
-      var window = new MockBrowserHtmlWindow();
-      return new BrowserHistory(
+      var window = MockBrowserHtmlWindow();
+      return BrowserHistory(
           getConfirmation: confirmation ?? autoConfirm, window: window);
     }));
 
     group('BrowserMixin', () {
       test('handles error on history state gracefully', () {
-        var window = new MockBrowserHtmlWindow();
-        window.mockHistory = new MockBrowserHtmlHistory(mockErrorOnState: true);
-        new BrowserHistory(window: window);
+        var window = MockBrowserHtmlWindow();
+        window.mockHistory = MockBrowserHtmlHistory(mockErrorOnState: true);
+        BrowserHistory(window: window);
       });
 
       test('handles null history state gracefully', () async {
-        var window = new MockBrowserHtmlWindow();
+        var window = MockBrowserHtmlWindow();
         var mockNav = window.mockNavigator;
         when(mockNav.userAgent).thenReturn(
             'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36 CriOS');
-        window.mockHistory = new MockBrowserHtmlHistory(mockNullOnState: true);
-        var browserHistory = new BrowserHistory(window: window);
-        var completer = new Completer();
+        window.mockHistory = MockBrowserHtmlHistory(mockNullOnState: true);
+        var browserHistory = BrowserHistory(window: window);
+        var completer = Completer();
         var sub = browserHistory.onChange.listen((_) {
           completer.complete();
         });
         await browserHistory.push('/push');
         await completer.future;
-        sub.cancel();
+        await sub.cancel();
       });
 
       test('window events are still handled when pop state is not supported',
           () async {
-        var window = new MockBrowserHtmlWindow();
-        window.mockHistory = new MockBrowserHtmlHistory(mockUsePopState: false);
+        var window = MockBrowserHtmlWindow();
+        window.mockHistory = MockBrowserHtmlHistory(mockUsePopState: false);
         var mockNav = window.mockNavigator;
         when(mockNav.userAgent).thenReturn(
             'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36 Trident');
-        var browserHistory = new BrowserHistory(window: window);
-        var completer = new Completer();
+        var browserHistory = BrowserHistory(window: window);
+        var completer = Completer();
         var sub = browserHistory.onChange.listen((_) {
           completer.complete();
         });
         window.location.href = '/path';
         await completer.future;
-        sub.cancel();
+        await sub.cancel();
         expect(browserHistory.location.pathname, equals('/path'));
       });
 
       group('forceRefresh', () {
         test('reponds correctly after construction', () {
-          var window = new MockBrowserHtmlWindow();
-          var browserHistory = new BrowserHistory(window: window);
+          var window = MockBrowserHtmlWindow();
+          var browserHistory = BrowserHistory(window: window);
           expect(browserHistory.willForceRefresh, isFalse);
-          browserHistory =
-              new BrowserHistory(window: window, forcedRefresh: false);
+          browserHistory = BrowserHistory(window: window, forcedRefresh: false);
           expect(browserHistory.willForceRefresh, isFalse);
-          browserHistory =
-              new BrowserHistory(window: window, forcedRefresh: true);
+          browserHistory = BrowserHistory(window: window, forcedRefresh: true);
           expect(browserHistory.willForceRefresh, isTrue);
         });
 
         test('causes location.href set on push', () async {
-          var window = new MockBrowserHtmlWindow();
+          var window = MockBrowserHtmlWindow();
           var browserHistory =
-              new BrowserHistory(window: window, forcedRefresh: true);
-          var completer = new Completer();
+              BrowserHistory(window: window, forcedRefresh: true);
+          var completer = Completer();
           var sub = browserHistory.onChange.listen((h) {
             completer.complete();
           });
           await browserHistory.push('/path');
           expect(window.location.href, equals('/path'));
           expect(completer.isCompleted, isFalse);
-          sub.cancel();
+          await sub.cancel();
         });
 
         test('causes location.href set on replace', () async {
-          var window = new MockBrowserHtmlWindow();
+          var window = MockBrowserHtmlWindow();
           var browserHistory =
-              new BrowserHistory(window: window, forcedRefresh: true);
-          var completer = new Completer();
+              BrowserHistory(window: window, forcedRefresh: true);
+          var completer = Completer();
           var sub = browserHistory.onChange.listen((h) {
             completer.complete();
           });
           await browserHistory.replace('/path');
           expect(window.location.href, equals('/path'));
           expect(completer.isCompleted, isFalse);
-          sub.cancel();
+          await sub.cancel();
         });
       });
 
       test(
           'getting location prints warning message when basename is different from path',
           () {
-        var mockHtmlWindow = new MockBrowserHtmlWindow();
+        var mockHtmlWindow = MockBrowserHtmlWindow();
         var browserHistory =
-            new BrowserHistory(basename: '/base', window: mockHtmlWindow);
+            BrowserHistory(basename: '/base', window: mockHtmlWindow);
         expect(browserHistory.location.path, isNot(startsWith('/base')));
       });
 
@@ -140,12 +138,11 @@ void main() {
         StreamSubscription sub;
 
         setUp(() {
-          window = new MockBrowserHtmlWindow();
+          window = MockBrowserHtmlWindow();
           var mockNav = window.mockNavigator;
           when(mockNav.userAgent).thenReturn('Android 2.2 and Mobile Safari');
-          browserHistory =
-              new BrowserHistory(window: window, forcedRefresh: true);
-          completer = new Completer();
+          browserHistory = BrowserHistory(window: window, forcedRefresh: true);
+          completer = Completer();
           sub = browserHistory.onChange.listen((h) {
             completer.complete();
           });

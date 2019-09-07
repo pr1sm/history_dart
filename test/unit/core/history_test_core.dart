@@ -227,7 +227,7 @@ testSuiteRunner testCoreHistory(HistoryGenerator getHistory,
           expect(history.isBlocking, isFalse);
           history.block(null);
           expect(history.isBlocking, isFalse);
-          history.block((_, __) async => new Future.value('prompt'));
+          history.block((_, __) async => Future.value('prompt'));
           expect(history.isBlocking, isTrue);
           history.block(null);
           expect(history.isBlocking, isFalse);
@@ -237,7 +237,7 @@ testSuiteRunner testCoreHistory(HistoryGenerator getHistory,
           expect(history.isBlocking, isFalse);
           history.unblock();
           expect(history.isBlocking, isFalse);
-          history.block((_, __) async => new Future.value('prompt'));
+          history.block((_, __) async => Future.value('prompt'));
           expect(history.isBlocking, isTrue);
           history.unblock();
           expect(history.isBlocking, isFalse);
@@ -249,7 +249,7 @@ testSuiteRunner testCoreHistory(HistoryGenerator getHistory,
           Completer c;
 
           setUp(() {
-            c = new Completer();
+            c = Completer();
             history = getHistory();
             sub = history.onChange.listen((h) {
               expect(h, equals(history));
@@ -281,7 +281,7 @@ testSuiteRunner testCoreHistory(HistoryGenerator getHistory,
           });
 
           test('go', () async {
-            sub.cancel();
+            await sub.cancel();
             await history.push('/path');
             await history.push('/path2');
             sub = history.onChange.listen((h) {
@@ -296,7 +296,7 @@ testSuiteRunner testCoreHistory(HistoryGenerator getHistory,
           });
 
           test('goForward', () async {
-            sub.cancel();
+            await sub.cancel();
             await history.push('/path');
             await history.go(-1);
             sub = history.onChange.listen((h) {
@@ -311,7 +311,7 @@ testSuiteRunner testCoreHistory(HistoryGenerator getHistory,
           });
 
           test('goBack', () async {
-            sub.cancel();
+            await sub.cancel();
             await history.push('/path');
             sub = history.onChange.listen((h) {
               expect(h, equals(history));
@@ -326,12 +326,12 @@ testSuiteRunner testCoreHistory(HistoryGenerator getHistory,
         });
 
         test('waits for confirmation when in blocking mode', () async {
-          var c = new Completer();
-          var confirmed = new Completer();
+          var c = Completer();
+          var confirmed = Completer();
           Confirmation confirm = (String _) async {
             confirmed.complete();
             expect(c.isCompleted, isFalse);
-            return new Future.value(true);
+            return Future.value(true);
           };
           history = getHistory(confirmation: confirm);
           sub = history.onChange.listen((_) {
@@ -350,10 +350,10 @@ testSuiteRunner testCoreHistory(HistoryGenerator getHistory,
         Confirmation confirm;
 
         setUp(() {
-          c = new Completer();
+          c = Completer();
           confirm = (String _) async {
             c.complete();
-            return new Future.value(true);
+            return Future.value(true);
           };
         });
 
@@ -370,7 +370,7 @@ testSuiteRunner testCoreHistory(HistoryGenerator getHistory,
           history = getHistory();
           expect(history.length, equals(1));
           expect(history.location.pathname, equals('/'));
-          var next = new Location(pathname: '/path', key: 'key');
+          var next = Location(pathname: '/path', key: 'key');
           await history.push(next);
           expect(history.length, equals(2));
           expect(history.location, isNot(equals(next)));
@@ -388,7 +388,7 @@ testSuiteRunner testCoreHistory(HistoryGenerator getHistory,
           expect(c.isCompleted, isTrue);
 
           history.unblock();
-          c = new Completer();
+          c = Completer();
           await history.push('/path3');
           expect(c.isCompleted, isFalse);
         });
@@ -396,7 +396,7 @@ testSuiteRunner testCoreHistory(HistoryGenerator getHistory,
         test('does nothing when transition is denied', () async {
           confirm = (String _) async {
             c.complete();
-            return new Future.value(false);
+            return Future.value(false);
           };
           history = getHistory(confirmation: confirm);
           history.block('prompt');
@@ -419,7 +419,7 @@ testSuiteRunner testCoreHistory(HistoryGenerator getHistory,
             'uses Location.state when state is both provided in Location and by parameter',
             () async {
           history = getHistory();
-          var next = new Location(pathname: '/path', state: 'locationstate');
+          var next = Location(pathname: '/path', state: 'locationstate');
           await history.push(next, 'parameterstate');
           var stateMatcher = supportsState ? equals('locationstate') : isNull;
           expect(history.location.state, stateMatcher);
@@ -440,7 +440,7 @@ testSuiteRunner testCoreHistory(HistoryGenerator getHistory,
           history = getHistory();
           expect(history.length, equals(1));
           expect(history.location.pathname, equals('/'));
-          var next = new Location(pathname: '/path', key: 'key');
+          var next = Location(pathname: '/path', key: 'key');
           await history.replace(next);
           expect(history.length, equals(1));
           expect(history.location, isNot(equals(next)));
@@ -449,10 +449,10 @@ testSuiteRunner testCoreHistory(HistoryGenerator getHistory,
         });
 
         test('waits for confirmation when in blocking mode', () async {
-          var c = new Completer();
+          var c = Completer();
           Confirmation confirm = (String _) async {
             c.complete();
-            return new Future.value(true);
+            return Future.value(true);
           };
           history = getHistory(confirmation: confirm);
           await history.replace('/path');
@@ -463,18 +463,18 @@ testSuiteRunner testCoreHistory(HistoryGenerator getHistory,
           expect(c.isCompleted, isTrue);
 
           history.unblock();
-          c = new Completer();
+          c = Completer();
           await history.replace('/path3');
           expect(c.isCompleted, isFalse);
         });
 
         test('does nothing when transition is denied', () async {
-          var c = new Completer();
+          var c = Completer();
           Confirmation confirm = (String _) async {
             if (!c.isCompleted) {
               c.complete();
             }
-            return new Future.value(false);
+            return Future.value(false);
           };
           history = getHistory(confirmation: confirm);
           history.block('prompt');
@@ -497,7 +497,7 @@ testSuiteRunner testCoreHistory(HistoryGenerator getHistory,
             'uses Location.state when state is both provided in Location and by parameter',
             () async {
           history = getHistory();
-          var next = new Location(pathname: '/path', state: 'locationstate');
+          var next = Location(pathname: '/path', state: 'locationstate');
           await history.replace(next, 'parameterstate');
           var stateMatcher = supportsState ? equals('locationstate') : isNull;
           expect(history.location.state, stateMatcher);
@@ -540,10 +540,10 @@ testSuiteRunner testCoreHistory(HistoryGenerator getHistory,
         });
 
         test('waits for confirmation when in blocking mode', () async {
-          var c = new Completer();
+          var c = Completer();
           Confirmation confirm = (String _) async {
             c.complete();
-            return new Future.value(true);
+            return Future.value(true);
           };
           history = getHistory(confirmation: confirm);
           await history.push('/path');
@@ -552,24 +552,24 @@ testSuiteRunner testCoreHistory(HistoryGenerator getHistory,
           await history.go(-3);
           expect(c.isCompleted, isFalse);
 
-          c = new Completer();
+          c = Completer();
           history.block('prompt');
           await history.go(2);
           await c.future;
           expect(c.isCompleted, isTrue);
 
           history.unblock();
-          c = new Completer();
+          c = Completer();
           await history.go(-1);
           expect(c.isCompleted, isFalse);
         });
 
         test('still emits a change when transition is denied', () async {
-          var c = new Completer();
-          var c2 = new Completer();
+          var c = Completer();
+          var c2 = Completer();
           Confirmation confirm = (String _) async {
             c.complete();
-            return new Future.value(false);
+            return Future.value(false);
           };
           history = getHistory(confirmation: confirm);
           await history.push('/path');
@@ -583,7 +583,7 @@ testSuiteRunner testCoreHistory(HistoryGenerator getHistory,
           await c2.future;
           expect(c.isCompleted, isTrue);
           expect(history.location.pathname, equals('/path2'));
-          sub.cancel();
+          await sub.cancel();
         });
       });
 
@@ -591,10 +591,10 @@ testSuiteRunner testCoreHistory(HistoryGenerator getHistory,
         Completer c;
         Confirmation confirm;
         setUp(() {
-          c = new Completer();
+          c = Completer();
           confirm = (String _) async {
             c.complete();
-            return new Future.value(true);
+            return Future.value(true);
           };
         });
         test('waits for confirmation when in blocking mode', () async {
@@ -614,17 +614,17 @@ testSuiteRunner testCoreHistory(HistoryGenerator getHistory,
           expect(c.isCompleted, isTrue);
 
           history.unblock();
-          c = new Completer();
+          c = Completer();
           await history.goForward();
           expect(history.location.pathname, equals('/path3'));
           expect(c.isCompleted, isFalse);
         });
 
         test('still emits a change when transition is denied', () async {
-          var c2 = new Completer();
+          var c2 = Completer();
           confirm = (String _) async {
             c.complete();
-            return new Future.value(false);
+            return Future.value(false);
           };
           history = getHistory(confirmation: confirm);
           await history.push('/path');
@@ -638,12 +638,12 @@ testSuiteRunner testCoreHistory(HistoryGenerator getHistory,
           await c2.future;
           expect(c.isCompleted, isTrue);
           expect(history.location.pathname, equals('/'));
-          sub.cancel();
+          await sub.cancel();
         });
 
         test('still emits a change when triggered at the end of history',
             () async {
-          var c2 = new Completer();
+          var c2 = Completer();
           history = getHistory(confirmation: confirm);
           await history.push('/path');
           history.block('prompt');
@@ -655,7 +655,7 @@ testSuiteRunner testCoreHistory(HistoryGenerator getHistory,
           await c2.future;
           expect(c.isCompleted, isTrue);
           expect(history.location.pathname, equals('/path'));
-          sub.cancel();
+          await sub.cancel();
         });
       });
 
@@ -664,10 +664,10 @@ testSuiteRunner testCoreHistory(HistoryGenerator getHistory,
         Confirmation confirm;
 
         setUp(() {
-          c = new Completer();
+          c = Completer();
           confirm = (String _) async {
             c.complete();
-            return new Future.value(true);
+            return Future.value(true);
           };
         });
 
@@ -686,17 +686,17 @@ testSuiteRunner testCoreHistory(HistoryGenerator getHistory,
           expect(c.isCompleted, isTrue);
 
           history.unblock();
-          c = new Completer();
+          c = Completer();
           await history.goBack();
           expect(history.location.pathname, equals('/'));
           expect(c.isCompleted, isFalse);
         });
 
         test('still emits a change when transition is denied', () async {
-          var c2 = new Completer();
+          var c2 = Completer();
           confirm = (String _) async {
             c.complete();
-            return new Future.value(false);
+            return Future.value(false);
           };
           history = getHistory(confirmation: confirm);
           await history.push('/path');
@@ -709,12 +709,12 @@ testSuiteRunner testCoreHistory(HistoryGenerator getHistory,
           await c2.future;
           expect(c.isCompleted, isTrue);
           expect(history.location.pathname, equals('/path'));
-          sub.cancel();
+          await sub.cancel();
         });
 
         test('still emits a change when triggered at the start of history',
             () async {
-          var c2 = new Completer();
+          var c2 = Completer();
           history = getHistory(confirmation: confirm);
           await history.push('/path');
           await history.goBack();
@@ -727,7 +727,7 @@ testSuiteRunner testCoreHistory(HistoryGenerator getHistory,
           await c2.future;
           expect(c.isCompleted, isTrue);
           expect(history.location.pathname, equals('/'));
-          sub.cancel();
+          await sub.cancel();
         });
       });
 
@@ -754,10 +754,10 @@ testSuiteRunner testCoreHistory(HistoryGenerator getHistory,
 
           setUp(() {
             history = getHistory();
-            c = new Completer();
+            c = Completer();
             check = (Location _, Action __) async {
               c.complete();
-              return new Future.value('prompt');
+              return Future.value('prompt');
             };
           });
 
@@ -797,7 +797,7 @@ testSuiteRunner testCoreHistory(HistoryGenerator getHistory,
 
             history.block(check);
             await history.go(-1);
-            c = new Completer();
+            c = Completer();
             await history.goForward();
             expect(c.isCompleted, isTrue);
           });
@@ -809,7 +809,7 @@ testSuiteRunner testCoreHistory(HistoryGenerator getHistory,
 
             history.block(check);
             await history.go(1);
-            c = new Completer();
+            c = Completer();
             await history.goBack();
             expect(c.isCompleted, isTrue);
           });
@@ -841,9 +841,9 @@ testSuiteRunner testCoreHistory(HistoryGenerator getHistory,
             history = getHistory();
             check = (Location _, Action __) async {
               c.complete();
-              return new Future.value('prompt');
+              return Future.value('prompt');
             };
-            c = new Completer();
+            c = Completer();
             history.block(check);
           });
 
@@ -852,7 +852,7 @@ testSuiteRunner testCoreHistory(HistoryGenerator getHistory,
             await c.future;
             expect(c.isCompleted, isTrue);
 
-            c = new Completer();
+            c = Completer();
             history.unblock();
             await history.push('/test');
             expect(c.isCompleted, isFalse);
@@ -863,7 +863,7 @@ testSuiteRunner testCoreHistory(HistoryGenerator getHistory,
             await c.future;
             expect(c.isCompleted, isTrue);
 
-            c = new Completer();
+            c = Completer();
             history.unblock();
             await history.replace('/test');
             expect(c.isCompleted, isFalse);
@@ -871,12 +871,12 @@ testSuiteRunner testCoreHistory(HistoryGenerator getHistory,
 
           test('go', () async {
             await history.push('/test');
-            c = new Completer();
+            c = Completer();
             await history.go(-1);
             await c.future;
             expect(c.isCompleted, isTrue);
 
-            c = new Completer();
+            c = Completer();
             history.unblock();
             await history.go(1);
             expect(c.isCompleted, isFalse);
@@ -884,14 +884,14 @@ testSuiteRunner testCoreHistory(HistoryGenerator getHistory,
 
           test('goForward', () async {
             await history.push('/test');
-            c = new Completer();
+            c = Completer();
             await history.go(-1);
-            c = new Completer();
+            c = Completer();
             await history.goForward();
             await c.future;
             expect(c.isCompleted, isTrue);
 
-            c = new Completer();
+            c = Completer();
             history.unblock();
             await history.go(-1);
             await history.goForward();
@@ -900,12 +900,12 @@ testSuiteRunner testCoreHistory(HistoryGenerator getHistory,
 
           test('goBack', () async {
             await history.push('/test');
-            c = new Completer();
+            c = Completer();
             await history.goBack();
             await c.future;
             expect(c.isCompleted, isTrue);
 
-            c = new Completer();
+            c = Completer();
             history.unblock();
             await history.go(1);
             await history.goBack();

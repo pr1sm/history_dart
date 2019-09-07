@@ -40,7 +40,7 @@ String stripLeadingSlash(String path) => stripLeading(path, '/');
 
 /// Check if [path] has [prefix] as the basename
 bool hasBasename(String path, String prefix) =>
-    new RegExp('^${prefix}(\\/|\\?|#|\$)', caseSensitive: false).hasMatch(path);
+    RegExp('^${prefix}(\\/|\\?|#|\$)', caseSensitive: false).hasMatch(path);
 
 /// Remove [prefix] as basename from [path] if it exists
 String stripBasename(String path, String prefix) =>

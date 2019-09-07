@@ -2,26 +2,26 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-StreamController<String> analyzerStdOut = new StreamController();
-StreamController<String> analyzerStdErr = new StreamController();
+StreamController<String> analyzerStdOut = StreamController();
+StreamController<String> analyzerStdErr = StreamController();
 
-Completer outc = new Completer();
-Completer errc = new Completer();
-Completer donec = new Completer();
-Completer<int> procExitCode = new Completer();
+Completer outc = Completer();
+Completer errc = Completer();
+Completer donec = Completer();
+Completer<int> procExitCode = Completer();
 
 String analyzerExecutable = 'dartanalyzer';
-List<String> analyzerArgs = new List()..add('.');
+List<String> analyzerArgs = List()..add('.');
 
 void startAnalyzer() async {
-  Process.start(analyzerExecutable, analyzerArgs).then((process) {
+  return Process.start(analyzerExecutable, analyzerArgs).then((process) {
     process.stdout
         .transform(utf8.decoder)
-        .transform(new LineSplitter())
+        .transform(LineSplitter())
         .listen(analyzerStdOut.add, onDone: outc.complete);
     process.stderr
         .transform(utf8.decoder)
-        .transform(new LineSplitter())
+        .transform(LineSplitter())
         .listen(analyzerStdErr.add, onDone: errc.complete);
     process.exitCode.then(procExitCode.complete);
     Future.wait([outc.future, errc.future, process.exitCode])

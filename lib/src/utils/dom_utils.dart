@@ -48,10 +48,10 @@ class DomUtils {
   /// https://github.com/ReactTraining/history/blob/master/modules/DOMUtils.js
   bool get supportsHistory {
     final ua = _windowImpl.navigator.userAgent;
-    if ((ua.indexOf('Android 2.') != -1 || ua.indexOf('Android 4.0') != -1) &&
-        ua.indexOf('Mobile Safari') != -1 &&
-        ua.indexOf('Chrome') == -1 &&
-        ua.indexOf('Windows Phone') == -1) {
+    if ((ua.contains('Android 2.') || ua.contains('Android 4.0')) &&
+        ua.contains('Mobile Safari') &&
+        !ua.contains('Chrome') &&
+        !ua.contains('Windows Phone')) {
       return false;
     }
     return _windowImpl.history != null && _windowImpl.history is History;
@@ -59,17 +59,16 @@ class DomUtils {
 
   /// Check if Browser supports [PopStateEvent] on hash change
   bool get supportsPopStateOnHashChange =>
-      _windowImpl.navigator.userAgent.indexOf('Trident') == -1;
+      !_windowImpl.navigator.userAgent.contains('Trident');
 
   /// Check if [Window.go] can be called without reloading when using hash
   bool get supportsGoWithoutReloadUsingHash =>
-      _windowImpl.navigator.userAgent.indexOf('Firefox') == -1;
+      !_windowImpl.navigator.userAgent.contains('Firefox');
 
   /// Check if [event] is an extra [PopStateEvent]
   ///
   /// On Mobile Chrome, a [PopStateEvent] is triggered with an empty state when
   /// the back button is clicked. Check if [event] is this type of event.
   bool isExtraneousPopStateEvent(PopStateEvent event) =>
-      event.state == null &&
-      _windowImpl.navigator.userAgent.indexOf('CriOS') == -1;
+      event.state == null && !_windowImpl.navigator.userAgent.contains('CriOS');
 }

@@ -41,9 +41,9 @@ class Location {
   Location(
       {String pathname = '/',
       String hash = '',
-      String key = null,
+      String key,
       String search = '',
-      dynamic state = null}) {
+      dynamic state}) {
     // Call initialization with given inputs
     _initialize(pathname ?? '/', hash ?? '', key, search ?? '', state);
   }
@@ -124,13 +124,13 @@ class Location {
   ///
   /// Example:
   /// ```
-  /// Location base = new Location(pathname: '/home/first');
-  /// Location relative = new Location(pathname: 'second'); // relative path
+  /// Location base = Location(pathname: '/home/first');
+  /// Location relative = Location(pathname: 'second'); // relative path
   /// relative.relateTo(base);
   /// print(relative.pathname) // Output: /home/second
   /// ```
   void relateTo(Location base) {
-    String resolvedPathname = null;
+    String resolvedPathname;
     if (base != null) {
       // Current pathname is empty, use base pathname
       if (_pathname.isEmpty) {
@@ -244,7 +244,7 @@ class Location {
     try {
       Uri.parse(path);
     } on FormatException catch (_) {
-      throw new FormatException(
+      throw FormatException(
           'Pathname "${_pathname}" could not be decoded. This is likely caused by an invalid percent-encoding.');
     }
   }
